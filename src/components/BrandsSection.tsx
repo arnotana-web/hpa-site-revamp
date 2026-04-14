@@ -1,0 +1,42 @@
+const brands = [
+  { name: "La Redoute Intérieur", url: "https://www.laredoute.fr/interieur/" },
+  { name: "AM.PM", url: "https://www.ampm.fr" },
+  { name: "Woven", url: "https://wovenplus.com" },
+  { name: "Otazen", url: "https://www.otazen.com" },
+  { name: "Gervasoni", url: "https://www.gervasoni1882.it" },
+  { name: "Rols Carpet", url: "https://www.rolscarpets.com/en/" },
+];
+
+export default function BrandsSection() {
+  return (
+    <section id="marques" className="section-padding bg-secondary border-t border-border">
+      <div className="max-w-[1400px] mx-auto">
+        <div className="text-center max-w-2xl mx-auto mb-12">
+          <p className="text-[11px] font-body font-bold tracking-[3px] uppercase text-accent mb-4">
+            Notre portefeuille
+          </p>
+          <h2 className="font-heading text-3xl md:text-4xl text-primary font-normal leading-tight mb-4">
+            Marques représentées et distribuées
+          </h2>
+          <p className="text-muted-foreground font-body text-[15px]">
+            HPA sélectionne et représente des marques pour leur cohérence avec les projets de nos clients — qualité, durabilité, esthétique et rapport qualité/prix.
+          </p>
+        </div>
+
+        <div className="flex flex-wrap justify-center gap-3">
+          {brands.map((b) => (
+            <a
+              key={b.name}
+              href={b.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-block bg-card border border-border px-7 py-3.5 font-body text-[13px] font-bold text-primary tracking-[1px] uppercase hover:bg-primary hover:text-primary-foreground hover:border-primary transition-all"
+            >
+              {b.name}
+            </a>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
