@@ -9,6 +9,7 @@ import MarketsSection from "@/components/MarketsSection";
 import BrandsSection from "@/components/BrandsSection";
 import ProcessSection from "@/components/ProcessSection";
 import TestimonialsSection from "@/components/TestimonialsSection";
+import RealisationsSection from "@/components/RealisationsSection";
 import CtaBanner from "@/components/CtaBanner";
 import ContactSection from "@/components/ContactSection";
 import Footer from "@/components/Footer";
@@ -39,6 +40,7 @@ function Index() {
       <BrandsSection />
       <ProcessSection />
       <TestimonialsSection />
+      <RealisationsSection />
       <CtaBanner />
       <ContactSection />
       <Footer />
