@@ -35,9 +35,14 @@ const expertises = [
     intro:
       "HPA Concept accompagne les promoteurs immobiliers, les architectes d'intérieur et les investisseurs dans la fourniture complète de leur lot mobilier résidentiel. Nous proposons trois niveaux de pack — Essential, Premium et Prestige — adaptés à chaque positionnement de projet et à chaque budget.",
     packs: [
-      { name: "Essential", desc: "Mobilier fonctionnel et soigné pour des appartements à fort rendement locatif. Sélection de marques accessibles, livraison clé en main.", color: "bg-secondary" },
-      { name: "Premium", desc: "Alliance de marques sélectionnées et de pièces sur mesure pour des résidences haut de gamme. Conseil en décoration inclus.", color: "bg-primary/10" },
-      { name: "Prestige", desc: "Curation complète, mobilier custom, matériaux nobles — pour villas d'exception et résidences de luxe. Suivi personnalisé de A à Z.", color: "bg-accent/10" },
+      { name: "Essential", desc: "Mobilier fonctionnel et soigné pour des appartements à fort rendement locatif. Sélection de marques accessibles, livraison clé en main." },
+      { name: "Premium", desc: "Alliance de marques sélectionnées et de pièces sur mesure pour des résidences haut de gamme. Conseil en décoration inclus." },
+      { name: "Prestige", desc: "Curation complète, mobilier custom, matériaux nobles — pour villas d'exception et résidences de luxe. Suivi personnalisé de A à Z." },
+    ],
+    packDetails: [
+      "Idéal pour les résidences locatives et les appartements standards. Mobilier fonctionnel issu de nos marques accessibles — La Redoute Intérieur, AM.PM. Livraison et installation incluses.",
+      "Pour les projets résidentiels premium et les villas haut de gamme. Alliance de marques sélectionnées (Woven, Otazen, Gervasoni) et de pièces fabriquées sur mesure. Conseil en décoration inclus.",
+      "Curation complète pour villas d'exception et résidences de luxe. Mobilier custom, matériaux nobles, suivi personnalisé architecte-décorateur. Chaque pièce est unique.",
     ],
     points: [
       "Packs mobilier complets : salon, chambre, salle à manger, terrasse",
@@ -71,6 +76,7 @@ const expertises = [
 
 export default function MarketsSection() {
   const [active, setActive] = useState(0);
+  const [activePack, setActivePack] = useState(0);
   const ex = expertises[active];
 
   return (
@@ -92,7 +98,7 @@ export default function MarketsSection() {
             <button
               key={e.id}
               id={e.anchor}
-              onClick={() => setActive(i)}
+              onClick={() => { setActive(i); setActivePack(0); }}
               className={`px-6 py-3 font-body text-[12px] font-bold tracking-[1.5px] uppercase transition-all border ${
                 active === i
                   ? "bg-primary text-primary-foreground border-primary"
@@ -150,13 +156,42 @@ export default function MarketsSection() {
 
         {/* Packs — Résidentiel only */}
         {"packs" in ex && ex.packs && (
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-[2px] bg-border">
-            {ex.packs.map((pack) => (
-              <div key={pack.name} className={`${pack.color} p-8`}>
-                <h4 className="font-heading text-xl text-primary mb-3">{pack.name}</h4>
-                <p className="font-body text-sm text-muted-foreground leading-relaxed">{pack.desc}</p>
+          <div className="mt-2">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-[2px] bg-border">
+              {ex.packs.map((pack, i) => (
+                <div
+                  key={pack.name}
+                  onClick={() => setActivePack(i)}
+                  className={`cursor-pointer p-8 transition-all duration-300 ${
+                    activePack === i
+                      ? "bg-primary text-primary-foreground scale-[1.02] shadow-xl z-10 relative"
+                      : "bg-card hover:bg-secondary"
+                  }`}
+                >
+                  <div className={`text-[10px] font-body font-bold tracking-[2px] uppercase mb-3 text-accent`}>
+                    Pack
+                  </div>
+                  <h4 className={`font-heading text-2xl mb-3 ${activePack === i ? "text-primary-foreground" : "text-primary"}`}>
+                    {pack.name}
+                  </h4>
+                  <p className={`font-body text-sm leading-relaxed ${activePack === i ? "text-primary-foreground/80" : "text-muted-foreground"}`}>
+                    {pack.desc}
+                  </p>
+                  {activePack === i && (
+                    <div className="mt-6 inline-flex items-center gap-2 font-body text-xs font-bold tracking-[1.5px] uppercase text-accent border-b border-accent pb-0.5">
+                      Sélectionné <Check size={12} />
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+            {"packDetails" in ex && ex.packDetails && (
+              <div className="bg-card p-8 mt-[2px] border-t-2 border-accent transition-all duration-300">
+                <p className="font-body text-sm text-muted-foreground">
+                  {ex.packDetails[activePack]}
+                </p>
               </div>
-            ))}
+            )}
           </div>
         )}
       </div>
