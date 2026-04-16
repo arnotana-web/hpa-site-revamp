@@ -102,6 +102,52 @@ function generateTags(title: string, category: string, slug: string): string[] {
   return [...new Set(tags)].slice(0, 3);
 }
 
+// Titles to exclude entirely
+const EXCLUDED_TITLES = new Set([
+  "private penthouse",
+  "penthouse",
+  "private appartement",
+  "arokaria",
+  "boa",
+  "diamond trust bank",
+  "togocel",
+  "mvola",
+  "i&m",
+  "odity",
+]);
+
+function shouldExclude(title: string): boolean {
+  const t = title.toLowerCase();
+  return [...EXCLUDED_TITLES].some((ex) => t === ex || t.includes(ex));
+}
+
+// Location overrides by partial title match
+const LOCATION_OVERRIDES: [RegExp, string][] = [
+  [/park\s*life/i, "Madagascar"],
+  [/ecole\s*42/i, "Madagascar"],
+  [/axian\s*university/i, "Madagascar"],
+  [/bank\s*of\s*africa/i, "Madagascar"],
+  [/anjajavy/i, "Madagascar"],
+  [/le\s*louvre/i, "Madagascar"],
+  [/nexta/i, "Madagascar"],
+  [/connecteo/i, "Madagascar"],
+  [/jovenna/i, "Madagascar"],
+  [/park\s*alarobia/i, "Madagascar"],
+];
+
+// Title renames
+function renameTitle(title: string): string {
+  if (/axian\s*abidjan\s*offices/i.test(title)) return "Axian Abidjan";
+  return title;
+}
+
+function getOverriddenLocation(title: string, defaultLoc: string): string {
+  for (const [re, loc] of LOCATION_OVERRIDES) {
+    if (re.test(title)) return loc;
+  }
+  return defaultLoc;
+}
+
 const categories = ["Tous", "Hôtellerie", "Résidentiel", "Bureaux"];
 
 export default function RealisationsSection() {
@@ -119,9 +165,12 @@ export default function RealisationsSection() {
         let idx = 0;
 
         for (const item of data) {
-          const title = cleanTitle(item.title?.rendered || "");
+          let title = cleanTitle(item.title?.rendered || "");
           if (!title || seen.has(title)) continue;
+          if (shouldExclude(title)) continue;
           seen.add(title);
+
+          title = renameTitle(title);
 
           const slug = item.slug || "";
           const media = item._embedded?.["wp:featuredmedia"]?.[0];
@@ -129,7 +178,7 @@ export default function RealisationsSection() {
           if (!image) continue;
 
           const category = getCategory(slug, title);
-          const location = getLocation(slug, title);
+          const location = getOverriddenLocation(title, getLocation(slug, title));
 
           items.push({
             id: idx + 1,
