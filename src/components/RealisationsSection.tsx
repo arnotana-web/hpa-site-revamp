@@ -1,5 +1,5 @@
-import { useState, useEffect } from "react";
-import { ArrowRight, MapPin, Tag, Loader2 } from "lucide-react";
+import { useState, useEffect, useCallback } from "react";
+import { ArrowRight, MapPin, Tag, Loader2, X, ZoomIn } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
 
 type Realisation = {
@@ -258,6 +258,14 @@ export default function RealisationsSection() {
     getManualRealisations(),
   );
   const [loading, setLoading] = useState(true);
+  const [lightbox, setLightbox] = useState<{ image: string; title: string } | null>(null);
+
+  const openLightbox = useCallback((e: React.MouseEvent, image: string, title: string) => {
+    e.stopPropagation();
+    setLightbox({ image, title });
+  }, []);
+
+  const closeLightbox = useCallback(() => setLightbox(null), []);
 
   useEffect(() => {
     const manualItems = getManualRealisations();
@@ -319,6 +327,7 @@ export default function RealisationsSection() {
       : realisations.filter((r) => r.category === activeFilter);
 
   return (
+    <>
     <section id="realisations" className="section-padding bg-card">
       <div className="max-w-[1400px] mx-auto">
         <div className="text-center max-w-2xl mx-auto mb-12">
@@ -378,6 +387,13 @@ export default function RealisationsSection() {
                   <span className="absolute top-4 left-4 bg-primary text-primary-foreground font-body text-[10px] font-bold tracking-[2px] uppercase px-3 py-1">
                     {r.category}
                   </span>
+                  <button
+                    onClick={(e) => openLightbox(e, r.image, r.title)}
+                    className="absolute bottom-3 right-3 bg-primary/80 hover:bg-primary text-primary-foreground p-2 opacity-0 group-hover:opacity-100 transition-all duration-300 backdrop-blur-sm"
+                    aria-label={`Agrandir ${r.title}`}
+                  >
+                    <ZoomIn size={16} />
+                  </button>
                 </div>
                 <div className="p-7">
                   <div className="flex items-center gap-1.5 text-muted-foreground font-body text-xs mb-3">
@@ -416,5 +432,29 @@ export default function RealisationsSection() {
         </div>
       </div>
     </section>
+
+    {/* Lightbox */}
+    {lightbox && (
+      <div
+        className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 backdrop-blur-sm animate-fade-in"
+        onClick={closeLightbox}
+      >
+        <button
+          onClick={closeLightbox}
+          className="absolute top-6 right-6 text-white/80 hover:text-white transition-colors"
+          aria-label="Fermer"
+        >
+          <X size={28} />
+        </button>
+        <p className="absolute top-6 left-6 text-white/70 font-heading text-lg">{lightbox.title}</p>
+        <img
+          src={lightbox.image}
+          alt={lightbox.title}
+          className="max-w-[90vw] max-h-[85vh] object-contain shadow-2xl animate-scale-in"
+          onClick={(e) => e.stopPropagation()}
+        />
+      </div>
+    )}
+    </>
   );
 }
