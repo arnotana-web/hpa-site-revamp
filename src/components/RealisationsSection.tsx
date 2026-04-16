@@ -17,9 +17,19 @@ const API_URL =
   "https://hpa-concept.com/wp-json/wp/v2/elemenfolio?per_page=100&_embed=wp:featuredmedia&_fields=title,slug,_embedded,_links";
 
 function cleanTitle(raw: string): string {
-  const el = document.createElement("span");
-  el.innerHTML = raw;
-  return el.textContent || raw;
+  return raw
+    .replace(/&#(\d+);/g, (_, code) => String.fromCharCode(Number(code)))
+    .replace(/&#x([0-9a-fA-F]+);/g, (_, code) => String.fromCharCode(parseInt(code, 16)))
+    .replace(/&amp;/g, "&")
+    .replace(/&lt;/g, "<")
+    .replace(/&gt;/g, ">")
+    .replace(/&quot;/g, '"')
+    .replace(/&apos;/g, "'")
+    .replace(/&#8217;/g, "\u2019")
+    .replace(/&#8211;/g, "\u2013")
+    .replace(/&#8212;/g, "\u2014")
+    .replace(/<[^>]*>/g, "")
+    .trim();
 }
 
 function getCategory(slug: string, title: string): string {
