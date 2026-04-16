@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
-import { ArrowRight, MapPin, Tag, Loader2, X, ZoomIn } from "lucide-react";
+import { ArrowRight, MapPin, Tag, Loader2, X, ZoomIn, Download } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
 
 type Realisation = {
@@ -421,14 +421,23 @@ export default function RealisationsSection() {
 
         <div className="text-center mt-14">
           <p className="font-body text-sm text-muted-foreground mb-5">
-            Vous avez un projet similaire ? Parlons-en.
+            Vous avez un projet similaire ? Parlons-en — ou découvrez notre portfolio complet.
           </p>
-          <a
-            href="#contact"
-            className="inline-flex items-center gap-2 bg-primary text-primary-foreground px-8 py-4 font-body text-xs font-bold tracking-[1.5px] uppercase hover:bg-hpa-green-dark transition-colors"
-          >
-            Discuter de votre projet <ArrowRight size={14} />
-          </a>
+          <div className="flex flex-wrap gap-3 justify-center">
+            <a
+              href="#contact"
+              className="inline-flex items-center gap-2 bg-primary text-primary-foreground px-8 py-4 font-body text-xs font-bold tracking-[1.5px] uppercase hover:bg-hpa-green-dark transition-colors"
+            >
+              Discuter de votre projet <ArrowRight size={14} />
+            </a>
+            <a
+              href="/portfolio-hpa-2025.pdf"
+              download
+              className="inline-flex items-center gap-2 bg-transparent text-primary border border-primary px-8 py-4 font-body text-xs font-bold tracking-[1.5px] uppercase hover:bg-primary hover:text-primary-foreground transition-colors"
+            >
+              <Download size={14} /> Télécharger le portfolio (PDF)
+            </a>
+          </div>
         </div>
       </div>
     </section>
