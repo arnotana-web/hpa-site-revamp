@@ -64,6 +64,14 @@ const MANUAL_REALISATIONS: ManualRealisation[] = [
     tags: ["Contract", "Corporate", "Bureaux"],
     image: "/images/necker.jpg",
   },
+  {
+    title: "O Petit Parc 1",
+    category: "Résidentiel",
+    location: "Île Maurice",
+    desc: "Mobilier haut de gamme et aménagement complet pour O Petit Parc 1 — sélection personnalisée.",
+    tags: ["Villa", "Sur mesure", "Résidentiel"],
+    image: "/images/o-petit-parc-1.jpg",
+  },
 ];
 
 const API_URL =
