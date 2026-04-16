@@ -210,7 +210,7 @@ export default function RealisationsSection() {
           <p className="font-body text-sm text-muted-foreground mb-5">
             Vous avez un projet similaire ? Parlons-en.
           </p>
-          
+          <a
             href="#contact"
             className="inline-flex items-center gap-2 bg-primary text-primary-foreground px-8 py-4 font-body text-xs font-bold tracking-[1.5px] uppercase hover:bg-hpa-green-dark transition-colors"
           >
