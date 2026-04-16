@@ -56,6 +56,14 @@ const MANUAL_REALISATIONS: ManualRealisation[] = [
     tags: ["Resort", "FF&E", "Hôtellerie"],
     image: "/images/sugar-beach.jpg",
   },
+  {
+    title: "Necker",
+    category: "Bureaux",
+    location: "Île Maurice",
+    desc: "Aménagement mobilier pour les espaces professionnels de Necker.",
+    tags: ["Contract", "Corporate", "Bureaux"],
+    image: "/images/necker.jpg",
+  },
 ];
 
 const API_URL =
