@@ -223,6 +223,18 @@ export default function RealisationsSection() {
           idx++;
         }
 
+        // Add Sugar Beach manually (absent from WordPress API)
+        items.push({
+          id: idx + 1,
+          title: "Sugar Beach",
+          category: "Hôtellerie",
+          location: "Île Maurice",
+          desc: "Fourniture et aménagement mobilier pour Sugar Beach — espaces hôteliers et zones communes.",
+          tags: ["Resort", "FF&E", "Hôtellerie"],
+          image: "/images/sugar-beach.jpg",
+          color: idx % 2 === 0 ? "border-accent" : "border-primary",
+        });
+
         setRealisations(items);
       })
       .catch((err) => console.error("Failed to fetch realisations:", err))
