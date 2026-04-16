@@ -239,6 +239,18 @@ export default function RealisationsSection() {
 
         items.push({
           id: idx + 1,
+          title: "Casa Alegria Loft",
+          category: "Résidentiel",
+          location: "Île Maurice",
+          desc: "Mobilier haut de gamme et aménagement complet pour Casa Alegria Loft — sélection personnalisée.",
+          tags: ["Villa", "Sur mesure", "Résidentiel"],
+          image: "/images/casa-alegria-loft.jpg",
+          color: idx % 2 === 0 ? "border-accent" : "border-primary",
+        });
+        idx++;
+
+        items.push({
+          id: idx + 1,
           title: "Sugar Beach",
           category: "Hôtellerie",
           location: "Île Maurice",
