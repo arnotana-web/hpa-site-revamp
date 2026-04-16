@@ -107,6 +107,7 @@ const EXCLUDED_TITLES = new Set([
   "private penthouse",
   "penthouse",
   "private appartement",
+  "private appartment",
   "arokaria",
   "boa",
   "diamond trust bank",
@@ -114,6 +115,8 @@ const EXCLUDED_TITLES = new Set([
   "mvola",
   "i&m",
   "odity",
+  "bureaux axian abidjan",
+  "apartment with decopack lri",
 ]);
 
 function shouldExclude(title: string): boolean {
