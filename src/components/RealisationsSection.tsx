@@ -35,7 +35,7 @@ function cleanTitle(raw: string): string {
 function getCategory(slug: string, title: string): string {
   const s = (slug + " " + title).toLowerCase();
   if (
-    /(hotel|resort|lodge|palm|club[\s-]?med|maradiva|pullman|constance|spa|restaurant|archipel|bar|lounge)/.test(s)
+    /(hotel|resort|lodge|palm|club[\s-]?med|maradiva|pullman|constance|spa|restaurant|archipel|bar|lounge|eden[\s-]?beach)/.test(s)
   )
     return "Hôtellerie";
   if (
@@ -119,6 +119,7 @@ const EXCLUDED_TITLES = new Set([
   "apartment with decopack lri",
   "phoenix",
   "bfv sg",
+  "barnes",
 ]);
 
 function shouldExclude(title: string): boolean {
@@ -141,13 +142,32 @@ const LOCATION_OVERRIDES: [RegExp, string][] = [
   [/club\s*med\s*st\s*anne/i, "Seychelles"],
   [/pulse/i, "Madagascar"],
   [/palm\s*beach/i, "Madagascar"],
+  [/quinta\s*de\s*faro/i, "Portugal"],
 ];
 
 // Title renames
+// Category overrides by title
+const CATEGORY_OVERRIDES: [RegExp, string][] = [
+  [/park\s*life\s*espace\s*sportif/i, "Hôtellerie"],
+  [/eden\s*beach/i, "Hôtellerie"],
+];
+
+function getOverriddenCategory(title: string, defaultCat: string): string {
+  for (const [re, cat] of CATEGORY_OVERRIDES) {
+    if (re.test(title)) return cat;
+  }
+  return defaultCat;
+}
+
 function renameTitle(title: string): string {
   if (/axian\s*abidjan\s*offices/i.test(title)) return "Axian Abidjan";
   if (/h[oô]tel\s*carlton\s*madagascar/i.test(title)) return "Hôtel Carlton";
   if (/park\s*alarobia\s*villa/i.test(title)) return "Park Alarobia";
+  if (/appartement\s*razia/i.test(title)) return "Appartement R";
+  if (/pack\s*deco\s*o\s*petit\s*parc/i.test(title)) return "O Petit Parc";
+  if (/prince\s*maurice\s*archipel\s*restaurant/i.test(title)) return "Prince Maurice Archipel";
+  if (/constance\s*prince\s*maurice/i.test(title)) return "Prince Maurice le Barachois";
+  if (/prince\s*maurice\s*le\s*spa/i.test(title)) return "Prince Maurice Le Spa";
   return title;
 }
 
