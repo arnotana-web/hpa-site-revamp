@@ -1,5 +1,5 @@
-import { useState, useEffect } from "react";
-import { ArrowRight, MapPin, Tag, Loader2 } from "lucide-react";
+import { useState, useEffect, useCallback } from "react";
+import { ArrowRight, MapPin, Tag, Loader2, X, ZoomIn } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
 
 type Realisation = {
@@ -258,6 +258,14 @@ export default function RealisationsSection() {
     getManualRealisations(),
   );
   const [loading, setLoading] = useState(true);
+  const [lightbox, setLightbox] = useState<{ image: string; title: string } | null>(null);
+
+  const openLightbox = useCallback((e: React.MouseEvent, image: string, title: string) => {
+    e.stopPropagation();
+    setLightbox({ image, title });
+  }, []);
+
+  const closeLightbox = useCallback(() => setLightbox(null), []);
 
   useEffect(() => {
     const manualItems = getManualRealisations();
