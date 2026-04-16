@@ -262,6 +262,9 @@ export default function RealisationsSection() {
   useEffect(() => {
     const manualItems = getManualRealisations();
 
+    // Build a set of manual titles to avoid duplicates from API
+    const manualTitles = new Set(manualItems.map((m) => m.title.toLowerCase()));
+
     fetch(API_URL)
       .then((res) => res.json())
       .then((data: any[]) => {
@@ -276,6 +279,9 @@ export default function RealisationsSection() {
           seen.add(title);
 
           title = renameTitle(title);
+
+          // Skip if this title matches a manual entry (case-insensitive)
+          if (manualTitles.has(title.toLowerCase())) continue;
 
           const slug = item.slug || "";
           const media = item._embedded?.["wp:featuredmedia"]?.[0];
