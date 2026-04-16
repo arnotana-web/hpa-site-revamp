@@ -224,7 +224,19 @@ export default function RealisationsSection() {
           idx++;
         }
 
-        // Add Sugar Beach manually (absent from WordPress API)
+        // Add manual projects (absent from WordPress API)
+        items.push({
+          id: idx + 1,
+          title: "Ki Residence",
+          category: "Résidentiel",
+          location: "Île Maurice",
+          desc: "Mobilier haut de gamme et aménagement complet pour Ki Residence — sélection personnalisée.",
+          tags: ["Ki Residence", "Sur mesure", "Résidentiel"],
+          image: "/images/ki-residence.jpg",
+          color: idx % 2 === 0 ? "border-accent" : "border-primary",
+        });
+        idx++;
+
         items.push({
           id: idx + 1,
           title: "Sugar Beach",
