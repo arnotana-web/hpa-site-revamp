@@ -207,7 +207,7 @@ export default function RealisationsSection() {
           const image = media?.source_url;
           if (!image) continue;
 
-          const category = getCategory(slug, title);
+          const category = getOverriddenCategory(title, getCategory(slug, title));
           const location = getOverriddenLocation(title, getLocation(slug, title));
 
           items.push({
