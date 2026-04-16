@@ -327,6 +327,7 @@ export default function RealisationsSection() {
       : realisations.filter((r) => r.category === activeFilter);
 
   return (
+    <>
     <section id="realisations" className="section-padding bg-card">
       <div className="max-w-[1400px] mx-auto">
         <div className="text-center max-w-2xl mx-auto mb-12">
