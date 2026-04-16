@@ -150,6 +150,7 @@ const LOCATION_OVERRIDES: [RegExp, string][] = [
 const CATEGORY_OVERRIDES: [RegExp, string][] = [
   [/park\s*life\s*espace\s*sportif/i, "Hôtellerie"],
   [/eden\s*beach/i, "Hôtellerie"],
+  [/prince\s*maurice.*villa\s*princi[eè]re/i, "Hôtellerie"],
 ];
 
 function getOverriddenCategory(title: string, defaultCat: string): string {
