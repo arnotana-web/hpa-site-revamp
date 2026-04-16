@@ -13,6 +13,51 @@ type Realisation = {
   color: string;
 };
 
+type ManualRealisation = Omit<Realisation, "id" | "color">;
+
+const MANUAL_REALISATIONS: ManualRealisation[] = [
+  {
+    title: "Ki Residence",
+    category: "Résidentiel",
+    location: "Île Maurice",
+    desc: "Mobilier haut de gamme et aménagement complet pour Ki Residence — sélection personnalisée.",
+    tags: ["Ki Residence", "Sur mesure", "Résidentiel"],
+    image: "/images/ki-residence.jpg",
+  },
+  {
+    title: "Casa Alegria Loft",
+    category: "Résidentiel",
+    location: "Île Maurice",
+    desc: "Mobilier haut de gamme et aménagement complet pour Casa Alegria Loft — sélection personnalisée.",
+    tags: ["Villa", "Sur mesure", "Résidentiel"],
+    image: "/images/casa-alegria-loft.jpg",
+  },
+  {
+    title: "Casa Alegria 1",
+    category: "Résidentiel",
+    location: "Île Maurice",
+    desc: "Mobilier haut de gamme et aménagement complet pour Casa Alegria 1 — sélection personnalisée.",
+    tags: ["Villa", "Sur mesure", "Résidentiel"],
+    image: "/images/casa-alegria-1.jpg",
+  },
+  {
+    title: "Casa Alegria 2",
+    category: "Résidentiel",
+    location: "Île Maurice",
+    desc: "Mobilier haut de gamme et aménagement complet pour Casa Alegria 2 — sélection personnalisée.",
+    tags: ["Villa", "Sur mesure", "Résidentiel"],
+    image: "/images/casa-alegria-2.jpg",
+  },
+  {
+    title: "Sugar Beach",
+    category: "Hôtellerie",
+    location: "Île Maurice",
+    desc: "Fourniture et aménagement mobilier pour Sugar Beach — espaces hôteliers et zones communes.",
+    tags: ["Resort", "FF&E", "Hôtellerie"],
+    image: "/images/sugar-beach.jpg",
+  },
+];
+
 const API_URL =
   "https://hpa-concept.com/wp-json/wp/v2/elemenfolio?per_page=100&_embed=wp:featuredmedia&_fields=title,slug,_embedded,_links";
 
@@ -181,19 +226,32 @@ function getOverriddenLocation(title: string, defaultLoc: string): string {
 
 const categories = ["Tous", "Hôtellerie", "Résidentiel", "Bureaux"];
 
+function getManualRealisations(startIndex = 0): Realisation[] {
+  return MANUAL_REALISATIONS.map((item, index) => ({
+    id: startIndex + index + 1,
+    ...item,
+    color:
+      (startIndex + index) % 2 === 0 ? "border-accent" : "border-primary",
+  }));
+}
+
 export default function RealisationsSection() {
   const [activeFilter, setActiveFilter] = useState("Tous");
   const [selected, setSelected] = useState<number | null>(null);
-  const [realisations, setRealisations] = useState<Realisation[]>([]);
+  const [realisations, setRealisations] = useState<Realisation[]>(() =>
+    getManualRealisations(),
+  );
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    const manualItems = getManualRealisations();
+
     fetch(API_URL)
       .then((res) => res.json())
       .then((data: any[]) => {
         const seen = new Set<string>();
         const items: Realisation[] = [];
-        let idx = 0;
+        let idx = MANUAL_REALISATIONS.length;
 
         for (const item of data) {
           let title = cleanTitle(item.title?.rendered || "");
@@ -224,69 +282,12 @@ export default function RealisationsSection() {
           idx++;
         }
 
-        // Add manual projects (absent from WordPress API)
-        items.push({
-          id: idx + 1,
-          title: "Ki Residence",
-          category: "Résidentiel",
-          location: "Île Maurice",
-          desc: "Mobilier haut de gamme et aménagement complet pour Ki Residence — sélection personnalisée.",
-          tags: ["Ki Residence", "Sur mesure", "Résidentiel"],
-          image: "/images/ki-residence.jpg",
-          color: idx % 2 === 0 ? "border-accent" : "border-primary",
-        });
-        idx++;
-
-        items.push({
-          id: idx + 1,
-          title: "Casa Alegria Loft",
-          category: "Résidentiel",
-          location: "Île Maurice",
-          desc: "Mobilier haut de gamme et aménagement complet pour Casa Alegria Loft — sélection personnalisée.",
-          tags: ["Villa", "Sur mesure", "Résidentiel"],
-          image: "/images/casa-alegria-loft.jpg",
-          color: idx % 2 === 0 ? "border-accent" : "border-primary",
-        });
-        idx++;
-
-        items.push({
-          id: idx + 1,
-          title: "Casa Alegria 1",
-          category: "Résidentiel",
-          location: "Île Maurice",
-          desc: "Mobilier haut de gamme et aménagement complet pour Casa Alegria 1 — sélection personnalisée.",
-          tags: ["Villa", "Sur mesure", "Résidentiel"],
-          image: "/images/casa-alegria-1.jpg",
-          color: idx % 2 === 0 ? "border-accent" : "border-primary",
-        });
-        idx++;
-
-        items.push({
-          id: idx + 1,
-          title: "Casa Alegria 2",
-          category: "Résidentiel",
-          location: "Île Maurice",
-          desc: "Mobilier haut de gamme et aménagement complet pour Casa Alegria 2 — sélection personnalisée.",
-          tags: ["Villa", "Sur mesure", "Résidentiel"],
-          image: "/images/casa-alegria-2.jpg",
-          color: idx % 2 === 0 ? "border-accent" : "border-primary",
-        });
-        idx++;
-
-        items.push({
-          id: idx + 1,
-          title: "Sugar Beach",
-          category: "Hôtellerie",
-          location: "Île Maurice",
-          desc: "Fourniture et aménagement mobilier pour Sugar Beach — espaces hôteliers et zones communes.",
-          tags: ["Resort", "FF&E", "Hôtellerie"],
-          image: "/images/sugar-beach.jpg",
-          color: idx % 2 === 0 ? "border-accent" : "border-primary",
-        });
-
-        setRealisations(items);
+        setRealisations([...manualItems, ...items]);
       })
-      .catch((err) => console.error("Failed to fetch realisations:", err))
+      .catch((err) => {
+        console.error("Failed to fetch realisations:", err);
+        setRealisations(manualItems);
+      })
       .finally(() => setLoading(false));
   }, []);
 
@@ -326,7 +327,7 @@ export default function RealisationsSection() {
           ))}
         </div>
 
-        {loading ? (
+        {loading && realisations.length === 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-[2px]">
             {Array.from({ length: 6 }).map((_, i) => (
               <div key={i} className="bg-card p-0">
