@@ -117,6 +117,8 @@ const EXCLUDED_TITLES = new Set([
   "odity",
   "bureaux axian abidjan",
   "apartment with decopack lri",
+  "phoenix",
+  "bfv sg",
 ]);
 
 function shouldExclude(title: string): boolean {
@@ -136,11 +138,16 @@ const LOCATION_OVERRIDES: [RegExp, string][] = [
   [/connecteo/i, "Madagascar"],
   [/jovenna/i, "Madagascar"],
   [/park\s*alarobia/i, "Madagascar"],
+  [/club\s*med\s*st\s*anne/i, "Seychelles"],
+  [/pulse/i, "Madagascar"],
+  [/palm\s*beach/i, "Madagascar"],
 ];
 
 // Title renames
 function renameTitle(title: string): string {
   if (/axian\s*abidjan\s*offices/i.test(title)) return "Axian Abidjan";
+  if (/h[oô]tel\s*carlton\s*madagascar/i.test(title)) return "Hôtel Carlton";
+  if (/park\s*alarobia\s*villa/i.test(title)) return "Park Alarobia";
   return title;
 }
 
