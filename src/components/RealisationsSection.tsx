@@ -57,6 +57,14 @@ const MANUAL_REALISATIONS: ManualRealisation[] = [
     image: "/images/sugar-beach.jpg",
   },
   {
+    title: "Veranda Palmar",
+    category: "Hôtellerie",
+    location: "Île Maurice",
+    desc: "Fourniture et aménagement mobilier pour Veranda Palmar — chambres, espaces communs et zones extérieures.",
+    tags: ["Resort", "FF&E", "Hôtellerie"],
+    image: "/images/veranda-palmar.jpg",
+  },
+  {
     title: "Necker",
     category: "Bureaux",
     location: "Île Maurice",
