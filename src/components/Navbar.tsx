@@ -43,12 +43,14 @@ export default function Navbar() {
   return (
     <>
       {/* Top bar */}
-      <div className="bg-hpa-green-dark text-hpa-cream hidden md:flex justify-end gap-8 px-10 py-2 font-body text-[13px]">
-        <a href="mailto:info@hpa-concept.com" className="flex items-center gap-1.5 hover:text-hpa-gold transition-colors">
-          <Mail size={14} /> info@hpa-concept.com
+      <div className="bg-hpa-indigo-deep text-hpa-creme hidden md:flex justify-end gap-8 px-10 py-2 font-body text-[13px]">
+        <a href="mailto:contact@hpa.mu" className="flex items-center gap-1.5 hover:text-accent transition-colors">
+          <Mail size={14} />
+          <span>contact@hpa.mu</span>
         </a>
-        <a href="tel:+23052300000" className="flex items-center gap-1.5 hover:text-hpa-gold transition-colors">
-          <Phone size={14} /> +230 5230 0000
+        <a href="tel:+23057892416" className="flex items-center gap-1.5 hover:text-accent transition-colors">
+          <Phone size={14} />
+          <span>+230 5 789 24 16</span>
         </a>
       </div>
 
