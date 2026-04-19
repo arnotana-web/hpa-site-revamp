@@ -64,13 +64,8 @@ export default function Navbar() {
           {/* Logo */}
           <a href="#" className="py-3 flex items-center gap-3">
             <img src={hpaLogo} alt="HPA — Sourceur d'idées" className="h-14 w-14 md:h-16 md:w-16 object-contain" />
-            <span className="hidden sm:flex flex-col">
-              <span className="font-heading text-xl md:text-[22px] font-black text-primary tracking-[-0.02em] leading-none">
-                HPA
-              </span>
-              <span className="text-[10px] text-accent font-accent italic tracking-wide mt-1">
-                sourceur d'idées
-              </span>
+            <span className="hidden sm:block text-[11px] text-accent font-accent italic tracking-wide">
+              sourceur d'idées
             </span>
           </a>
 

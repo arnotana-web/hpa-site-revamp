@@ -9,9 +9,6 @@ export default function Footer() {
           {/* Brand */}
           <div>
             <img src={hpaLogo} alt="HPA" className="h-20 w-20 object-contain mb-4" />
-            <h3 className="font-heading text-2xl font-black text-primary-foreground tracking-[-0.02em]">
-              HPA
-            </h3>
             <p className="text-[12px] text-accent font-accent italic tracking-wide mt-1">
               sourceur d'idées
             </p>

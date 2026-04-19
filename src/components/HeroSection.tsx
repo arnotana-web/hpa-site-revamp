@@ -3,31 +3,18 @@ import hpaLogo from "@/assets/hpa-logo.png";
 export default function HeroSection() {
   return (
     <section className="relative min-h-[88vh] overflow-hidden bg-hpa-indigo-deep">
-      {/* Decorative giant HPA monogram in background */}
-      <div
-        aria-hidden
-        className="absolute inset-0 flex items-center justify-end pr-[5%] pointer-events-none select-none"
-      >
-        <span
-          className="font-heading font-black text-[28vw] leading-none tracking-[-0.05em] text-primary-foreground/[0.04]"
-          style={{ fontStretch: "condensed" }}
-        >
-          HPA
-        </span>
-      </div>
-
       {/* Decorative circular stamp (logo, very faded, on the right) */}
       <img
         src={hpaLogo}
         alt=""
         aria-hidden
-        className="absolute right-[-8%] top-1/2 -translate-y-1/2 w-[60vw] max-w-[800px] opacity-[0.08] pointer-events-none select-none"
+        className="absolute right-[-8%] top-1/2 -translate-y-1/2 w-[60vw] max-w-[800px] opacity-[0.05] pointer-events-none select-none"
       />
 
       {/* Top label */}
       <div className="absolute top-6 left-6 md:top-8 md:left-12 z-10">
         <span className="font-body text-[11px] tracking-[4px] uppercase text-hpa-creme/70">
-          HPA — Sourceur d'idées
+          Maurice · Océan Indien · Afrique
         </span>
       </div>
 
