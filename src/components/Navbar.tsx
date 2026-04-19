@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { Menu, X, ChevronDown, Phone, Mail } from "lucide-react";
+import hpaLogo from "@/assets/hpa-logo.png";
 
 const navLinks = [
   { label: "Accueil", href: "#" },
