@@ -1,20 +1,22 @@
 import { Mail, Phone, MapPin, Globe } from "lucide-react";
+import hpaLogo from "@/assets/hpa-logo.png";
 
 export default function Footer() {
   return (
-    <footer className="bg-hpa-green-dark text-primary-foreground/75">
+    <footer className="bg-hpa-indigo-deep text-primary-foreground/75">
       <div className="max-w-[1400px] mx-auto px-6 md:px-10 pt-16 pb-8">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 pb-12 border-b border-primary-foreground/10">
           {/* Brand */}
           <div>
-            <h3 className="font-heading text-xl font-bold text-primary-foreground tracking-[2px] uppercase">
-              HPA Concept
+            <img src={hpaLogo} alt="HPA" className="h-20 w-20 object-contain mb-4" />
+            <h3 className="font-heading text-2xl font-black text-primary-foreground tracking-[-0.02em]">
+              HPA
             </h3>
-            <p className="text-[10px] text-accent font-body font-bold tracking-[3px] uppercase mt-1">
-              Mobilier & FF&E — Océan Indien & Afrique
+            <p className="text-[12px] text-accent font-accent italic tracking-wide mt-1">
+              sourceur d'idées
             </p>
             <p className="mt-5 text-sm leading-7 text-primary-foreground/60">
-              Votre partenaire clé en main pour la fourniture et la gestion de mobilier FF&E — de la sélection produit jusqu'à l'installation sur site.
+              Maison de sourcing — mobilier, luminaires et accessoires pour l'hôtellerie, les résidences et les espaces de travail à Maurice et dans l'océan Indien.
             </p>
           </div>
 

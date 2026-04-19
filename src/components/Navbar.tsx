@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { Menu, X, ChevronDown, Phone, Mail } from "lucide-react";
+import hpaLogo from "@/assets/hpa-logo.png";
 
 const navLinks = [
   { label: "Accueil", href: "#" },
@@ -59,12 +60,15 @@ export default function Navbar() {
       >
         <div className="max-w-[1400px] mx-auto flex items-center justify-between px-6 md:px-10">
           {/* Logo */}
-          <a href="#" className="py-4 flex flex-col">
-            <span className="text-xl md:text-2xl font-heading font-bold text-primary tracking-[2px] uppercase">
-              HPA Concept
-            </span>
-            <span className="text-[10px] text-accent font-body font-bold tracking-[3px] uppercase mt-0.5">
-              Mobilier & FF&E — Océan Indien & Afrique
+          <a href="#" className="py-3 flex items-center gap-3">
+            <img src={hpaLogo} alt="HPA — Sourceur d'idées" className="h-14 w-14 md:h-16 md:w-16 object-contain" />
+            <span className="hidden sm:flex flex-col">
+              <span className="font-heading text-xl md:text-[22px] font-black text-primary tracking-[-0.02em] leading-none">
+                HPA
+              </span>
+              <span className="text-[10px] text-accent font-accent italic tracking-wide mt-1">
+                sourceur d'idées
+              </span>
             </span>
           </a>
 
