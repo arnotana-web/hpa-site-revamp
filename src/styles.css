@@ -41,51 +41,63 @@
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
-  --color-hpa-green: var(--hpa-green);
-  --color-hpa-green-light: var(--hpa-green-light);
-  --color-hpa-green-dark: var(--hpa-green-dark);
-  --color-hpa-gold: var(--hpa-gold);
-  --color-hpa-gold-light: var(--hpa-gold-light);
-  --color-hpa-cream: var(--hpa-cream);
-  --color-hpa-cream-dark: var(--hpa-cream-dark);
-  --color-hpa-text: var(--hpa-text);
-  --color-hpa-text-muted: var(--hpa-text-muted);
-  --font-heading: 'Playfair Display', Georgia, serif;
+  --color-hpa-indigo: var(--hpa-indigo);
+  --color-hpa-indigo-deep: var(--hpa-indigo-deep);
+  --color-hpa-pierre: var(--hpa-pierre);
+  --color-hpa-tabac: var(--hpa-tabac);
+  --color-hpa-creme: var(--hpa-creme);
+  --color-hpa-encre: var(--hpa-encre);
+  /* Legacy aliases (kept for backwards compatibility with existing components) */
+  --color-hpa-green: var(--hpa-indigo);
+  --color-hpa-green-light: var(--hpa-indigo);
+  --color-hpa-green-dark: var(--hpa-indigo-deep);
+  --color-hpa-gold: var(--hpa-tabac);
+  --color-hpa-gold-light: var(--hpa-tabac);
+  --color-hpa-cream: var(--hpa-creme);
+  --color-hpa-cream-dark: var(--hpa-pierre);
+  --color-hpa-text: var(--hpa-encre);
+  --color-hpa-text-muted: oklch(0.5 0.02 250);
+  --font-heading: 'Fraunces', Georgia, serif;
+  --font-display: 'Fraunces', Georgia, serif;
+  --font-accent: 'Cormorant Garamond', Georgia, serif;
   --font-body: 'Inter', Arial, sans-serif;
 }
 
 :root {
   --radius: 0.25rem;
-  --background: oklch(0.99 0.002 90);
-  --foreground: oklch(0.2 0.02 30);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.2 0.02 30);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.2 0.02 30);
-  --primary: oklch(0.35 0.06 170);
-  --primary-foreground: oklch(0.97 0.005 90);
-  --secondary: oklch(0.96 0.008 85);
-  --secondary-foreground: oklch(0.35 0.06 170);
-  --muted: oklch(0.96 0.008 85);
-  --muted-foreground: oklch(0.5 0.02 30);
-  --accent: oklch(0.75 0.12 80);
-  --accent-foreground: oklch(0.25 0.04 170);
+
+  /* HPA Charte K — Pierre & Indigo (source of truth) */
+  /* Indigo profond #1A2A44 */
+  --hpa-indigo: oklch(0.27 0.06 265);
+  --hpa-indigo-deep: oklch(0.20 0.05 265);
+  /* Pierre #D8CDB4 */
+  --hpa-pierre: oklch(0.84 0.025 85);
+  /* Tabac #7A5A2C */
+  --hpa-tabac: oklch(0.48 0.08 70);
+  /* Crème #F6EFD9 */
+  --hpa-creme: oklch(0.95 0.025 90);
+  /* Encre #12161F */
+  --hpa-encre: oklch(0.18 0.015 265);
+
+  --background: oklch(0.95 0.025 90); /* crème */
+  --foreground: oklch(0.18 0.015 265); /* encre */
+  --card: oklch(0.97 0.018 90);
+  --card-foreground: oklch(0.18 0.015 265);
+  --popover: oklch(0.97 0.018 90);
+  --popover-foreground: oklch(0.18 0.015 265);
+  --primary: oklch(0.27 0.06 265); /* indigo */
+  --primary-foreground: oklch(0.95 0.025 90); /* crème */
+  --secondary: oklch(0.84 0.025 85); /* pierre */
+  --secondary-foreground: oklch(0.27 0.06 265);
+  --muted: oklch(0.88 0.020 85);
+  --muted-foreground: oklch(0.42 0.015 265);
+  --accent: oklch(0.48 0.08 70); /* tabac */
+  --accent-foreground: oklch(0.95 0.025 90);
   --destructive: oklch(0.577 0.245 27.325);
   --destructive-foreground: oklch(0.984 0.003 247.858);
-  --border: oklch(0.92 0.01 85);
-  --input: oklch(0.92 0.01 85);
-  --ring: oklch(0.35 0.06 170);
-
-  /* HPA Brand */
-  --hpa-green: oklch(0.35 0.06 170);
-  --hpa-green-light: oklch(0.42 0.07 170);
-  --hpa-green-dark: oklch(0.25 0.04 170);
-  --hpa-gold: oklch(0.75 0.12 80);
-  --hpa-gold-light: oklch(0.85 0.08 80);
-  --hpa-cream: oklch(0.97 0.008 85);
-  --hpa-cream-dark: oklch(0.93 0.012 85);
-  --hpa-text: oklch(0.2 0.02 30);
-  --hpa-text-muted: oklch(0.5 0.02 30);
+  --border: oklch(0.82 0.020 85);
+  --input: oklch(0.82 0.020 85);
+  --ring: oklch(0.27 0.06 265);
 
   --chart-1: oklch(0.646 0.222 41.116);
   --chart-2: oklch(0.6 0.118 184.704);
