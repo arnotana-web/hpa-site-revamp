@@ -22,10 +22,10 @@ export default function HeroSection() {
       <div className="relative z-10 flex flex-col justify-center min-h-[88vh] max-w-[1400px] mx-auto px-6 md:px-16 pt-24 pb-20">
         <div className="max-w-4xl animate-fade-up">
           <h1 className="font-heading font-black text-hpa-creme leading-[0.95] tracking-[-0.04em] text-[14vw] sm:text-[11vw] md:text-[9vw] lg:text-[7.5vw]">
-            Furniture, lighting,
+            Mobilier, luminaires,
             <br />
             <span className="font-accent font-normal italic text-accent tracking-normal">
-              accessories.
+              accessoires.
             </span>
           </h1>
 
@@ -38,7 +38,7 @@ export default function HeroSection() {
         {/* Bottom row: contact + CTA */}
         <div className="mt-16 md:mt-24 flex flex-col md:flex-row md:items-end md:justify-between gap-8">
           <div className="font-body text-[11px] tracking-[3px] uppercase text-hpa-creme/60 leading-[2.2]">
-            <div>Tamarin · Mauritius</div>
+            <div>Tamarin · Île Maurice</div>
             <a href="mailto:contact@hpa.mu" className="hover:text-accent transition-colors">
               contact@hpa.mu
             </a>
