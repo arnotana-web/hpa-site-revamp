@@ -37,16 +37,9 @@ export default function HeroSection() {
 
         {/* Bottom row: contact + CTA */}
         <div className="mt-16 md:mt-24 flex flex-col md:flex-row md:items-end md:justify-between gap-8">
-          <div className="font-body text-[11px] tracking-[3px] uppercase text-hpa-creme/60 leading-[2.2]">
-            <div>Tamarin · Île Maurice</div>
-            <a href="mailto:contact@hpa.mu" className="hover:text-accent transition-colors">
-              contact@hpa.mu
-            </a>
-          </div>
-
           <a
             href="#realisations"
-            className="group inline-flex items-center gap-3 font-accent italic text-accent text-xl md:text-2xl hover:gap-5 transition-all"
+            className="group ml-auto inline-flex items-center gap-3 font-accent italic text-accent text-xl md:text-2xl hover:gap-5 transition-all"
           >
             Voir nos projets
             <span aria-hidden className="text-2xl transition-transform group-hover:translate-x-1">→</span>
