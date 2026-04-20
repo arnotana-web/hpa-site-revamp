@@ -1,3 +1,10 @@
+import ffeImg from "@/assets/services/ffe.jpg";
+import fabricationImg from "@/assets/services/fabrication.jpg";
+import conseilImg from "@/assets/services/conseil.jpg";
+import gestionImg from "@/assets/services/gestion-projet.jpg";
+import livraisonImg from "@/assets/services/livraison.jpg";
+import distributionImg from "@/assets/services/distribution.jpg";
+
 export type ServiceSlug =
   | "ffe"
   | "fabrication"
@@ -27,7 +34,7 @@ export const services: Record<ServiceSlug, ServiceContent> = {
     tagline: "Furniture, Fixtures & Equipment",
     intro:
       "Sélection, approvisionnement et coordination complète de votre lot mobilier — pour l'hôtellerie, le résidentiel et les espaces commerciaux.",
-    image: "https://images.unsplash.com/photo-1631679706909-1844bbd07221?w=1600&q=80",
+    image: ffeImg,
     description: [
       "Le lot FF&E (Furniture, Fixtures & Equipment) représente l'âme de tout projet hôtelier ou résidentiel haut de gamme. Il définit l'expérience client, l'identité de marque et la durabilité de votre investissement.",
       "HPA Concept prend en charge l'intégralité de ce lot — de la lecture des moodboards architectes jusqu'à la mise en place finale dans les chambres et espaces communs. Notre maîtrise des chaînes d'approvisionnement asiatiques et notre présence locale dans l'Océan Indien garantissent un résultat conforme, dans les délais, au juste prix.",
@@ -53,7 +60,7 @@ export const services: Record<ServiceSlug, ServiceContent> = {
     tagline: "Custom manufacturing",
     intro:
       "Shop drawings, validation prototype, production en usine partenaire en Asie, contrôle qualité rigoureux avant expédition.",
-    image: "https://images.unsplash.com/photo-1615873968403-89e068629265?w=1600&q=80",
+    image: fabricationImg,
     description: [
       "Quand le mobilier standard ne répond pas à votre vision, nous orchestrons une fabrication 100% sur mesure. Chaque pièce est conçue, prototypée et produite selon vos plans et vos spécifications matériaux.",
       "Notre équipe technique transforme vos intentions design en shop drawings précis, valide les prototypes avec vous, puis pilote la production dans nos usines partenaires — bois massifs, métal, rotin, tissus haut de gamme.",
@@ -79,7 +86,7 @@ export const services: Record<ServiceSlug, ServiceContent> = {
     tagline: "Design consulting",
     intro:
       "Moodboards, spécifications techniques, sélection de matériaux — nous vous accompagnons dans la définition de votre identité intérieure.",
-    image: "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?w=1600&q=80",
+    image: conseilImg,
     description: [
       "Avant la fabrication, il y a la vision. HPA Concept vous accompagne dans la définition d'une identité intérieure cohérente, désirable et adaptée à votre marché — qu'il s'agisse d'un boutique-hôtel, d'une villa privée ou d'un espace commercial.",
       "Nos conseillers travaillent main dans la main avec vos architectes, designers et opérateurs pour construire des moodboards inspirants, sélectionner les bons matériaux et valider les choix techniques avant tout engagement de production.",
@@ -105,7 +112,7 @@ export const services: Record<ServiceSlug, ServiceContent> = {
     tagline: "Project management",
     intro:
       "Coordination fournisseurs, suivi des commandes, logistique internationale — un interlocuteur unique pour l'ensemble de votre lot mobilier.",
-    image: "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=1600&q=80",
+    image: gestionImg,
     description: [
       "Un projet hôtelier mobilise des dizaines de fournisseurs, des centaines de références et plusieurs continents. Sans pilotage rigoureux, les retards et surcoûts s'accumulent.",
       "HPA Concept devient votre interlocuteur unique : un chef de projet dédié coordonne fournisseurs, transitaires, douanes et équipes chantier pour livrer votre lot mobilier complet, dans les délais, conforme aux spécifications.",
@@ -131,7 +138,7 @@ export const services: Record<ServiceSlug, ServiceContent> = {
     tagline: "Delivery & installation",
     intro:
       "Gestion des contraintes insulaires et africaines, dédouanement, livraison sur site et installation par des équipes spécialisées.",
-    image: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=1600&q=80",
+    image: livraisonImg,
     description: [
       "Livrer du mobilier à Maurice, Madagascar, aux Seychelles ou à Zanzibar n'a rien à voir avec une livraison européenne. Délais portuaires, formalités douanières, accès aux sites — chaque étape exige une expertise locale.",
       "HPA Concept maîtrise ces contraintes depuis plus d'une décennie. Nos équipes prennent en charge le transport international, le dédouanement et l'installation finale par des installateurs spécialisés mobilier hôtelier.",
@@ -157,7 +164,7 @@ export const services: Record<ServiceSlug, ServiceContent> = {
     tagline: "Brand distribution",
     intro:
       "HPA représente et distribue un portefeuille de marques sélectionnées — La Redoute Intérieur, AM.PM, Woven, Otazen, Skyline Design.",
-    image: "https://images.unsplash.com/photo-1567538096630-e0c55bd6374c?w=1600&q=80",
+    image: distributionImg,
     description: [
       "Au-delà du sur-mesure, HPA Concept distribue dans l'Océan Indien et en Afrique un portefeuille de marques internationales soigneusement sélectionnées pour leur qualité, leur design et leur pertinence sur nos marchés.",
       "Nous accompagnons hôteliers, architectes et particuliers dans la sélection des collections les plus adaptées à leurs projets, avec des conditions négociées et un service après-vente local.",
