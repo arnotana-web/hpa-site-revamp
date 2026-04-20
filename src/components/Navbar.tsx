@@ -3,16 +3,17 @@ import { Menu, X, ChevronDown } from "lucide-react";
 import hpaLogo from "@/assets/hpa-logo.png";
 
 const navLinks = [
-  { label: "Accueil", href: "#" },
+  { label: "Accueil", href: "/" },
   {
     label: "Services",
-    href: "#services",
+    href: "/#services",
     children: [
-      { label: "FF&E & Mobilier de projet", href: "#services" },
-      { label: "Fabrication sur mesure", href: "#services" },
-      { label: "Conseil & Conception", href: "#services" },
-      { label: "Gestion de projet", href: "#services" },
-      { label: "Livraison & Installation", href: "#services" },
+      { label: "FF&E & Mobilier de projet", href: "/services/ffe" },
+      { label: "Fabrication sur mesure", href: "/services/fabrication" },
+      { label: "Conseil & Conception", href: "/services/conseil" },
+      { label: "Gestion de projet", href: "/services/gestion-projet" },
+      { label: "Livraison & Installation", href: "/services/livraison" },
+      { label: "Distribution de marques", href: "/services/distribution" },
     ],
   },
   {
@@ -24,9 +25,9 @@ const navLinks = [
       { label: "Bureaux & Espaces commerciaux", href: "#expertise" },
     ],
   },
-  { label: "Marques", href: "#marques" },
-  { label: "Réalisations", href: "#realisations" },
-  { label: "À propos", href: "#about" },
+  { label: "Marques", href: "/#marques" },
+  { label: "Réalisations", href: "/#realisations" },
+  { label: "À propos", href: "/#about" },
 ];
 
 export default function Navbar() {
@@ -50,7 +51,7 @@ export default function Navbar() {
       >
         <div className="max-w-[1400px] mx-auto flex items-center justify-between px-6 md:px-10">
           {/* Logo */}
-          <a href="#" className="py-3 flex items-center gap-3">
+          <a href="/" className="py-3 flex items-center gap-3">
             <img src={hpaLogo} alt="HPA — Sourceur d'idées" className="h-14 w-14 md:h-16 md:w-16 object-contain" />
             <span className="hidden sm:block text-[11px] text-accent font-accent italic tracking-wide">
               sourceur d'idées
@@ -90,7 +91,7 @@ export default function Navbar() {
             ))}
             <li>
               <a
-                href="#contact"
+                href="/#contact"
                 className="ml-3 inline-block bg-primary text-primary-foreground px-5 py-2.5 rounded-sm hover:bg-hpa-green-dark transition-colors"
               >
                 Demander un devis
@@ -136,7 +137,7 @@ export default function Navbar() {
               </div>
             ))}
             <a
-              href="#contact"
+              href="/#contact"
               className="block mt-4 bg-primary text-primary-foreground text-center py-3 rounded-sm font-body text-sm font-bold uppercase tracking-wide"
               onClick={() => setMobileOpen(false)}
             >
