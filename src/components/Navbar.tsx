@@ -51,7 +51,7 @@ export default function Navbar() {
       >
         <div className="max-w-[1400px] mx-auto flex items-center justify-between px-6 md:px-10">
           {/* Logo */}
-          <a href="/" className="py-3 flex items-center gap-3">
+          <a href="/" className="py-3 flex items-center gap-3" data-navbar-logo>
             <img src={hpaLogo} alt="HPA — Sourceur d'idées" className="h-14 w-14 md:h-16 md:w-16 object-contain" />
             <span className="hidden sm:block text-[11px] text-accent font-accent italic tracking-wide">
               sourceur d'idées
