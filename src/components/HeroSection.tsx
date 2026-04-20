@@ -110,7 +110,7 @@ export default function HeroSection() {
                   className="font-accent italic text-accent tracking-normal text-2xl md:text-3xl absolute left-0 top-0 whitespace-nowrap leading-none"
                   style={{
                     opacity: i === marketIndex ? 1 : 0,
-                    filter: i === marketIndex ? "blur(0)" : "blur(6px)",
+                    filter: i === marketIndex ? "none" : "blur(6px)",
                     transform: `translateY(${i === marketIndex ? 0 : 6}px)`,
                     transition: "opacity 600ms ease, filter 600ms ease, transform 600ms ease",
                   }}
