@@ -79,6 +79,24 @@ export default function MarketsSection() {
   const [activePack, setActivePack] = useState(0);
   const ex = expertises[active];
 
+  useEffect(() => {
+    const syncFromHash = () => {
+      const hash = window.location.hash.replace("#", "");
+      const idx = expertises.findIndex((e) => e.anchor === hash);
+      if (idx >= 0) {
+        setActive(idx);
+        setActivePack(0);
+        // Scroll to section after tab switch
+        setTimeout(() => {
+          document.getElementById("expertise")?.scrollIntoView({ behavior: "smooth", block: "start" });
+        }, 50);
+      }
+    };
+    syncFromHash();
+    window.addEventListener("hashchange", syncFromHash);
+    return () => window.removeEventListener("hashchange", syncFromHash);
+  }, []);
+
   return (
     <section id="expertise" className="section-padding bg-secondary">
       <div className="max-w-[1400px] mx-auto">
