@@ -15,11 +15,19 @@ const brandLoop = [...heroBrands, ...heroBrands];
 
 export default function HeroSection() {
   const [scrollY, setScrollY] = useState(0);
+  const [marketIndex, setMarketIndex] = useState(0);
 
   useEffect(() => {
     const onScroll = () => setScrollY(window.scrollY);
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  useEffect(() => {
+    const id = window.setInterval(() => {
+      setMarketIndex((i) => (i + 1) % rotatingMarkets.length);
+    }, 2500);
+    return () => window.clearInterval(id);
   }, []);
 
   // Parallaxe douce sur la vidéo (effet Ken Burns combiné au scroll)
