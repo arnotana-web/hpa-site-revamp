@@ -113,7 +113,6 @@ export default function HeroSection() {
                     filter: i === marketIndex ? "blur(0)" : "blur(6px)",
                     transform: `translateY(${i === marketIndex ? 0 : 6}px)`,
                     transition: "opacity 600ms ease, filter 600ms ease, transform 600ms ease",
-                    textShadow: "0 1px 20px color-mix(in oklab, var(--accent) 30%, transparent)",
                   }}
                 >
                   {m}
