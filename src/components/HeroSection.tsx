@@ -57,12 +57,6 @@ export default function HeroSection() {
 
       {/* (monogramme HPA en filigrane retiré — remplacé par la transition logo splash → navbar) */}
 
-      {/* Top label — positionné sous la navbar fixed pour ne pas être masqué par le logo */}
-      <div className="absolute top-28 md:top-32 left-6 md:left-32 lg:left-40 z-10">
-        <span className="font-body text-[11px] tracking-[4px] uppercase text-hpa-creme/70">
-          Maurice · Océan Indien · Afrique
-        </span>
-      </div>
 
       {/* Content */}
       <div className="relative z-10 flex flex-col justify-center min-h-screen max-w-[1400px] mx-auto px-6 md:px-16 pt-24 pb-40">
