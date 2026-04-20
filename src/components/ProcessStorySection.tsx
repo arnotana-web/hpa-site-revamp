@@ -82,50 +82,54 @@ export default function ProcessStorySection() {
             <div className="relative min-h-[320px]">
               {/* Progress bar */}
               <div className="flex items-center gap-3 mb-10">
-                {steps.map((_, i) => (
-                  <div
-                    key={i}
-                    className="relative h-px flex-1 bg-border overflow-hidden"
-                  >
+                {steps.map((_, i) => {
+                  const segStart = i / steps.length;
+                  const segEnd = (i + 1) / steps.length;
+                  const sub = Math.min(
+                    1,
+                    Math.max(0, (progress - segStart) / (segEnd - segStart))
+                  );
+                  return (
                     <div
-                      className={`absolute inset-y-0 left-0 bg-accent transition-all duration-700 ease-out ${
-                        i < active
-                          ? "w-full"
-                          : i === active
-                          ? "w-full"
-                          : "w-0"
-                      }`}
-                    />
-                  </div>
-                ))}
-              </div>
-
-              {/* Step number — large, ghosted */}
-              <div
-                key={`num-${active}`}
-                className="font-heading text-[120px] md:text-[160px] leading-none text-accent/15 absolute -top-8 -left-2 pointer-events-none select-none"
-                aria-hidden
-              >
-                {steps[active].num}
+                      key={i}
+                      className="relative h-px flex-1 bg-border overflow-hidden"
+                    >
+                      <div
+                        className="absolute inset-y-0 left-0 bg-accent"
+                        style={{ width: `${sub * 100}%` }}
+                      />
+                    </div>
+                  );
+                })}
               </div>
 
               {/* Step content — animated swap */}
               <div key={`content-${active}`} className="relative animate-fade-in">
-                <div className="flex items-center gap-3 mb-4">
-                  <span className="h-px w-10 bg-accent" />
-                  <span className="font-body text-[11px] font-bold tracking-[3px] uppercase text-accent">
-                    Étape {steps[active].num} — {steps[active].kicker}
-                  </span>
+                {/* Step number — large, ghosted, behind content */}
+                <div
+                  className="font-heading text-[140px] md:text-[200px] leading-none text-accent/10 absolute -top-16 md:-top-24 -left-3 pointer-events-none select-none"
+                  aria-hidden
+                >
+                  {steps[active].num}
                 </div>
-                <h3 className="font-heading text-3xl md:text-5xl text-primary font-normal mb-5 leading-tight">
-                  {steps[active].title}
-                </h3>
-                <p className="font-body text-[15px] md:text-base text-muted-foreground leading-relaxed max-w-md">
-                  {steps[active].desc}
-                </p>
 
-                <div className="mt-8 font-body text-[11px] tracking-[2px] uppercase text-muted-foreground/60">
-                  {active + 1} / {steps.length} — {active < steps.length - 1 ? "Continuez à scroller" : "Fin du parcours"}
+                <div className="relative z-10">
+                  <div className="flex items-center gap-3 mb-4">
+                    <span className="h-px w-10 bg-accent" />
+                    <span className="font-body text-[11px] font-bold tracking-[3px] uppercase text-accent">
+                      Étape {steps[active].num} — {steps[active].kicker}
+                    </span>
+                  </div>
+                  <h3 className="font-heading text-3xl md:text-5xl text-primary font-normal mb-5 leading-tight">
+                    {steps[active].title}
+                  </h3>
+                  <p className="font-body text-[15px] md:text-base text-muted-foreground leading-relaxed max-w-md">
+                    {steps[active].desc}
+                  </p>
+
+                  <div className="mt-8 font-body text-[11px] tracking-[2px] uppercase text-muted-foreground/60">
+                    {active + 1} / {steps.length} — {active < steps.length - 1 ? "Continuez à scroller" : "Fin du parcours"}
+                  </div>
                 </div>
               </div>
             </div>
