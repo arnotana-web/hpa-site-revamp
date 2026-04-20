@@ -94,15 +94,15 @@ export default function HeroSection() {
           </h1>
 
           {/* Mot rotatif — marchés cibles */}
-          <p
-            className="mt-10 font-body text-[12px] md:text-[13px] tracking-[3.5px] uppercase text-hpa-creme/55 opacity-0 animate-[heroWordIn_0.9s_ease-out_forwards] flex flex-wrap items-center gap-x-3"
+          <div
+            className="mt-10 opacity-0 animate-[heroWordIn_0.9s_ease-out_forwards] flex items-center gap-4 flex-wrap"
             style={{ animationDelay: "0.75s" }}
           >
-            <span className="inline-flex items-center gap-3">
+            <span className="inline-flex items-center gap-3 font-body text-[12px] md:text-[13px] tracking-[3.5px] uppercase text-hpa-creme/55 shrink-0">
               <span aria-hidden className="h-px w-8 bg-hpa-creme/40" />
               Pour
             </span>
-            <span className="relative inline-block min-w-[12ch] h-[1.6em]">
+            <span className="relative inline-block min-w-[12ch] leading-none">
               {rotatingMarkets.map((m, i) => (
                 <span
                   key={m}
