@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import logoBadge from "@/assets/hpa-logo-badge.svg";
 
 const SESSION_KEY = "hpa_splash_seen";
-const TOTAL_DURATION = 2600; // ms
+const TOTAL_DURATION = 8000; // ms — temporairement allongé pour QA visuel
 
 export default function SplashScreen() {
   const [mounted, setMounted] = useState(false);
