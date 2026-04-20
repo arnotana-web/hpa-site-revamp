@@ -18,11 +18,11 @@ const navLinks = [
   },
   {
     label: "Expertise",
-    href: "#expertise",
+    href: "/#expertise",
     children: [
-      { label: "Hôtellerie & Resorts", href: "#expertise" },
-      { label: "Résidentiel", href: "#expertise" },
-      { label: "Bureaux & Espaces commerciaux", href: "#expertise" },
+      { label: "Hôtellerie & Resorts", href: "/#expertise-hotel" },
+      { label: "Résidentiel", href: "/#expertise-residentiel" },
+      { label: "Bureaux & Espaces commerciaux", href: "/#expertise-bureaux" },
     ],
   },
   { label: "Marques", href: "/#marques" },
