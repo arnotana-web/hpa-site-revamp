@@ -124,7 +124,7 @@ export default function HeroSection() {
                 les résidences
               </span>
             </span>
-          </p>
+          </div>
 
 
           <p
