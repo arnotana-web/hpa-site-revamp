@@ -296,11 +296,11 @@
 
 /* Splash → Navbar transition (le logo glisse du centre vers le coin haut-gauche) */
 .splash-logo {
-  transition: top 900ms cubic-bezier(.7, 0, .2, 1),
-              left 900ms cubic-bezier(.7, 0, .2, 1),
-              width 900ms cubic-bezier(.7, 0, .2, 1),
-              height 900ms cubic-bezier(.7, 0, .2, 1),
-              transform 900ms cubic-bezier(.7, 0, .2, 1);
+  transition: top 1500ms cubic-bezier(.7, 0, .2, 1),
+              left 1500ms cubic-bezier(.7, 0, .2, 1),
+              width 1500ms cubic-bezier(.7, 0, .2, 1),
+              height 1500ms cubic-bezier(.7, 0, .2, 1),
+              transform 1500ms cubic-bezier(.7, 0, .2, 1);
   will-change: top, left, width, height, transform;
 }
 .splash-logo--center {
