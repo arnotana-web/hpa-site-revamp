@@ -4,15 +4,21 @@ import logoBadge from "@/assets/hpa-logo-badge.svg";
 const SESSION_KEY = "hpa_splash_seen";
 const TOTAL_DURATION = 2600; // ms
 
+// Calcul synchrone (pré-render) pour éviter le flash : on suppose visible par défaut
+// puis on cache immédiatement côté client si déjà vu.
+function shouldShowInitially() {
+  if (typeof window === "undefined") return true;
+  const force = new URLSearchParams(window.location.search).get("splash") === "force";
+  if (force) return true;
+  return !sessionStorage.getItem(SESSION_KEY);
+}
+
 export default function SplashScreen() {
-  const [mounted, setMounted] = useState(false);
+  const [mounted, setMounted] = useState<boolean>(() => shouldShowInitially());
   const [hiding, setHiding] = useState(false);
 
   useEffect(() => {
-    if (typeof window === "undefined") return;
-    if (sessionStorage.getItem(SESSION_KEY)) return;
-
-    setMounted(true);
+    if (typeof window === "undefined" || !mounted) return;
     sessionStorage.setItem(SESSION_KEY, "1");
 
     const hideTimer = window.setTimeout(() => setHiding(true), TOTAL_DURATION - 600);
@@ -21,7 +27,7 @@ export default function SplashScreen() {
       window.clearTimeout(hideTimer);
       window.clearTimeout(removeTimer);
     };
-  }, []);
+  }, [mounted]);
 
   if (!mounted) return null;
 
