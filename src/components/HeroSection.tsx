@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import hpaLogo from "@/assets/hpa-logo.png";
 import heroVideo from "@/assets/hero-cinematic.mp4.asset.json";
 
 const words = ["Mobilier,", "luminaires,"];
@@ -56,13 +55,14 @@ export default function HeroSection() {
         <div className="absolute inset-0 bg-gradient-to-r from-hpa-indigo-deep/70 via-transparent to-hpa-indigo-deep/40" />
       </div>
 
-      {/* Logo fantôme décoratif */}
-      <img
-        src={hpaLogo}
-        alt=""
+      {/* Monogramme typographique HPA — filigrane d'identité (conforme charte K) */}
+      <span
         aria-hidden
-        className="absolute right-[-8%] top-1/2 -translate-y-1/2 w-[60vw] max-w-[800px] opacity-[0.04] pointer-events-none select-none z-[1]"
-      />
+        className="absolute right-[-4%] bottom-[8%] font-heading font-black text-hpa-creme leading-none tracking-[-0.05em] select-none pointer-events-none z-[1] text-[28vw] md:text-[22vw] lg:text-[18vw]"
+        style={{ opacity: 0.08 }}
+      >
+        HPA
+      </span>
 
       {/* Top label */}
       <div className="absolute top-6 left-6 md:top-8 md:left-12 z-10">
