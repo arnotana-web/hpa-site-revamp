@@ -143,7 +143,7 @@ export default function Navbar() {
         {/* Desktop links */}
         <ul
           className={`hidden lg:flex items-center gap-0 font-body text-[13px] font-semibold tracking-wide uppercase ${
-            transparent ? "text-[color:var(--hpa-creme)]" : "text-foreground"
+            transparent ? "text-[color:var(--hpa-creme)]" : "text-[color:var(--hpa-indigo)]"
           }`}
         >
           {navLinks.map((link) => {
