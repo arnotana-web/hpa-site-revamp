@@ -93,11 +93,6 @@ export default function SplashScreen() {
         className={`absolute splash-logo ${
           isTransitioning ? "splash-logo--landed" : "splash-logo--center"
         }`}
-        style={{
-          transition: isTransitioning
-            ? `top ${TRANSITION_DURATION}ms cubic-bezier(.7,0,.2,1), left ${TRANSITION_DURATION}ms cubic-bezier(.7,0,.2,1), width ${TRANSITION_DURATION}ms cubic-bezier(.7,0,.2,1), height ${TRANSITION_DURATION}ms cubic-bezier(.7,0,.2,1), transform ${TRANSITION_DURATION}ms cubic-bezier(.7,0,.2,1)`
-            : undefined,
-        }}
       >
         <img
           src={logoBadge}
