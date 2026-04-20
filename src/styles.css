@@ -190,8 +190,8 @@
 
 /* Hero — Ken Burns sur la vidéo de fond (cycle long et symétrique pour ne pas saccader) */
 @keyframes heroKenBurns {
-  from { transform: scale(1.08) translate(0.6%, 0.4%); }
-  to { transform: scale(1.14) translate(-0.6%, -0.4%); }
+  from { transform: scale(1.06) translate(0.3%, 0.2%); }
+  to { transform: scale(1.09) translate(-0.3%, -0.2%); }
 }
 
 /* Hero — indicateur de scroll */
