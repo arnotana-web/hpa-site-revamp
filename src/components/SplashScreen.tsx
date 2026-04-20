@@ -16,9 +16,15 @@ function shouldShowInitially() {
 }
 
 export default function SplashScreen() {
-  const [mounted, setMounted] = useState<boolean>(() => shouldShowInitially());
+  const [mounted, setMounted] = useState<boolean>(false);
   const [phase, setPhase] = useState<"reveal" | "glide" | "fade">("reveal");
   const [backdropVisible, setBackdropVisible] = useState(true);
+
+  // Ne monter qu'après hydratation côté client (évite que le splash reste figé
+  // pendant le chargement JS si rendu en SSR).
+  useEffect(() => {
+    if (shouldShowInitially()) setMounted(true);
+  }, []);
 
   useEffect(() => {
     if (typeof window === "undefined" || !mounted) return;
@@ -27,9 +33,7 @@ export default function SplashScreen() {
 
     const glideTimer = window.setTimeout(() => {
       setPhase("glide");
-      // Le logo de la navbar peut apparaître presque tout de suite (atterrissage doux)
       document.documentElement.dataset.splashActive = "0";
-      // Le fond indigo se retire peu après le début du glissement
       window.setTimeout(() => setBackdropVisible(false), BACKDROP_FADE_DELAY);
     }, REVEAL_DURATION);
 
