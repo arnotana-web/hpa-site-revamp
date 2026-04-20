@@ -2,13 +2,13 @@ import { useEffect, useState } from "react";
 import logoBadge from "@/assets/hpa-logo-badge.svg";
 
 const SESSION_KEY = "hpa_splash_seen";
-const REVEAL_DURATION = 550;         // wipe + apparition du logo (court)
-const TRANSITION_DURATION = 1200;    // glissement vers la navbar
+const REVEAL_DURATION = 650;         // apparition + courte pause avant glissement
+const TRANSITION_DURATION = 1100;    // glissement vers la navbar
 const FADE_DURATION = 300;
 const TOTAL_DURATION = REVEAL_DURATION + TRANSITION_DURATION + FADE_DURATION;
 // Le fond se retire AU DÉBUT de la transition (pas à la fin), pour qu'on voie
 // le logo voler par-dessus le site jusqu'à sa position dans la navbar.
-const BACKDROP_FADE_DELAY = 200;     // léger retard après le début du glissement
+const BACKDROP_FADE_DELAY = 100;     // léger retard après le début du glissement
 
 function shouldShowInitially() {
   if (typeof window === "undefined") return true;
