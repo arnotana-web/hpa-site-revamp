@@ -31,6 +31,7 @@ const steps = [
 export default function ProcessStorySection() {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const [active, setActive] = useState(0);
+  const [progress, setProgress] = useState(0); // 0..1 across the whole storytelling
 
   useEffect(() => {
     const node = containerRef.current;
@@ -39,17 +40,15 @@ export default function ProcessStorySection() {
     const onScroll = () => {
       const rect = node.getBoundingClientRect();
       const vh = window.innerHeight;
-      // Container is steps.length * vh tall. Sticky child sticks while we scroll.
-      // Progress = how far we've scrolled inside the container, 0..1
       const total = rect.height - vh;
       if (total <= 0) return;
       const progressed = Math.min(Math.max(-rect.top / total, 0), 1);
-      // Map progress to a step index with slight bias so each step holds for ~1/3
       const idx = Math.min(
         steps.length - 1,
         Math.floor(progressed * steps.length * 0.999)
       );
       setActive(idx);
+      setProgress(progressed);
     };
 
     onScroll();
