@@ -115,7 +115,6 @@ export default function MarketsSection() {
           {expertises.map((e, i) => (
             <button
               key={e.id}
-              id={e.anchor}
               onClick={() => { setActive(i); setActivePack(0); }}
               className={`px-6 py-3 font-body text-[12px] font-bold tracking-[1.5px] uppercase transition-all border ${
                 active === i
