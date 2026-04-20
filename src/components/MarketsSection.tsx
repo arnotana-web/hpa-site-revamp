@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Check, ArrowRight } from "lucide-react";
 
 const expertises = [
