@@ -48,7 +48,7 @@ export default function HeroSection() {
           playsInline
           preload="auto"
           aria-hidden
-          className="absolute inset-0 h-full w-full object-cover scale-110 animate-[heroKenBurns_30s_ease-in-out_infinite_alternate]"
+          className="absolute inset-0 h-full w-full object-cover scale-110 animate-[heroKenBurns_60s_ease-in-out_infinite_alternate]"
         />
         {/* Overlay sombre + gradient indigo pour lisibilité */}
         <div className="absolute inset-0 bg-hpa-indigo-deep/70" />
