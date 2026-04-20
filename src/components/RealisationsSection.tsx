@@ -1,5 +1,5 @@
-import { useState, useEffect, useCallback } from "react";
-import { ArrowRight, MapPin, Tag, Loader2, X, ZoomIn, Download } from "lucide-react";
+import { useState, useEffect, useCallback, useMemo } from "react";
+import { ArrowRight, MapPin, Tag, X, ZoomIn, Download, ChevronLeft, ChevronRight } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
 
 type Realisation = {
