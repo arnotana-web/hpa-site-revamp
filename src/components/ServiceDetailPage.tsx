@@ -21,7 +21,7 @@ export default function ServiceDetailPage({ service }: Props) {
         className="relative h-[60vh] min-h-[420px] bg-cover bg-center flex items-end"
         style={{ backgroundImage: `url(${service.image})` }}
       >
-        <div className="absolute inset-0 bg-gradient-to-t from-primary/90 via-primary/50 to-primary/20" />
+        <div className="absolute inset-0 bg-gradient-to-t from-primary via-primary/80 to-primary/40" />
         <div className="relative max-w-[1400px] mx-auto px-6 md:px-10 pb-16 md:pb-20 w-full">
           <Link
             to="/"
