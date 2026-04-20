@@ -13,6 +13,7 @@ import RealisationsSection from "@/components/RealisationsSection";
 import CtaBanner from "@/components/CtaBanner";
 import ContactSection from "@/components/ContactSection";
 import Footer from "@/components/Footer";
+import Reveal from "@/components/Reveal";
 
 export const Route = createFileRoute("/")({
   component: Index,
@@ -31,18 +32,18 @@ function Index() {
     <div className="min-h-screen">
       <Navbar />
       <HeroSection />
-      <AboutSection />
-      <TeamSection />
+      <Reveal><AboutSection /></Reveal>
+      <Reveal><TeamSection /></Reveal>
       <div className="hpa-divider" />
-      <ServicesSection />
-      <WhyUsSection />
-      <MarketsSection />
-      <BrandsSection />
-      <ProcessSection />
-      <TestimonialsSection />
-      <RealisationsSection />
-      <CtaBanner />
-      <ContactSection />
+      <Reveal><ServicesSection /></Reveal>
+      <Reveal><WhyUsSection /></Reveal>
+      <Reveal><MarketsSection /></Reveal>
+      <Reveal><BrandsSection /></Reveal>
+      <Reveal><ProcessSection /></Reveal>
+      <Reveal><TestimonialsSection /></Reveal>
+      <Reveal><RealisationsSection /></Reveal>
+      <Reveal><CtaBanner /></Reveal>
+      <Reveal><ContactSection /></Reveal>
       <Footer />
     </div>
   );
