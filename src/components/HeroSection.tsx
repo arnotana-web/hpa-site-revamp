@@ -4,6 +4,7 @@ import heroVideo from "@/assets/hero-cinematic.mp4.asset.json";
 
 const words = ["Mobilier,", "luminaires,"];
 const accentWord = "accessoires.";
+const rotatingMarkets = ["l'hôtellerie", "les résidences", "les workspaces"];
 
 const heroBrands = [
   "Marset", "Viccarbe", "Gervasoni", "Bover", "Expormim",
@@ -14,11 +15,19 @@ const brandLoop = [...heroBrands, ...heroBrands];
 
 export default function HeroSection() {
   const [scrollY, setScrollY] = useState(0);
+  const [marketIndex, setMarketIndex] = useState(0);
 
   useEffect(() => {
     const onScroll = () => setScrollY(window.scrollY);
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  useEffect(() => {
+    const id = window.setInterval(() => {
+      setMarketIndex((i) => (i + 1) % rotatingMarkets.length);
+    }, 2500);
+    return () => window.clearInterval(id);
   }, []);
 
   // Parallaxe douce sur la vidéo (effet Ken Burns combiné au scroll)
@@ -83,6 +92,35 @@ export default function HeroSection() {
               {accentWord}
             </span>
           </h1>
+
+          {/* Mot rotatif — marchés cibles */}
+          <p
+            className="mt-8 font-body text-[11px] md:text-xs tracking-[3px] uppercase text-hpa-creme/70 opacity-0 animate-[heroWordIn_0.9s_ease-out_forwards] flex flex-wrap items-baseline gap-x-2"
+            style={{ animationDelay: "0.75s" }}
+          >
+            <span>Pour</span>
+            <span className="relative inline-block min-w-[10ch]">
+              {rotatingMarkets.map((m, i) => (
+                <span
+                  key={m}
+                  aria-hidden={i !== marketIndex}
+                  className="font-accent normal-case italic text-accent tracking-normal text-base md:text-lg absolute left-0 top-1/2 -translate-y-1/2 whitespace-nowrap"
+                  style={{
+                    opacity: i === marketIndex ? 1 : 0,
+                    filter: i === marketIndex ? "blur(0)" : "blur(6px)",
+                    transform: `translateY(-50%) translateY(${i === marketIndex ? 0 : 6}px)`,
+                    transition: "opacity 600ms ease, filter 600ms ease, transform 600ms ease",
+                  }}
+                >
+                  {m}
+                </span>
+              ))}
+              {/* Spacer invisible — réserve la largeur du plus long mot */}
+              <span className="invisible font-accent italic text-base md:text-lg whitespace-nowrap">
+                les résidences
+              </span>
+            </span>
+          </p>
 
           <p
             className="mt-10 max-w-xl font-accent italic text-hpa-creme/85 text-lg md:text-xl leading-relaxed opacity-0 animate-[heroWordIn_0.9s_ease-out_forwards]"
