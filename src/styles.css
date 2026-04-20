@@ -271,6 +271,39 @@
   }
 }
 
+/* Splash screen — tracé du logo */
+@keyframes splashRingDraw {
+  to { stroke-dashoffset: 0; }
+}
+@keyframes splashLogoIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.92);
+    filter: blur(6px);
+    clip-path: circle(0% at 50% 50%);
+  }
+  60% {
+    filter: blur(0);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+    filter: blur(0);
+    clip-path: circle(75% at 50% 50%);
+  }
+}
+@keyframes splashHalo {
+  0% { opacity: 0; transform: scale(0.6); }
+  50% { opacity: 1; }
+  100% { opacity: 0.6; transform: scale(1.1); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  @keyframes splashRingDraw { to { stroke-dashoffset: 0; } }
+  @keyframes splashLogoIn { 0%, 100% { opacity: 1; transform: none; filter: none; clip-path: none; } }
+  @keyframes splashHalo { 0%, 100% { opacity: 0.6; transform: scale(1); } }
+}
+
 .marquee-mask {
   -webkit-mask-image: linear-gradient(to right, transparent 0, #000 8%, #000 92%, transparent 100%);
           mask-image: linear-gradient(to right, transparent 0, #000 8%, #000 92%, transparent 100%);
