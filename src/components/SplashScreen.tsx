@@ -10,9 +10,9 @@ const BACKDROP_FADE_DELAY = 50;      // le fond se retire dès le début du glis
 
 function shouldShowInitially() {
   if (typeof window === "undefined") return true;
-  const force = new URLSearchParams(window.location.search).get("splash") === "force";
-  if (force) return true;
-  return !sessionStorage.getItem(SESSION_KEY);
+  // Mode peaufinage : le splash joue à chaque rechargement.
+  // Pour réactiver le "une seule fois par session", remettre la logique sessionStorage.
+  return true;
 }
 
 export default function SplashScreen() {
