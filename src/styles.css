@@ -200,6 +200,77 @@
   60%, 100% { transform: translateY(400%); }
 }
 
+/* Hero — Monogramme HPA : entrée centrale grande puis glissement vers filigrane bas-droit */
+@keyframes hpaMonogramSettle {
+  0% {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 38vw;
+    opacity: 0;
+    filter: blur(12px);
+  }
+  18% {
+    opacity: 0.28;
+    filter: blur(0);
+  }
+  55% {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 38vw;
+    opacity: 0.28;
+  }
+  100% {
+    top: auto;
+    left: auto;
+    right: -4%;
+    bottom: 8%;
+    transform: translate(0, 0);
+    font-size: 18vw;
+    opacity: 0.08;
+  }
+}
+
+@media (max-width: 768px) {
+  @keyframes hpaMonogramSettle {
+    0% {
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 60vw;
+      opacity: 0;
+      filter: blur(12px);
+    }
+    18% { opacity: 0.28; filter: blur(0); }
+    55% {
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 60vw;
+      opacity: 0.28;
+    }
+    100% {
+      top: auto; left: auto;
+      right: -4%; bottom: 8%;
+      transform: translate(0, 0);
+      font-size: 28vw;
+      opacity: 0.08;
+    }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  @keyframes hpaMonogramSettle {
+    0%, 100% {
+      top: auto; left: auto;
+      right: -4%; bottom: 8%;
+      transform: translate(0, 0);
+      font-size: 18vw;
+      opacity: 0.08;
+      filter: none;
+    }
+  }
+}
+
 .marquee-mask {
   -webkit-mask-image: linear-gradient(to right, transparent 0, #000 8%, #000 92%, transparent 100%);
           mask-image: linear-gradient(to right, transparent 0, #000 8%, #000 92%, transparent 100%);
