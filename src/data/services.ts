@@ -1,3 +1,10 @@
+import ffeImg from "@/assets/services/ffe.jpg";
+import fabricationImg from "@/assets/services/fabrication.jpg";
+import conseilImg from "@/assets/services/conseil.jpg";
+import gestionImg from "@/assets/services/gestion-projet.jpg";
+import livraisonImg from "@/assets/services/livraison.jpg";
+import distributionImg from "@/assets/services/distribution.jpg";
+
 export type ServiceSlug =
   | "ffe"
   | "fabrication"
