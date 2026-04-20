@@ -1,13 +1,15 @@
 import { createFileRoute } from "@tanstack/react-router";
 import Navbar from "@/components/Navbar";
 import HeroSection from "@/components/HeroSection";
+import StatsBar from "@/components/StatsBar";
 import AboutSection from "@/components/AboutSection";
 import TeamSection from "@/components/TeamSection";
 import ServicesSection from "@/components/ServicesSection";
 import WhyUsSection from "@/components/WhyUsSection";
 import MarketsSection from "@/components/MarketsSection";
+import RegionMapSection from "@/components/RegionMapSection";
 import BrandsSection from "@/components/BrandsSection";
-import ProcessSection from "@/components/ProcessSection";
+import ProcessStorySection from "@/components/ProcessStorySection";
 import TestimonialsSection from "@/components/TestimonialsSection";
 import RealisationsSection from "@/components/RealisationsSection";
 import CtaBanner from "@/components/CtaBanner";
@@ -32,14 +34,16 @@ function Index() {
     <div className="min-h-screen">
       <Navbar />
       <HeroSection />
+      <StatsBar />
       <Reveal><AboutSection /></Reveal>
       <Reveal><TeamSection /></Reveal>
       <div className="hpa-divider" />
       <Reveal><ServicesSection /></Reveal>
       <Reveal><WhyUsSection /></Reveal>
       <Reveal><MarketsSection /></Reveal>
+      <Reveal><RegionMapSection /></Reveal>
       <Reveal><BrandsSection /></Reveal>
-      <Reveal><ProcessSection /></Reveal>
+      <ProcessStorySection />
       <Reveal><TestimonialsSection /></Reveal>
       <Reveal><RealisationsSection /></Reveal>
       <Reveal><CtaBanner /></Reveal>
