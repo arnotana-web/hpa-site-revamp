@@ -544,6 +544,7 @@ export default function RealisationsSection() {
           </div>
         </div>
       </div>
+      </div>
     </section>
 
     {/* Lightbox */}
