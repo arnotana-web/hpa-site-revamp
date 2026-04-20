@@ -1,5 +1,4 @@
 import { Outlet, Link, createRootRoute, HeadContent, Scripts } from "@tanstack/react-router";
-import MagneticCursor from "@/components/MagneticCursor";
 
 import "../styles.css";
 
@@ -80,7 +79,6 @@ function RootComponent() {
   return (
     <>
       <Outlet />
-      <MagneticCursor />
     </>
   );
 }
