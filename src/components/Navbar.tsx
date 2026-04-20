@@ -133,7 +133,7 @@ export default function Navbar() {
       className={`fixed top-0 inset-x-0 z-50 transition-all duration-500 ${
         transparent
           ? "bg-transparent border-b border-transparent"
-          : "bg-card/95 backdrop-blur-md border-b border-[color:var(--hpa-tabac)]/40 shadow-sm"
+          : "bg-card/95 backdrop-blur-md border-b border-hpa-tabac/40 shadow-sm"
       }`}
     >
       <div className="max-w-[1400px] mx-auto flex items-center justify-between px-6 md:px-10">
@@ -151,7 +151,7 @@ export default function Navbar() {
         {/* Desktop links */}
         <ul
           className={`hidden lg:flex items-center gap-0 font-body text-[13px] font-semibold tracking-wide uppercase ${
-            transparent ? "text-[color:var(--hpa-creme)]" : "text-[color:var(--hpa-indigo)]"
+            transparent ? "text-hpa-creme" : "text-hpa-indigo"
           }`}
         >
           {navLinks.map((link) => {
@@ -167,7 +167,7 @@ export default function Navbar() {
                   href={link.href}
                   className={`group relative flex items-center gap-1 px-4 py-6 transition-colors ${
                     transparent
-                      ? "hover:text-[color:var(--hpa-creme)]"
+                      ? "hover:text-hpa-creme"
                       : "hover:text-primary"
                   }`}
                 >
@@ -175,7 +175,7 @@ export default function Navbar() {
                     {link.label}
                     {/* Animated gold underline */}
                     <span
-                      className={`pointer-events-none absolute left-0 -bottom-1 h-px bg-[color:var(--hpa-tabac)] transition-transform duration-500 ease-out origin-left ${
+                      className={`pointer-events-none absolute left-0 -bottom-1 h-px bg-hpa-tabac transition-transform duration-500 ease-out origin-left ${
                         active ? "scale-x-100" : "scale-x-0 group-hover:scale-x-100"
                       }`}
                       style={{ width: "100%" }}
@@ -189,12 +189,12 @@ export default function Navbar() {
                   )}
                   {/* Active dot indicator */}
                   {active && (
-                    <span className="absolute left-1/2 -translate-x-1/2 bottom-2 w-1 h-1 rounded-full bg-[color:var(--hpa-tabac)]" />
+                    <span className="absolute left-1/2 -translate-x-1/2 bottom-2 w-1 h-1 rounded-full bg-hpa-tabac" />
                   )}
                 </a>
                 {link.children && openDropdown === link.label && (
                   <div
-                    className="absolute top-full left-0 bg-card border border-border border-t-2 border-t-[color:var(--hpa-tabac)] min-w-[260px] shadow-2xl z-50 animate-fade-in"
+                    className="absolute top-full left-0 bg-card border border-border border-t-2 border-t-hpa-tabac min-w-[260px] shadow-2xl z-50 animate-fade-in"
                     onMouseEnter={() => handleEnter(link.label)}
                     onMouseLeave={handleLeave}
                   >
@@ -216,19 +216,19 @@ export default function Navbar() {
           {/* FR / EN selector (visual only) */}
           <li className="ml-3 flex items-center gap-1 text-[11px] tracking-[0.15em]">
             <span
-              className={`px-1.5 py-0.5 border-b border-[color:var(--hpa-tabac)] ${
-                transparent ? "text-[color:var(--hpa-creme)]" : "text-[color:var(--hpa-indigo)]"
+              className={`px-1.5 py-0.5 border-b border-hpa-tabac ${
+                transparent ? "text-hpa-creme" : "text-hpa-indigo"
               }`}
               aria-current="true"
             >
               FR
             </span>
-            <span className={transparent ? "text-[color:var(--hpa-creme)]/50" : "text-[color:var(--hpa-indigo)]/40"}>
+            <span className={transparent ? "text-hpa-creme/50" : "text-hpa-indigo/40"}>
               /
             </span>
             <span
               className={`px-1.5 py-0.5 cursor-not-allowed ${
-                transparent ? "text-[color:var(--hpa-creme)]/50" : "text-[color:var(--hpa-indigo)]/40"
+                transparent ? "text-hpa-creme/50" : "text-hpa-indigo/40"
               }`}
               title="English version coming soon"
             >
@@ -241,8 +241,8 @@ export default function Navbar() {
               href="/#contact"
               className={`ml-4 inline-block px-5 py-2.5 rounded-sm transition-all duration-300 ${
                 transparent
-                  ? "bg-[color:var(--hpa-creme)] text-[color:var(--hpa-indigo)] hover:bg-[color:var(--hpa-tabac)] hover:text-[color:var(--hpa-creme)]"
-                  : "bg-primary text-primary-foreground hover:bg-[color:var(--hpa-indigo-deep)]"
+                  ? "bg-hpa-creme text-hpa-indigo hover:bg-hpa-tabac hover:text-hpa-creme"
+                  : "bg-primary text-primary-foreground hover:bg-hpa-indigo-deep"
               }`}
             >
               Demander un devis
@@ -252,7 +252,7 @@ export default function Navbar() {
 
         {/* Mobile toggle */}
         <button
-          className={`lg:hidden p-2 ${transparent ? "text-[color:var(--hpa-creme)]" : "text-foreground"}`}
+          className={`lg:hidden p-2 ${transparent ? "text-hpa-creme" : "text-foreground"}`}
           onClick={() => setMobileOpen(!mobileOpen)}
           aria-label="Menu"
         >
