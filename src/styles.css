@@ -271,37 +271,27 @@
   }
 }
 
-/* Splash screen — tracé du logo */
-@keyframes splashRingDraw {
-  to { stroke-dashoffset: 0; }
+/* Splash screen — wipe doré horizontal */
+@keyframes splashGoldLine {
+  0%   { transform: translateX(-100%) translateY(-50%) scaleX(0.4); opacity: 0; }
+  15%  { opacity: 1; }
+  50%  { transform: translateX(0%) translateY(-50%) scaleX(1); opacity: 1; }
+  85%  { opacity: 1; }
+  100% { transform: translateX(100%) translateY(-50%) scaleX(0.4); opacity: 0; }
 }
-@keyframes splashLogoIn {
-  0% {
-    opacity: 0;
-    transform: scale(0.92);
-    filter: blur(6px);
-    clip-path: circle(0% at 50% 50%);
-  }
-  60% {
-    filter: blur(0);
-  }
-  100% {
-    opacity: 1;
-    transform: scale(1);
-    filter: blur(0);
-    clip-path: circle(75% at 50% 50%);
-  }
+@keyframes splashWipeReveal {
+  0%   { clip-path: inset(50% 0 50% 0); opacity: 0.2; filter: blur(4px); }
+  40%  { opacity: 1; filter: blur(0); }
+  100% { clip-path: inset(0% 0 0% 0); opacity: 1; filter: blur(0); }
 }
-@keyframes splashHalo {
-  0% { opacity: 0; transform: scale(0.6); }
-  50% { opacity: 1; }
-  100% { opacity: 0.6; transform: scale(1.1); }
+@keyframes splashHaloIn {
+  to { opacity: 1; }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  @keyframes splashRingDraw { to { stroke-dashoffset: 0; } }
-  @keyframes splashLogoIn { 0%, 100% { opacity: 1; transform: none; filter: none; clip-path: none; } }
-  @keyframes splashHalo { 0%, 100% { opacity: 0.6; transform: scale(1); } }
+  @keyframes splashGoldLine { 0%, 100% { opacity: 0; } }
+  @keyframes splashWipeReveal { 0%, 100% { clip-path: none; opacity: 1; filter: none; } }
+  @keyframes splashHaloIn { to { opacity: 1; } }
 }
 
 .marquee-mask {
