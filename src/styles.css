@@ -311,18 +311,18 @@
   transform: translate(-50%, -50%);
 }
 .splash-logo--landed {
-  /* Doit correspondre à la position/taille du logo de la navbar (h-16 = 64px à partir de md, padding py-3 = 12px, gap nav max-w 1400px px-6 md:px-10) */
+  /* Position du logo navbar : <a class="py-3"> dans <div class="max-w-[1400px] mx-auto px-6 md:px-10"> */
   top: 12px;
-  left: max(24px, calc((100vw - 1400px) / 2 + 40px));
-  width: 64px;
-  height: 64px;
+  left: max(24px, calc((100vw - 1400px) / 2 + 24px));
+  width: 56px;
+  height: 56px;
   transform: translate(0, 0);
 }
-@media (max-width: 767px) {
+@media (min-width: 768px) {
   .splash-logo--landed {
-    left: 24px;
-    width: 56px;
-    height: 56px;
+    left: max(40px, calc((100vw - 1400px) / 2 + 40px));
+    width: 64px;
+    height: 64px;
   }
 }
 
