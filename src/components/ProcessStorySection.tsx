@@ -38,10 +38,17 @@ export default function ProcessStorySection() {
 
     const onScroll = () => {
       const rect = node.getBoundingClientRect();
-      const total = rect.height - window.innerHeight;
+      const vh = window.innerHeight;
+      // Container is steps.length * vh tall. Sticky child sticks while we scroll.
+      // Progress = how far we've scrolled inside the container, 0..1
+      const total = rect.height - vh;
       if (total <= 0) return;
       const progressed = Math.min(Math.max(-rect.top / total, 0), 1);
-      const idx = Math.min(steps.length - 1, Math.floor(progressed * steps.length));
+      // Map progress to a step index with slight bias so each step holds for ~1/3
+      const idx = Math.min(
+        steps.length - 1,
+        Math.floor(progressed * steps.length * 0.999)
+      );
       setActive(idx);
     };
 
@@ -64,56 +71,75 @@ export default function ProcessStorySection() {
         </div>
       </div>
 
-      {/* Sticky storytelling */}
-      <div ref={containerRef} className="relative" style={{ height: `${steps.length * 100}vh` }}>
-        <div className="sticky top-0 h-screen flex items-center">
-          <div className="max-w-[1400px] mx-auto w-full px-6 md:px-10 grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
-            {/* Left — text steps */}
-            <div className="relative">
-              <div className="space-y-12">
-                {steps.map((s, i) => (
+      {/* Sticky storytelling — only ONE step visible at a time */}
+      <div
+        ref={containerRef}
+        className="relative"
+        style={{ height: `${steps.length * 100}vh` }}
+      >
+        <div className="sticky top-0 h-screen flex items-center overflow-hidden">
+          <div className="max-w-[1400px] mx-auto w-full px-6 md:px-10 grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-center">
+            {/* Left — single text panel that swaps */}
+            <div className="relative min-h-[320px]">
+              {/* Progress bar */}
+              <div className="flex items-center gap-3 mb-10">
+                {steps.map((_, i) => (
                   <div
-                    key={s.num}
-                    className={`transition-all duration-500 ${
-                      i === active ? "opacity-100 translate-x-0" : "opacity-25 translate-x-2"
-                    }`}
+                    key={i}
+                    className="relative h-px flex-1 bg-border overflow-hidden"
                   >
-                    <div className="flex items-baseline gap-4 mb-3">
-                      <span className="font-heading text-5xl text-accent/40">{s.num}</span>
-                      <span className="font-body text-[11px] font-bold tracking-[3px] uppercase text-accent">
-                        {s.kicker}
-                      </span>
-                    </div>
-                    <h3 className="font-heading text-2xl md:text-3xl text-primary font-normal mb-3">
-                      {s.title}
-                    </h3>
-                    <p className="font-body text-[15px] text-muted-foreground leading-relaxed max-w-md">
-                      {s.desc}
-                    </p>
+                    <div
+                      className={`absolute inset-y-0 left-0 bg-accent transition-all duration-700 ease-out ${
+                        i < active
+                          ? "w-full"
+                          : i === active
+                          ? "w-full"
+                          : "w-0"
+                      }`}
+                    />
                   </div>
                 ))}
               </div>
 
-              {/* Step indicator */}
-              <div className="hidden lg:flex flex-col gap-2 absolute -left-10 top-1/2 -translate-y-1/2">
-                {steps.map((_, i) => (
-                  <span
-                    key={i}
-                    className={`block w-px transition-all duration-500 ${
-                      i === active ? "h-12 bg-accent" : "h-6 bg-border"
-                    }`}
-                  />
-                ))}
+              {/* Step number — large, ghosted */}
+              <div
+                key={`num-${active}`}
+                className="font-heading text-[120px] md:text-[160px] leading-none text-accent/15 absolute -top-8 -left-2 pointer-events-none select-none"
+                aria-hidden
+              >
+                {steps[active].num}
+              </div>
+
+              {/* Step content — animated swap */}
+              <div key={`content-${active}`} className="relative animate-fade-in">
+                <div className="flex items-center gap-3 mb-4">
+                  <span className="h-px w-10 bg-accent" />
+                  <span className="font-body text-[11px] font-bold tracking-[3px] uppercase text-accent">
+                    Étape {steps[active].num} — {steps[active].kicker}
+                  </span>
+                </div>
+                <h3 className="font-heading text-3xl md:text-5xl text-primary font-normal mb-5 leading-tight">
+                  {steps[active].title}
+                </h3>
+                <p className="font-body text-[15px] md:text-base text-muted-foreground leading-relaxed max-w-md">
+                  {steps[active].desc}
+                </p>
+
+                <div className="mt-8 font-body text-[11px] tracking-[2px] uppercase text-muted-foreground/60">
+                  {active + 1} / {steps.length} — {active < steps.length - 1 ? "Continuez à scroller" : "Fin du parcours"}
+                </div>
               </div>
             </div>
 
-            {/* Right — sticky image */}
-            <div className="relative aspect-[4/5] lg:aspect-[4/5] overflow-hidden bg-primary/10 shadow-xl order-first lg:order-last">
+            {/* Right — image that swaps */}
+            <div className="relative aspect-[4/5] overflow-hidden bg-primary/10 shadow-xl order-first lg:order-last">
               {steps.map((s, i) => (
                 <div
                   key={s.num}
-                  className={`absolute inset-0 transition-opacity duration-700 ${
-                    i === active ? "opacity-100" : "opacity-0"
+                  className={`absolute inset-0 transition-all duration-700 ease-out ${
+                    i === active
+                      ? "opacity-100 scale-100"
+                      : "opacity-0 scale-105"
                   }`}
                   style={{
                     backgroundImage: `url(${s.image})`,
@@ -121,7 +147,7 @@ export default function ProcessStorySection() {
                     backgroundPosition: "center",
                   }}
                 >
-                  <div className="absolute inset-0 bg-gradient-to-t from-primary/40 via-transparent to-transparent" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-primary/50 via-transparent to-transparent" />
                 </div>
               ))}
               <div className="absolute bottom-6 left-6 text-primary-foreground">
