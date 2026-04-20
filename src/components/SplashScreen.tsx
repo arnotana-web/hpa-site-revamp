@@ -2,8 +2,8 @@ import { useEffect, useState } from "react";
 import logoBadge from "@/assets/hpa-logo-badge.svg";
 
 const SESSION_KEY = "hpa_splash_seen";
-const REVEAL_DURATION = 1100;        // wipe + apparition du logo (raccourci)
-const TRANSITION_DURATION = 1300;    // glissement vers la navbar
+const REVEAL_DURATION = 550;         // wipe + apparition du logo (court)
+const TRANSITION_DURATION = 1200;    // glissement vers la navbar
 const FADE_DURATION = 300;
 const TOTAL_DURATION = REVEAL_DURATION + TRANSITION_DURATION + FADE_DURATION;
 // Le fond se retire AU DÉBUT de la transition (pas à la fin), pour qu'on voie
@@ -74,7 +74,7 @@ export default function SplashScreen() {
       {isReveal && (
         <>
           <div
-            className="pointer-events-none absolute top-1/2 left-0 right-0 h-px -translate-y-1/2 origin-left animate-[splashGoldLine_1.1s_cubic-bezier(.7,0,.2,1)_0s_both]"
+            className="pointer-events-none absolute top-1/2 left-0 right-0 h-px -translate-y-1/2 origin-left animate-[splashGoldLine_0.55s_cubic-bezier(.7,0,.2,1)_0s_both]"
             style={{
               background:
                 "linear-gradient(to right, transparent 0%, oklch(from var(--accent) calc(l + 0.1) c h) 50%, transparent 100%)",
@@ -105,7 +105,7 @@ export default function SplashScreen() {
           src={logoBadge}
           alt="HPA Concept"
           className={`h-full w-full object-contain ${
-            isReveal ? "animate-[splashWipeReveal_1s_cubic-bezier(.7,0,.2,1)_0.15s_both]" : ""
+            isReveal ? "animate-[splashWipeReveal_0.5s_cubic-bezier(.7,0,.2,1)_0.05s_both]" : ""
           }`}
         />
       </div>
