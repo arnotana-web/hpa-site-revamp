@@ -2,10 +2,13 @@ import { useEffect, useState } from "react";
 import logoBadge from "@/assets/hpa-logo-badge.svg";
 
 const SESSION_KEY = "hpa_splash_seen";
-const REVEAL_DURATION = 1800;
-const TRANSITION_DURATION = 1500;
-const FADE_DURATION = 450;
+const REVEAL_DURATION = 1100;        // wipe + apparition du logo (raccourci)
+const TRANSITION_DURATION = 1300;    // glissement vers la navbar
+const FADE_DURATION = 300;
 const TOTAL_DURATION = REVEAL_DURATION + TRANSITION_DURATION + FADE_DURATION;
+// Le fond se retire AU DÉBUT de la transition (pas à la fin), pour qu'on voie
+// le logo voler par-dessus le site jusqu'à sa position dans la navbar.
+const BACKDROP_FADE_DELAY = 200;     // léger retard après le début du glissement
 
 function shouldShowInitially() {
   if (typeof window === "undefined") return true;
@@ -17,6 +20,7 @@ function shouldShowInitially() {
 export default function SplashScreen() {
   const [mounted, setMounted] = useState<boolean>(() => shouldShowInitially());
   const [phase, setPhase] = useState<"reveal" | "glide" | "fade">("reveal");
+  const [backdropVisible, setBackdropVisible] = useState(true);
 
   useEffect(() => {
     if (typeof window === "undefined" || !mounted) return;
@@ -25,11 +29,14 @@ export default function SplashScreen() {
 
     const glideTimer = window.setTimeout(() => {
       setPhase("glide");
+      // Le logo de la navbar peut apparaître presque tout de suite (atterrissage doux)
+      document.documentElement.dataset.splashActive = "0";
+      // Le fond indigo se retire peu après le début du glissement
+      window.setTimeout(() => setBackdropVisible(false), BACKDROP_FADE_DELAY);
     }, REVEAL_DURATION);
 
     const fadeTimer = window.setTimeout(() => {
       setPhase("fade");
-      document.documentElement.dataset.splashActive = "0";
     }, REVEAL_DURATION + TRANSITION_DURATION);
 
     const removeTimer = window.setTimeout(() => {
@@ -47,7 +54,7 @@ export default function SplashScreen() {
 
   if (!mounted) return null;
 
-  const isGliding = phase === "glide";
+  const isReveal = phase === "reveal";
   const isFading = phase === "fade";
 
   return (
@@ -55,14 +62,19 @@ export default function SplashScreen() {
       aria-hidden
       className={`fixed inset-0 z-[9999] overflow-hidden pointer-events-none ${
         isFading ? "opacity-0" : "opacity-100"
-      } transition-opacity duration-[450ms] ease-out`}
+      } transition-opacity duration-[300ms] ease-out`}
     >
-      <div className="absolute inset-0 bg-hpa-indigo-deep" />
+      {/* Fond indigo plein — fade out au début du glissement */}
+      <div
+        className={`absolute inset-0 bg-hpa-indigo-deep transition-opacity duration-[700ms] ease-out ${
+          backdropVisible ? "opacity-100" : "opacity-0"
+        }`}
+      />
 
-      {phase === "reveal" && (
+      {isReveal && (
         <>
           <div
-            className="pointer-events-none absolute top-1/2 left-0 right-0 h-px -translate-y-1/2 origin-left animate-[splashGoldLine_1.9s_cubic-bezier(.7,0,.2,1)_0.05s_both]"
+            className="pointer-events-none absolute top-1/2 left-0 right-0 h-px -translate-y-1/2 origin-left animate-[splashGoldLine_1.1s_cubic-bezier(.7,0,.2,1)_0s_both]"
             style={{
               background:
                 "linear-gradient(to right, transparent 0%, oklch(from var(--accent) calc(l + 0.1) c h) 50%, transparent 100%)",
@@ -71,7 +83,7 @@ export default function SplashScreen() {
             }}
           />
 
-          <div className="pointer-events-none absolute inset-0 flex items-center justify-center opacity-0 animate-[splashHaloIn_2s_ease-out_0.35s_forwards]">
+          <div className="pointer-events-none absolute inset-0 flex items-center justify-center opacity-0 animate-[splashHaloIn_1.2s_ease-out_0.2s_forwards]">
             <div
               className="h-[70vmin] w-[70vmin] rounded-full"
               style={{
@@ -83,15 +95,18 @@ export default function SplashScreen() {
         </>
       )}
 
+      {/* Logo : centre puis glisse vers la navbar (visible par-dessus le site révélé) */}
       <div
         className={`absolute splash-logo ${
-          isGliding || isFading ? "splash-logo--landed" : "splash-logo--center"
+          isReveal ? "splash-logo--center" : "splash-logo--landed"
         }`}
       >
         <img
           src={logoBadge}
           alt="HPA Concept"
-          className={`h-full w-full object-contain ${phase === "reveal" ? "animate-[splashWipeReveal_1.7s_cubic-bezier(.7,0,.2,1)_0.2s_both]" : ""}`}
+          className={`h-full w-full object-contain ${
+            isReveal ? "animate-[splashWipeReveal_1s_cubic-bezier(.7,0,.2,1)_0.15s_both]" : ""
+          }`}
         />
       </div>
     </div>
