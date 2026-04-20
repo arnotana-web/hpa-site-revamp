@@ -8,11 +8,11 @@ const navLinks = [
     label: "Services",
     href: "#services",
     children: [
-      { label: "FF&E & Mobilier de projet", href: "#service-ffe" },
-      { label: "Fabrication sur mesure", href: "#service-fabrication" },
-      { label: "Conseil & Conception", href: "#service-conseil" },
-      { label: "Gestion de projet", href: "#service-gestion" },
-      { label: "Livraison & Installation", href: "#service-livraison" },
+      { label: "FF&E & Mobilier de projet", href: "#services" },
+      { label: "Fabrication sur mesure", href: "#services" },
+      { label: "Conseil & Conception", href: "#services" },
+      { label: "Gestion de projet", href: "#services" },
+      { label: "Livraison & Installation", href: "#services" },
     ],
   },
   {
