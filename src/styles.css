@@ -201,3 +201,8 @@
 html {
   scroll-behavior: smooth;
 }
+
+/* Offset for sticky navbar when using anchor links */
+section[id] {
+  scroll-margin-top: 90px;
+}

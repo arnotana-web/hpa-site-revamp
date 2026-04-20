@@ -51,9 +51,10 @@ export default function ServicesSection() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {services.map((s, i) => (
-            <div
+            <a
               key={i}
-              className="bg-card overflow-hidden group cursor-pointer transition-all duration-300 hover:-translate-y-1.5 hover:shadow-xl"
+              href="#contact"
+              className="bg-card overflow-hidden group cursor-pointer transition-all duration-300 hover:-translate-y-1.5 hover:shadow-xl block"
             >
               <div
                 className="h-56 bg-cover bg-center relative overflow-hidden"
@@ -68,7 +69,7 @@ export default function ServicesSection() {
                   En savoir plus <ArrowRight size={14} />
                 </span>
               </div>
-            </div>
+            </a>
           ))}
         </div>
       </div>
