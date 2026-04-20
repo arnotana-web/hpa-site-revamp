@@ -102,24 +102,15 @@ export default function HeroSection() {
               <span aria-hidden className="h-px w-8 bg-hpa-creme/40" />
               Pour
             </span>
-            <span className="relative inline-block min-w-[12ch] leading-none">
-              {rotatingMarkets.map((m, i) => (
-                <span
-                  key={m}
-                  aria-hidden={i !== marketIndex}
-                  className="font-accent italic text-accent tracking-normal text-2xl md:text-3xl absolute left-0 top-0 whitespace-nowrap leading-none"
-                  style={{
-                    opacity: i === marketIndex ? 1 : 0,
-                    filter: i === marketIndex ? "none" : "blur(6px)",
-                    transform: i === marketIndex ? "none" : "translateY(6px)",
-                    transition: "opacity 600ms ease, filter 600ms ease, transform 600ms ease",
-                  }}
-                >
-                  {m}
-                </span>
-              ))}
+            <span className="relative inline-flex min-w-[12ch] items-baseline leading-none">
+              <span
+                key={rotatingMarkets[marketIndex]}
+                className="font-accent italic text-accent tracking-normal text-2xl md:text-3xl whitespace-nowrap leading-none animate-[heroWordIn_0.45s_ease-out]"
+              >
+                {rotatingMarkets[marketIndex]}
+              </span>
               {/* Spacer invisible — réserve la largeur du plus long mot */}
-              <span className="invisible font-accent italic text-2xl md:text-3xl whitespace-nowrap leading-none">
+              <span className="invisible absolute left-0 top-0 font-accent italic text-2xl md:text-3xl whitespace-nowrap leading-none pointer-events-none">
                 les résidences
               </span>
             </span>
