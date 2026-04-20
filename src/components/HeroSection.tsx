@@ -93,6 +93,35 @@ export default function HeroSection() {
             </span>
           </h1>
 
+          {/* Mot rotatif — marchés cibles */}
+          <p
+            className="mt-8 font-body text-[11px] md:text-xs tracking-[3px] uppercase text-hpa-creme/70 opacity-0 animate-[heroWordIn_0.9s_ease-out_forwards] flex flex-wrap items-baseline gap-x-2"
+            style={{ animationDelay: "0.75s" }}
+          >
+            <span>Pour</span>
+            <span className="relative inline-block min-w-[10ch]">
+              {rotatingMarkets.map((m, i) => (
+                <span
+                  key={m}
+                  aria-hidden={i !== marketIndex}
+                  className="font-accent normal-case italic text-accent tracking-normal text-base md:text-lg absolute left-0 top-1/2 -translate-y-1/2 whitespace-nowrap"
+                  style={{
+                    opacity: i === marketIndex ? 1 : 0,
+                    filter: i === marketIndex ? "blur(0)" : "blur(6px)",
+                    transform: `translateY(-50%) translateY(${i === marketIndex ? 0 : 6}px)`,
+                    transition: "opacity 600ms ease, filter 600ms ease, transform 600ms ease",
+                  }}
+                >
+                  {m}
+                </span>
+              ))}
+              {/* Spacer invisible — réserve la largeur du plus long mot */}
+              <span className="invisible font-accent italic text-base md:text-lg whitespace-nowrap">
+                les résidences
+              </span>
+            </span>
+          </p>
+
           <p
             className="mt-10 max-w-xl font-accent italic text-hpa-creme/85 text-lg md:text-xl leading-relaxed opacity-0 animate-[heroWordIn_0.9s_ease-out_forwards]"
             style={{ animationDelay: "0.9s" }}
