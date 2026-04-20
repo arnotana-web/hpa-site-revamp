@@ -188,10 +188,10 @@
   100% { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); }
 }
 
-/* Hero — Ken Burns sur la vidéo de fond */
+/* Hero — Ken Burns sur la vidéo de fond (cycle long et symétrique pour ne pas saccader) */
 @keyframes heroKenBurns {
-  0% { transform: scale(1.1) translate(0, 0); }
-  100% { transform: scale(1.18) translate(-1.5%, -1%); }
+  0%, 100% { transform: scale(1.08) translate(0.6%, 0.4%); }
+  50% { transform: scale(1.14) translate(-0.6%, -0.4%); }
 }
 
 /* Hero — indicateur de scroll */
