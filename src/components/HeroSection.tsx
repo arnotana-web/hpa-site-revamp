@@ -33,7 +33,7 @@ export default function HeroSection() {
   const parallax = Math.min(scrollY * 0.35, 200);
 
   return (
-    <section className="relative min-h-screen overflow-hidden bg-hpa-indigo-deep">
+    <section id="hero" className="relative min-h-screen overflow-hidden bg-hpa-indigo-deep">
       {/* Vidéo de fond cinématique */}
       <div
         className="absolute inset-0 overflow-hidden"
