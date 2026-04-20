@@ -4,6 +4,7 @@ import heroVideo from "@/assets/hero-cinematic.mp4.asset.json";
 
 const words = ["Mobilier,", "luminaires,"];
 const accentWord = "accessoires.";
+const rotatingMarkets = ["l'hôtellerie", "les résidences", "les workspaces"];
 
 const heroBrands = [
   "Marset", "Viccarbe", "Gervasoni", "Bover", "Expormim",
