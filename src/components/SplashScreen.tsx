@@ -10,7 +10,8 @@ export default function SplashScreen() {
 
   useEffect(() => {
     if (typeof window === "undefined") return;
-    if (sessionStorage.getItem(SESSION_KEY)) return;
+    const force = new URLSearchParams(window.location.search).get("splash") === "force";
+    if (!force && sessionStorage.getItem(SESSION_KEY)) return;
 
     setMounted(true);
     sessionStorage.setItem(SESSION_KEY, "1");
