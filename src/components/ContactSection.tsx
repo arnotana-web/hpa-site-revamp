@@ -1,4 +1,11 @@
 import { Mail, Phone, MapPin, Globe } from "lucide-react";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 export default function ContactSection() {
   return (
@@ -85,14 +92,19 @@ export default function ContactSection() {
 
             <div>
               <label className="block font-body text-[11px] font-bold tracking-[1.5px] uppercase text-muted-foreground mb-2">Type de projet</label>
-              <select className="w-full px-4 py-3 border border-border bg-secondary font-body text-sm text-foreground focus:border-primary focus:bg-card outline-none transition-colors">
-                <option>Sélectionner...</option>
-                <option>Hôtel / Resort</option>
-                <option>Programme résidentiel</option>
-                <option>Villa privée</option>
-                <option>Espace commercial / Bureau</option>
-                <option>Autre</option>
-              </select>
+              <Select defaultValue="placeholder">
+                <SelectTrigger className="h-auto w-full rounded-none border-border bg-secondary px-4 py-3 font-body text-sm text-foreground shadow-none ring-offset-0 focus:ring-0 data-[placeholder]:text-muted-foreground">
+                  <SelectValue placeholder="Sélectionner..." />
+                </SelectTrigger>
+                <SelectContent className="rounded-none border-border bg-card text-foreground">
+                  <SelectItem value="placeholder">Sélectionner...</SelectItem>
+                  <SelectItem value="hotel-resort">Hôtel / Resort</SelectItem>
+                  <SelectItem value="residentiel">Programme résidentiel</SelectItem>
+                  <SelectItem value="villa">Villa privée</SelectItem>
+                  <SelectItem value="bureau">Espace commercial / Bureau</SelectItem>
+                  <SelectItem value="autre">Autre</SelectItem>
+                </SelectContent>
+              </Select>
             </div>
 
             <div>
