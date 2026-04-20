@@ -14,12 +14,12 @@
   <circle cx="250" cy="250" r="205" fill="none" stroke="#1C2B4A" stroke-width="0.7"/>
 
   <!-- Top curved text -->
-  <text font-family="Garamond, Times New Roman, serif" font-size="17" fill="#1C2B4A" letter-spacing="2.5">
+  <text font-family="Garamond, Times New Roman, serif" font-size="20" fill="#1C2B4A" letter-spacing="2.5" font-weight="600">
     <textPath href="#top-arc" startOffset="50%" text-anchor="middle">— hospitality · residences · workspaces —</textPath>
   </text>
 
   <!-- Bottom curved text -->
-  <text font-family="Garamond, Times New Roman, serif" font-size="15" fill="#1C2B4A" letter-spacing="3" font-weight="600">
+  <text font-family="Garamond, Times New Roman, serif" font-size="18" fill="#1C2B4A" letter-spacing="3" font-weight="700">
     <textPath href="#bot-arc" startOffset="50%" text-anchor="middle">FURNITURE · LIGHTING · ACCESSORIES</textPath>
   </text>
 
@@ -34,7 +34,7 @@
   <line x1="175" y1="318" x2="325" y2="318" stroke="#A0845C" stroke-width="1.5"/>
 
   <!-- Tagline -->
-  <text x="250" y="342" font-family="Garamond, Times New Roman, serif" font-size="18" fill="#1C2B4A" text-anchor="middle" font-style="italic" letter-spacing="1">sourceur d'idées</text>
+  <text x="250" y="342" font-family="Garamond, Times New Roman, serif" font-size="20" fill="#1C2B4A" text-anchor="middle" font-style="italic" font-weight="600" letter-spacing="1">sourceur d'idées</text>
 
   <!-- Ornement -->
   <circle cx="250" cy="370" r="5" fill="none" stroke="#A0845C" stroke-width="1.2"/>
