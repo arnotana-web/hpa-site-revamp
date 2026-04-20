@@ -105,7 +105,8 @@ export default function HeroSection() {
             <span className="relative inline-flex min-w-[12ch] items-baseline leading-none">
               <span
                 key={rotatingMarkets[marketIndex]}
-                className="font-accent italic text-accent tracking-normal text-2xl md:text-3xl whitespace-nowrap leading-none animate-[heroWordIn_0.45s_ease-out]"
+                className="font-accent italic font-medium tracking-normal text-2xl md:text-3xl whitespace-nowrap leading-none animate-[heroWordIn_0.45s_ease-out]"
+                style={{ color: "oklch(from var(--accent) calc(l - 0.06) calc(c + 0.02) h)" }}
               >
                 {rotatingMarkets[marketIndex]}
               </span>
