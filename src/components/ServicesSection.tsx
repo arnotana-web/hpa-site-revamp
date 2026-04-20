@@ -1,37 +1,6 @@
 import { ArrowRight } from "lucide-react";
-
-const services = [
-  {
-    title: "FF&E & Mobilier de projet",
-    desc: "Sélection, approvisionnement et coordination complète de votre lot mobilier — pour l'hôtellerie, le résidentiel et les espaces commerciaux.",
-    image: "https://images.unsplash.com/photo-1631679706909-1844bbd07221?w=800&q=80",
-  },
-  {
-    title: "Fabrication sur mesure",
-    desc: "Shop drawings, validation prototype, production en usine partenaire en Asie, contrôle qualité rigoureux avant expédition.",
-    image: "https://images.unsplash.com/photo-1615873968403-89e068629265?w=800&q=80",
-  },
-  {
-    title: "Conseil & Conception",
-    desc: "Moodboards, spécifications techniques, sélection de matériaux — nous vous accompagnons dans la définition de votre identité intérieure.",
-    image: "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?w=800&q=80",
-  },
-  {
-    title: "Gestion de projet",
-    desc: "Coordination fournisseurs, suivi des commandes, logistique internationale — un interlocuteur unique pour l'ensemble de votre lot mobilier.",
-    image: "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=800&q=80",
-  },
-  {
-    title: "Livraison & Installation",
-    desc: "Gestion des contraintes insulaires et africaines, dédouanement, livraison sur site et installation par des équipes spécialisées.",
-    image: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=800&q=80",
-  },
-  {
-    title: "Distribution de marques",
-    desc: "HPA représente et distribue un portefeuille de marques sélectionnées — La Redoute Intérieur, AM.PM, Woven, Otazen, Skyline Design.",
-    image: "https://images.unsplash.com/photo-1567538096630-e0c55bd6374c?w=800&q=80",
-  },
-];
+import { Link } from "@tanstack/react-router";
+import { servicesList } from "@/data/services";
 
 export default function ServicesSection() {
   return (
@@ -50,10 +19,11 @@ export default function ServicesSection() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {services.map((s, i) => (
-            <a
-              key={i}
-              href="#contact"
+          {servicesList.map((s) => (
+            <Link
+              key={s.slug}
+              to="/services/$slug"
+              params={{ slug: s.slug }}
               className="bg-card overflow-hidden group cursor-pointer transition-all duration-300 hover:-translate-y-1.5 hover:shadow-xl block"
             >
               <div
@@ -64,12 +34,12 @@ export default function ServicesSection() {
               </div>
               <div className="p-7">
                 <h3 className="font-heading text-lg text-primary mb-3">{s.title}</h3>
-                <p className="font-body text-sm text-muted-foreground leading-relaxed">{s.desc}</p>
+                <p className="font-body text-sm text-muted-foreground leading-relaxed">{s.intro}</p>
                 <span className="inline-flex items-center gap-1.5 mt-4 font-body text-xs font-bold text-primary tracking-[1px] uppercase border-b border-primary pb-0.5 group-hover:gap-3 transition-all">
                   En savoir plus <ArrowRight size={14} />
                 </span>
               </div>
-            </a>
+            </Link>
           ))}
         </div>
       </div>
