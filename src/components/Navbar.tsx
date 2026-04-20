@@ -56,8 +56,16 @@ export default function Navbar() {
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 40);
     onScroll();
+    // Rattrape les scrolls instantanés (hash anchors, restoration) qui ne
+    // déclenchent pas toujours un événement scroll observable au mount.
+    const t1 = window.setTimeout(onScroll, 50);
+    const t2 = window.setTimeout(onScroll, 300);
     window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      window.clearTimeout(t1);
+      window.clearTimeout(t2);
+    };
   }, []);
 
   // Scroll-spy: detect which section is currently in view (home only)
