@@ -94,24 +94,24 @@ export default function HeroSection() {
           </h1>
 
           {/* Mot rotatif — marchés cibles */}
-          <p
-            className="mt-10 font-body text-[12px] md:text-[13px] tracking-[3.5px] uppercase text-hpa-creme/55 opacity-0 animate-[heroWordIn_0.9s_ease-out_forwards] flex flex-wrap items-center gap-x-3"
+          <div
+            className="mt-10 opacity-0 animate-[heroWordIn_0.9s_ease-out_forwards] flex items-center gap-4 flex-wrap"
             style={{ animationDelay: "0.75s" }}
           >
-            <span className="inline-flex items-center gap-3">
+            <span className="inline-flex items-center gap-3 font-body text-[12px] md:text-[13px] tracking-[3.5px] uppercase text-hpa-creme/55 shrink-0">
               <span aria-hidden className="h-px w-8 bg-hpa-creme/40" />
               Pour
             </span>
-            <span className="relative inline-block min-w-[12ch] h-[1.6em]">
+            <span className="relative inline-block min-w-[12ch] leading-none">
               {rotatingMarkets.map((m, i) => (
                 <span
                   key={m}
                   aria-hidden={i !== marketIndex}
-                  className="font-accent normal-case italic text-accent tracking-normal text-2xl md:text-3xl absolute left-0 top-1/2 -translate-y-1/2 whitespace-nowrap"
+                  className="font-accent italic text-accent tracking-normal text-2xl md:text-3xl absolute left-0 top-0 whitespace-nowrap leading-none"
                   style={{
                     opacity: i === marketIndex ? 1 : 0,
                     filter: i === marketIndex ? "blur(0)" : "blur(6px)",
-                    transform: `translateY(-50%) translateY(${i === marketIndex ? 0 : 6}px)`,
+                    transform: `translateY(${i === marketIndex ? 0 : 6}px)`,
                     transition: "opacity 600ms ease, filter 600ms ease, transform 600ms ease",
                     textShadow: "0 1px 20px color-mix(in oklab, var(--accent) 30%, transparent)",
                   }}
@@ -120,11 +120,11 @@ export default function HeroSection() {
                 </span>
               ))}
               {/* Spacer invisible — réserve la largeur du plus long mot */}
-              <span className="invisible font-accent italic text-2xl md:text-3xl whitespace-nowrap">
+              <span className="invisible font-accent italic text-2xl md:text-3xl whitespace-nowrap leading-none">
                 les résidences
               </span>
             </span>
-          </p>
+          </div>
 
 
           <p
