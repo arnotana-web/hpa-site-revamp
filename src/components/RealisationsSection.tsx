@@ -1,5 +1,5 @@
-import { useState, useEffect, useCallback } from "react";
-import { ArrowRight, MapPin, Tag, Loader2, X, ZoomIn, Download } from "lucide-react";
+import { useState, useEffect, useCallback, useMemo } from "react";
+import { ArrowRight, MapPin, Tag, X, ZoomIn, Download, ChevronLeft, ChevronRight } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
 
 type Realisation = {
@@ -334,9 +334,105 @@ export default function RealisationsSection() {
       ? realisations
       : realisations.filter((r) => r.category === activeFilter);
 
+  // Showcase carrousel : 6 premiers projets
+  const showcase = useMemo(() => realisations.slice(0, 6), [realisations]);
+  const [slideIdx, setSlideIdx] = useState(0);
+  const [isPaused, setIsPaused] = useState(false);
+
+  useEffect(() => {
+    if (isPaused || showcase.length === 0) return;
+    const t = setInterval(() => {
+      setSlideIdx((i) => (i + 1) % showcase.length);
+    }, 5000);
+    return () => clearInterval(t);
+  }, [isPaused, showcase.length]);
+
+  const goPrev = useCallback(() => {
+    setSlideIdx((i) => (i - 1 + showcase.length) % showcase.length);
+  }, [showcase.length]);
+  const goNext = useCallback(() => {
+    setSlideIdx((i) => (i + 1) % showcase.length);
+  }, [showcase.length]);
+
   return (
     <>
-    <section id="realisations" className="section-padding bg-card">
+    <section id="realisations" className="bg-card">
+      {/* Showcase carrousel plein écran */}
+      {showcase.length > 0 && (
+        <div
+          className="relative h-[70vh] min-h-[480px] max-h-[720px] overflow-hidden bg-primary"
+          onMouseEnter={() => setIsPaused(true)}
+          onMouseLeave={() => setIsPaused(false)}
+        >
+          {showcase.map((r, i) => (
+            <div
+              key={r.id}
+              className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${
+                i === slideIdx ? "opacity-100" : "opacity-0 pointer-events-none"
+              }`}
+              style={{
+                backgroundImage: `url(${r.image})`,
+                backgroundSize: "cover",
+                backgroundPosition: "center",
+              }}
+            >
+              <div className="absolute inset-0 bg-gradient-to-t from-primary/90 via-primary/40 to-transparent" />
+            </div>
+          ))}
+
+          {/* Contenu slide actif */}
+          <div className="relative h-full max-w-[1400px] mx-auto px-6 md:px-10 flex flex-col justify-end pb-16 md:pb-24">
+            <div className="max-w-2xl text-primary-foreground">
+              <span className="inline-block bg-accent text-primary-foreground font-body text-[10px] font-bold tracking-[2px] uppercase px-3 py-1 mb-4">
+                {showcase[slideIdx]?.category}
+              </span>
+              <h3 className="font-heading text-3xl md:text-5xl font-normal mb-3 leading-tight">
+                {showcase[slideIdx]?.title}
+              </h3>
+              <div className="flex items-center gap-2 font-body text-sm opacity-80 mb-4">
+                <MapPin size={14} /> {showcase[slideIdx]?.location}
+              </div>
+              <p className="font-body text-[15px] leading-relaxed opacity-90 max-w-xl">
+                {showcase[slideIdx]?.desc}
+              </p>
+            </div>
+          </div>
+
+          {/* Contrôles */}
+          <button
+            onClick={goPrev}
+            aria-label="Slide précédent"
+            className="absolute left-4 md:left-8 top-1/2 -translate-y-1/2 bg-primary-foreground/10 hover:bg-primary-foreground/25 backdrop-blur-sm text-primary-foreground p-3 transition-colors"
+          >
+            <ChevronLeft size={22} />
+          </button>
+          <button
+            onClick={goNext}
+            aria-label="Slide suivant"
+            className="absolute right-4 md:right-8 top-1/2 -translate-y-1/2 bg-primary-foreground/10 hover:bg-primary-foreground/25 backdrop-blur-sm text-primary-foreground p-3 transition-colors"
+          >
+            <ChevronRight size={22} />
+          </button>
+
+          {/* Pagination dots */}
+          <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex gap-2">
+            {showcase.map((_, i) => (
+              <button
+                key={i}
+                onClick={() => setSlideIdx(i)}
+                aria-label={`Aller au slide ${i + 1}`}
+                className={`h-1.5 transition-all duration-300 ${
+                  i === slideIdx
+                    ? "w-10 bg-primary-foreground"
+                    : "w-5 bg-primary-foreground/40 hover:bg-primary-foreground/70"
+                }`}
+              />
+            ))}
+          </div>
+        </div>
+      )}
+
+      <div className="section-padding">
       <div className="max-w-[1400px] mx-auto">
         <div className="text-center max-w-2xl mx-auto mb-12">
           <p className="text-[11px] font-body font-bold tracking-[3px] uppercase text-accent mb-4">
@@ -447,6 +543,7 @@ export default function RealisationsSection() {
             </a>
           </div>
         </div>
+      </div>
       </div>
     </section>
 

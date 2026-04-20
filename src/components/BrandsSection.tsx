@@ -23,9 +23,12 @@ const brands = [
   { name: "Expormim", url: "https://www.expormim.com" },
 ];
 
+// On duplique la liste pour permettre une boucle infinie sans saut visuel
+const loop = [...brands, ...brands];
+
 export default function BrandsSection() {
   return (
-    <section id="marques" className="section-padding bg-secondary border-t border-border">
+    <section id="marques" className="section-padding bg-secondary border-t border-border overflow-hidden">
       <div className="max-w-[1400px] mx-auto">
         <div className="text-center max-w-2xl mx-auto mb-12">
           <p className="text-[11px] font-body font-bold tracking-[3px] uppercase text-accent mb-4">
@@ -39,18 +42,37 @@ export default function BrandsSection() {
           </p>
         </div>
 
-        <div className="flex flex-wrap justify-center gap-3">
-          {brands.map((b) => (
-            <a
-              key={b.name}
-              href={b.url}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-block bg-card border border-border px-7 py-3.5 font-body text-[13px] font-bold text-primary tracking-[1px] uppercase hover:bg-primary hover:text-primary-foreground hover:border-primary transition-all"
-            >
-              {b.name}
-            </a>
-          ))}
+        {/* Marquee — 2 rangées qui défilent en sens opposés */}
+        <div className="space-y-4 marquee-mask">
+          <div className="flex gap-4 animate-marquee w-max" style={{ animationDuration: "55s" }}>
+            {loop.map((b, i) => (
+              <a
+                key={`row1-${i}`}
+                href={b.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="shrink-0 inline-block bg-card border border-border px-7 py-3.5 font-body text-[13px] font-bold text-primary tracking-[1px] uppercase hover:bg-primary hover:text-primary-foreground hover:border-primary transition-all"
+              >
+                {b.name}
+              </a>
+            ))}
+          </div>
+          <div
+            className="flex gap-4 animate-marquee w-max"
+            style={{ animationDuration: "65s", animationDirection: "reverse" }}
+          >
+            {loop.map((b, i) => (
+              <a
+                key={`row2-${i}`}
+                href={b.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="shrink-0 inline-block bg-card border border-border px-7 py-3.5 font-body text-[13px] font-bold text-primary tracking-[1px] uppercase hover:bg-primary hover:text-primary-foreground hover:border-primary transition-all"
+              >
+                {b.name}
+              </a>
+            ))}
+          </div>
         </div>
       </div>
     </section>
