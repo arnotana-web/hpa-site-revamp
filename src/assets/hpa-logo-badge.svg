@@ -1,0 +1,43 @@
+<svg width="500" height="500" viewBox="0 0 500 500" xmlns="http://www.w3.org/2000/svg">
+  <title>HPA Concept Logo</title>
+  <desc>Logo badge circulaire HPA Concept</desc>
+
+  <defs>
+    <path id="top-arc" d="M 80,250 A 170,170 0 0,1 420,250"/>
+    <path id="bot-arc" d="M 95,295 A 158,158 0 0,0 405,295"/>
+  </defs>
+
+  <!-- Outer circle fill -->
+  <circle cx="250" cy="250" r="235" fill="#D4C9A8"/>
+  <circle cx="250" cy="250" r="235" fill="none" stroke="#1C2B4A" stroke-width="5"/>
+  <circle cx="250" cy="250" r="218" fill="none" stroke="#1C2B4A" stroke-width="1.5"/>
+  <circle cx="250" cy="250" r="205" fill="none" stroke="#1C2B4A" stroke-width="0.7"/>
+
+  <!-- Top curved text -->
+  <text font-family="Garamond, Times New Roman, serif" font-size="17" fill="#1C2B4A" letter-spacing="2.5">
+    <textPath href="#top-arc" startOffset="50%" text-anchor="middle">— hospitality · residences · workspaces —</textPath>
+  </text>
+
+  <!-- Bottom curved text -->
+  <text font-family="Garamond, Times New Roman, serif" font-size="15" fill="#1C2B4A" letter-spacing="3" font-weight="600">
+    <textPath href="#bot-arc" startOffset="50%" text-anchor="middle">FURNITURE · LIGHTING · ACCESSORIES</textPath>
+  </text>
+
+  <!-- HPA centré -->
+  <text text-anchor="middle" x="250" y="305"
+        font-family="Garamond, Times New Roman, serif"
+        font-size="148" font-weight="700" letter-spacing="6">
+    <tspan fill="#A0845C">H</tspan><tspan fill="#1C2B4A">PA</tspan>
+  </text>
+
+  <!-- Ligne décorative -->
+  <line x1="175" y1="318" x2="325" y2="318" stroke="#A0845C" stroke-width="1.5"/>
+
+  <!-- Tagline -->
+  <text x="250" y="342" font-family="Garamond, Times New Roman, serif" font-size="18" fill="#1C2B4A" text-anchor="middle" font-style="italic" letter-spacing="1">sourceur d'idées</text>
+
+  <!-- Ornement -->
+  <circle cx="250" cy="370" r="5" fill="none" stroke="#A0845C" stroke-width="1.2"/>
+  <circle cx="250" cy="370" r="2" fill="#A0845C"/>
+
+</svg>
