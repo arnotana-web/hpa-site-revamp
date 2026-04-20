@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import logoBadge from "@/assets/hpa-logo-badge.svg";
 
 const SESSION_KEY = "hpa_splash_seen";
-const TOTAL_DURATION = 2600; // ms
+const TOTAL_DURATION = 3500; // ms
 
 // Calcul synchrone (pré-render) pour éviter le flash : on suppose visible par défaut
 // puis on cache immédiatement côté client si déjà vu.
