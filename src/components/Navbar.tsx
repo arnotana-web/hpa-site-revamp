@@ -143,7 +143,7 @@ export default function Navbar() {
         {/* Desktop links */}
         <ul
           className={`hidden lg:flex items-center gap-0 font-body text-[13px] font-semibold tracking-wide uppercase ${
-            transparent ? "text-[color:var(--hpa-creme)]" : "text-foreground"
+            transparent ? "text-[color:var(--hpa-creme)]" : "text-[color:var(--hpa-indigo)]"
           }`}
         >
           {navLinks.map((link) => {
@@ -209,18 +209,18 @@ export default function Navbar() {
           <li className="ml-3 flex items-center gap-1 text-[11px] tracking-[0.15em]">
             <span
               className={`px-1.5 py-0.5 border-b border-[color:var(--hpa-tabac)] ${
-                transparent ? "text-[color:var(--hpa-creme)]" : "text-foreground"
+                transparent ? "text-[color:var(--hpa-creme)]" : "text-[color:var(--hpa-indigo)]"
               }`}
               aria-current="true"
             >
               FR
             </span>
-            <span className={transparent ? "text-[color:var(--hpa-creme)]/50" : "text-muted-foreground/60"}>
+            <span className={transparent ? "text-[color:var(--hpa-creme)]/50" : "text-[color:var(--hpa-indigo)]/40"}>
               /
             </span>
             <span
               className={`px-1.5 py-0.5 cursor-not-allowed ${
-                transparent ? "text-[color:var(--hpa-creme)]/50" : "text-muted-foreground/60"
+                transparent ? "text-[color:var(--hpa-creme)]/50" : "text-[color:var(--hpa-indigo)]/40"
               }`}
               title="English version coming soon"
             >
