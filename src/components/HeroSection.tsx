@@ -55,11 +55,10 @@ export default function HeroSection() {
         <div className="absolute inset-0 bg-gradient-to-r from-hpa-indigo-deep/70 via-transparent to-hpa-indigo-deep/40" />
       </div>
 
-      {/* Monogramme typographique HPA — filigrane d'identité (conforme charte K) */}
+      {/* Monogramme typographique HPA — entrée centrale puis glissement vers filigrane (charte K) */}
       <span
         aria-hidden
-        className="absolute right-[-4%] bottom-[8%] font-heading font-black text-hpa-creme leading-none tracking-[-0.05em] select-none pointer-events-none z-[1] text-[28vw] md:text-[22vw] lg:text-[18vw]"
-        style={{ opacity: 0.08 }}
+        className="absolute font-heading font-black text-hpa-creme leading-none tracking-[-0.05em] select-none pointer-events-none z-[2] animate-[hpaMonogramSettle_2.4s_cubic-bezier(.7,0,.2,1)_0.3s_both]"
       >
         HPA
       </span>
