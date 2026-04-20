@@ -111,7 +111,7 @@ export default function HeroSection() {
                   style={{
                     opacity: i === marketIndex ? 1 : 0,
                     filter: i === marketIndex ? "none" : "blur(6px)",
-                    transform: `translateY(${i === marketIndex ? 0 : 6}px)`,
+                    transform: i === marketIndex ? "none" : "translateY(6px)",
                     transition: "opacity 600ms ease, filter 600ms ease, transform 600ms ease",
                   }}
                 >
