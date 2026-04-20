@@ -5,6 +5,22 @@ const brands = [
   { name: "Otazen", url: "https://www.otazen.com" },
   { name: "Gervasoni", url: "https://www.gervasoni1882.it" },
   { name: "Rols Carpet", url: "https://www.rolscarpets.com/en/" },
+  { name: "Ezpeleta", url: "https://www.ezpeleta.com" },
+  { name: "Skyline Design", url: "https://www.skylinedesign.com" },
+  { name: "Joenfa", url: "https://www.joenfa.com" },
+  { name: "Artie", url: "https://www.artie.fr" },
+  { name: "Yellowkorner", url: "https://www.yellowkorner.com" },
+  { name: "Bover", url: "https://bover.es" },
+  { name: "Marset", url: "https://www.marset.com" },
+  { name: "GDR Asia", url: "https://www.gdrasia.com" },
+  { name: "Joquer", url: "https://www.joquer.com" },
+  { name: "Inclass", url: "https://www.inclass.es" },
+  { name: "LZF Lamps", url: "https://lzf-lamps.com" },
+  { name: "Papadatos", url: "https://www.papadatos.gr" },
+  { name: "Stua", url: "https://www.stua.com" },
+  { name: "Versalink", url: "https://www.versalink.com.my" },
+  { name: "Viccarbe", url: "https://www.viccarbe.com" },
+  { name: "Expormim", url: "https://www.expormim.com" },
 ];
 
 export default function BrandsSection() {
