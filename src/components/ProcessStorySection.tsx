@@ -16,7 +16,7 @@ const steps = [
     title: "Concevoir sur mesure",
     desc: "Pour les pièces uniques, nos usines partenaires en Asie produisent selon vos shop drawings. Prototype validé avant lancement série, contrôle qualité rigoureux à chaque étape.",
     image:
-      "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=1200&q=80",
+      "https://images.unsplash.com/photo-1581539250439-c96689b516dd?w=1200&q=80",
   },
   {
     num: "03",
