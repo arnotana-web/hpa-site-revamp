@@ -118,12 +118,12 @@ export default function RegionMapSection() {
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-10 items-start">
-          <div className="relative aspect-[1000/700] w-full">
+          <div className="relative aspect-[1000/800] w-full">
             <ComposableMap
-              projection="geoMercator"
-              projectionConfig={{ scale: 380, center: [25, -8] }}
+              projection="geoEquirectangular"
+              projectionConfig={{ scale: 540, center: [28, -6] }}
               width={1000}
-              height={700}
+              height={800}
               style={{ width: "100%", height: "100%" }}
             >
               <Geographies geography={GEO_URL}>
