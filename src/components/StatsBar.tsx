@@ -63,50 +63,16 @@ export default function StatsBar() {
   const [start, setStart] = useState(false);
 
   useEffect(() => {
-    const node = ref.current;
-    if (!node || typeof window === "undefined") {
+    if (typeof window === "undefined") {
       setStart(true);
       return;
     }
 
-    let started = false;
-    let intervalId = 0;
-
-    const trigger = () => {
-      if (started) return;
-      started = true;
+    const timer = window.setTimeout(() => {
       setStart(true);
-      window.removeEventListener("scroll", onScroll);
-      window.removeEventListener("resize", checkVisibility);
-      window.clearInterval(intervalId);
-    };
+    }, 2200);
 
-    const checkVisibility = () => {
-      if (started) return;
-      const rect = node.getBoundingClientRect();
-      const vh = window.innerHeight || document.documentElement.clientHeight;
-      const visibleHeight = Math.min(rect.bottom, vh) - Math.max(rect.top, 0);
-      const visibilityRatio = Math.max(0, visibleHeight) / Math.max(rect.height, 1);
-
-      if (visibilityRatio >= 0.25) {
-        trigger();
-      }
-    };
-
-    const onScroll = () => {
-      checkVisibility();
-    };
-
-    window.setTimeout(checkVisibility, 900);
-    intervalId = window.setInterval(checkVisibility, 250);
-    window.addEventListener("scroll", onScroll, { passive: true });
-    window.addEventListener("resize", checkVisibility);
-
-    return () => {
-      window.clearInterval(intervalId);
-      window.removeEventListener("scroll", onScroll);
-      window.removeEventListener("resize", checkVisibility);
-    };
+    return () => window.clearTimeout(timer);
   }, []);
 
   return (
