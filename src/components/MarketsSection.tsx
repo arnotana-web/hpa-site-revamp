@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Check, ArrowRight } from "lucide-react";
 import bureauxImg from "@/assets/markets/bureaux.jpg";
+import hotelImg from "@/assets/markets/hotel.jpg";
 
 const expertises = [
   {
@@ -24,7 +25,7 @@ const expertises = [
       "Gestion des contraintes insulaires et logistiques",
       "Respect des délais d'ouverture hôtelière",
     ],
-    image: "https://images.unsplash.com/photo-1631679706909-1844bbd07221?w=900&q=80",
+    image: hotelImg,
     cta: "Discuter de votre projet hôtelier",
   },
   {
