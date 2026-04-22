@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { Check, ArrowRight } from "lucide-react";
+import bureauxImg from "@/assets/markets/bureaux.jpg";
 
 const expertises = [
   {
@@ -69,7 +70,7 @@ const expertises = [
       "Gestion des délais serrés propres aux ouvertures",
       "Références à Maurice, Madagascar et Zanzibar",
     ],
-    image: "https://images.unsplash.com/photo-1497366216548-37526070297c?w=900&q=80",
+    image: bureauxImg,
     cta: "Demander une étude commerciale",
   },
 ];
