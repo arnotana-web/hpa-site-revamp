@@ -59,23 +59,27 @@ export default function StatsBar() {
     }
 
     let started = false;
+    let intervalId = 0;
 
     const checkVisibility = () => {
       if (started) return;
       const rect = node.getBoundingClientRect();
       const vh = window.innerHeight || document.documentElement.clientHeight;
-      const isVisible = rect.top <= vh * 0.9 && rect.bottom >= vh * 0.1;
+      const visibleHeight = Math.min(rect.bottom, vh) - Math.max(rect.top, 0);
+      const visibilityRatio = Math.max(0, visibleHeight) / Math.max(rect.height, 1);
 
-      if (isVisible) {
+      if (visibilityRatio >= 0.3) {
         started = true;
         setStart(true);
         window.removeEventListener("scroll", checkVisibility);
         window.removeEventListener("resize", checkVisibility);
+        window.clearInterval(intervalId);
       }
     };
 
     const rafId = window.requestAnimationFrame(checkVisibility);
-    const delayedId = window.setTimeout(checkVisibility, 1200);
+    const delayedId = window.setTimeout(checkVisibility, 800);
+    intervalId = window.setInterval(checkVisibility, 200);
 
     window.addEventListener("scroll", checkVisibility, { passive: true });
     window.addEventListener("resize", checkVisibility);
@@ -83,6 +87,7 @@ export default function StatsBar() {
     return () => {
       window.cancelAnimationFrame(rafId);
       window.clearTimeout(delayedId);
+      window.clearInterval(intervalId);
       window.removeEventListener("scroll", checkVisibility);
       window.removeEventListener("resize", checkVisibility);
     };
