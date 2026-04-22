@@ -67,12 +67,13 @@ type Country = {
 };
 
 const countries: Country[] = [
-  { id: "mu", name: "Île Maurice", x: 700, y: 470, projects: 95, highlight: "Hub historique — siège HPA, hôtels & villas" },
-  { id: "mg", name: "Madagascar", x: 610, y: 430, projects: 18, highlight: "Hôtellerie & corporate — Antananarivo, Anjajavy" },
-  { id: "sc", name: "Seychelles", x: 690, y: 350, projects: 2, highlight: "Resorts premium — Mahé, Praslin" },
-  { id: "tz", name: "Tanzanie", x: 500, y: 420, projects: 2, highlight: "Boutique-hôtels & lodges balnéaires — Zanzibar" },
-  { id: "ci", name: "Côte d'Ivoire", x: 290, y: 360, projects: 1, highlight: "Bureaux corporate — Abidjan" },
-  { id: "tg", name: "Togo", x: 330, y: 365, projects: 2, highlight: "Sièges bancaires & corporate" },
+  // Coordinates calibrated to the Africa silhouette below (viewBox 1000x700)
+  { id: "mu", name: "Île Maurice", x: 790, y: 505, projects: 95, highlight: "Hub historique — siège HPA, hôtels & villas" },
+  { id: "mg", name: "Madagascar", x: 720, y: 470, projects: 18, highlight: "Hôtellerie & corporate — Antananarivo, Anjajavy" },
+  { id: "sc", name: "Seychelles", x: 800, y: 390, projects: 2, highlight: "Resorts premium — Mahé, Praslin" },
+  { id: "tz", name: "Tanzanie", x: 605, y: 430, projects: 2, highlight: "Boutique-hôtels & lodges balnéaires — Zanzibar" },
+  { id: "ci", name: "Côte d'Ivoire", x: 285, y: 380, projects: 1, highlight: "Bureaux corporate — Abidjan" },
+  { id: "tg", name: "Togo", x: 335, y: 385, projects: 2, highlight: "Sièges bancaires & corporate" },
 ];
 
 export default function RegionMapSection() {
@@ -114,9 +115,9 @@ export default function RegionMapSection() {
               </defs>
               <rect width="1000" height="700" fill="url(#grid)" />
 
-              {/* Africa silhouette — stylised abstract polygon */}
+              {/* Africa silhouette — accurate stylised outline */}
               <path
-                d="M 180 180 Q 240 140 320 160 L 380 200 L 410 280 L 430 360 L 460 440 L 510 510 L 540 560 L 500 600 L 450 620 L 400 600 L 360 560 L 320 530 L 280 480 L 250 410 L 220 340 L 200 270 Z"
+                d="M 250 145 L 360 130 L 470 135 L 560 150 L 600 175 L 605 220 L 590 250 L 600 285 L 615 320 L 625 360 L 640 400 L 635 440 L 615 475 L 590 505 L 555 535 L 515 555 L 480 555 L 455 530 L 430 495 L 405 470 L 380 445 L 355 410 L 330 370 L 305 325 L 280 280 L 260 230 L 248 185 Z"
                 fill="currentColor"
                 fillOpacity="0.08"
                 stroke="currentColor"
@@ -124,9 +125,9 @@ export default function RegionMapSection() {
                 strokeWidth="1.2"
               />
 
-              {/* Madagascar */}
+              {/* Madagascar — east of Mozambique */}
               <path
-                d="M 600 380 Q 615 410 625 440 L 615 470 L 600 460 L 595 420 Z"
+                d="M 705 425 Q 720 445 728 475 L 720 505 L 708 510 L 700 485 L 698 450 Z"
                 fill="currentColor"
                 fillOpacity="0.08"
                 stroke="currentColor"
