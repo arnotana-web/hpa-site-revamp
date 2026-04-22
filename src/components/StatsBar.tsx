@@ -7,9 +7,9 @@ type Stat = {
 };
 
 const stats: Stat[] = [
-  { value: 15, suffix: "+", label: "Années d'expertise" },
-  { value: 250, suffix: "+", label: "Projets livrés" },
-  { value: 12, label: "Pays desservis" },
+  { value: 8, label: "Années d'expertise" },
+  { value: 120, label: "Projets livrés" },
+  { value: 5, label: "Pays desservis" },
   { value: 22, label: "Marques distribuées" },
 ];
 
