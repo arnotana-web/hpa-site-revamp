@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { ArrowRight } from "lucide-react";
+import processFabriquer from "@/assets/process-fabriquer.jpg";
 
 const steps = [
   {
@@ -15,8 +16,7 @@ const steps = [
     kicker: "Fabriquer",
     title: "Concevoir sur mesure",
     desc: "Pour les pièces uniques, nos usines partenaires en Asie produisent selon vos shop drawings. Prototype validé avant lancement série, contrôle qualité rigoureux à chaque étape.",
-    image:
-      "https://images.unsplash.com/photo-1567016526105-22da7c13161a?w=1200&q=80",
+    image: processFabriquer,
   },
   {
     num: "03",
@@ -27,6 +27,7 @@ const steps = [
       "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=1200&q=80",
   },
 ];
+
 
 export default function ProcessStorySection() {
   const containerRef = useRef<HTMLDivElement | null>(null);
