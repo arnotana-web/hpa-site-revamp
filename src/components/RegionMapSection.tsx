@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { MapPin } from "lucide-react";
+import { ComposableMap, Geographies, Geography, Marker, Line } from "react-simple-maps";
 
 function useCountUp(target: number, start: boolean, duration = 1400) {
   const [val, setVal] = useState(0);
