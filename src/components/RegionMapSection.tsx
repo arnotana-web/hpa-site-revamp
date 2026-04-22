@@ -245,8 +245,9 @@ export default function RegionMapSection() {
                           className="transition-all duration-300"
                         />
                         <text
-                          x={14}
-                          y={5}
+                          x={c.labelDx ?? 14}
+                          y={c.labelDy ?? 5}
+                          textAnchor={c.labelAnchor ?? "start"}
                           fill="#F6EFD9"
                           fillOpacity={isHover || isHub ? 1 : 0.55}
                           fontSize={isHub ? 14 : 12}
@@ -326,8 +327,9 @@ export default function RegionMapSection() {
                         />
                         <circle r={isHover ? 5 : isHub ? 5 : 3.5} fill="#7A5A2C" />
                         <text
-                          x={12}
-                          y={4}
+                          x={c.geoLabelDx ?? 12}
+                          y={c.geoLabelDy ?? 4}
+                          textAnchor={c.geoLabelAnchor ?? "start"}
                           fill="#F6EFD9"
                           fillOpacity={isHover || isHub ? 1 : 0.7}
                           fontSize={isHub ? 12 : 10}
