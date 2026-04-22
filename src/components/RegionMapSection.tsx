@@ -67,12 +67,12 @@ type Country = {
 };
 
 const countries: Country[] = [
-  { id: "mu", name: "Île Maurice", x: 700, y: 460, projects: 95, highlight: "Hub historique — siège HPA, hôtels & villas" },
-  { id: "mg", name: "Madagascar", x: 620, y: 410, projects: 18, highlight: "Hôtellerie & corporate — Antananarivo, Anjajavy" },
-  { id: "sc", name: "Seychelles", x: 720, y: 320, projects: 2, highlight: "Resorts premium — Mahé, Praslin" },
-  { id: "tz", name: "Tanzanie", x: 470, y: 410, projects: 2, highlight: "Boutique-hôtels & lodges balnéaires — Zanzibar" },
-  { id: "ci", name: "Côte d'Ivoire", x: 200, y: 360, projects: 1, highlight: "Bureaux corporate — Abidjan" },
-  { id: "tg", name: "Togo", x: 270, y: 380, projects: 2, highlight: "Sièges bancaires & corporate" },
+  { id: "mu", name: "Île Maurice", x: 700, y: 470, projects: 95, highlight: "Hub historique — siège HPA, hôtels & villas" },
+  { id: "mg", name: "Madagascar", x: 610, y: 430, projects: 18, highlight: "Hôtellerie & corporate — Antananarivo, Anjajavy" },
+  { id: "sc", name: "Seychelles", x: 690, y: 350, projects: 2, highlight: "Resorts premium — Mahé, Praslin" },
+  { id: "tz", name: "Tanzanie", x: 500, y: 420, projects: 2, highlight: "Boutique-hôtels & lodges balnéaires — Zanzibar" },
+  { id: "ci", name: "Côte d'Ivoire", x: 290, y: 360, projects: 1, highlight: "Bureaux corporate — Abidjan" },
+  { id: "tg", name: "Togo", x: 330, y: 365, projects: 2, highlight: "Sièges bancaires & corporate" },
 ];
 
 export default function RegionMapSection() {
