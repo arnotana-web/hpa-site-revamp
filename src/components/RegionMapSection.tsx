@@ -1,5 +1,60 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { MapPin } from "lucide-react";
+
+function useCountUp(target: number, start: boolean, duration = 1400) {
+  const [val, setVal] = useState(0);
+  useEffect(() => {
+    if (!start) return;
+    const startTs = performance.now();
+    let raf = 0;
+    const tick = (now: number) => {
+      const p = Math.min(1, (now - startTs) / duration);
+      const eased = 1 - Math.pow(1 - p, 3);
+      setVal(Math.round(target * eased));
+      if (p < 1) raf = requestAnimationFrame(tick);
+    };
+    raf = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(raf);
+  }, [target, start, duration]);
+  return val;
+}
+
+function CountStat({ target, suffix = "", label }: { target: number; suffix?: string; label: string }) {
+  const ref = useRef<HTMLDivElement | null>(null);
+  const [start, setStart] = useState(false);
+  useEffect(() => {
+    const node = ref.current;
+    if (!node || typeof IntersectionObserver === "undefined") {
+      setStart(true);
+      return;
+    }
+    const obs = new IntersectionObserver(
+      (entries) => {
+        for (const e of entries) {
+          if (e.isIntersecting) {
+            setStart(true);
+            obs.disconnect();
+          }
+        }
+      },
+      { threshold: 0.4 }
+    );
+    obs.observe(node);
+    return () => obs.disconnect();
+  }, []);
+  const v = useCountUp(target, start);
+  return (
+    <div ref={ref}>
+      <div className="font-heading text-3xl text-accent tabular-nums">
+        {v}
+        {suffix}
+      </div>
+      <div className="font-body text-[10px] tracking-[2px] uppercase text-primary-foreground/60 mt-1">
+        {label}
+      </div>
+    </div>
+  );
+}
 
 type Country = {
   id: string;
@@ -176,18 +231,8 @@ export default function RegionMapSection() {
                   Découvrez nos références par pays — hôtellerie, résidentiel et corporate dans l'ensemble de la zone.
                 </p>
                 <div className="mt-6 pt-6 border-t border-primary-foreground/10 grid grid-cols-2 gap-4 text-center">
-                  <div>
-                    <div className="font-heading text-3xl text-accent">{countries.reduce((s, c) => s + c.projects, 0)}+</div>
-                    <div className="font-body text-[10px] tracking-[2px] uppercase text-primary-foreground/60 mt-1">
-                      Projets total
-                    </div>
-                  </div>
-                  <div>
-                    <div className="font-heading text-3xl text-accent">{countries.length}</div>
-                    <div className="font-body text-[10px] tracking-[2px] uppercase text-primary-foreground/60 mt-1">
-                      Territoires
-                    </div>
-                  </div>
+                  <CountStat target={countries.reduce((s, c) => s + c.projects, 0)} suffix="+" label="Projets total" />
+                  <CountStat target={countries.length} label="Territoires" />
                 </div>
               </div>
             )}
