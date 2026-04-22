@@ -22,8 +22,6 @@ function useCountUp(target: number, start: boolean, duration = 1600) {
       return;
     }
 
-    console.debug("[StatsBar] count start", { target, duration });
-
     const steps = 40;
     const stepDuration = Math.max(24, Math.floor(duration / steps));
     let currentStep = 0;
