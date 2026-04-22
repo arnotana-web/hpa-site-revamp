@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { ArrowRight } from "lucide-react";
 import processFabriquer from "@/assets/process-fabriquer.jpg";
+import processInstaller from "@/assets/process-installer.jpg";
 
 const steps = [
   {
@@ -23,8 +24,7 @@ const steps = [
     kicker: "Installer",
     title: "Livrer & poser, clé en main",
     desc: "Fret international, dédouanement, livraison sur site et installation par nos équipes. Un interlocuteur unique jusqu'à la réception des travaux — Maurice, Madagascar, Seychelles, Afrique.",
-    image:
-      "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=1200&q=80",
+    image: processInstaller,
   },
 ];
 
