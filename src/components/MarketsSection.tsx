@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Check, ArrowRight } from "lucide-react";
 import bureauxImg from "@/assets/markets/bureaux.jpg";
 import hotelImg from "@/assets/markets/hotel.jpg";
+import residentielImg from "@/assets/markets/residentiel.jpg";
 
 const expertises = [
   {
@@ -53,7 +54,7 @@ const expertises = [
       "Coordination avec architectes et décorateurs",
       "Livraison et installation par nos équipes sur site",
     ],
-    image: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=900&q=80",
+    image: residentielImg,
     cta: "Demander une étude résidentielle",
   },
   {
