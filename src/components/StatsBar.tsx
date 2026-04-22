@@ -53,24 +53,39 @@ export default function StatsBar() {
 
   useEffect(() => {
     const node = ref.current;
-    if (!node || typeof IntersectionObserver === "undefined") {
+    if (!node || typeof window === "undefined") {
       setStart(true);
       return;
     }
-    const obs = new IntersectionObserver(
-      (entries) => {
-        for (const e of entries) {
-          if (e.isIntersecting) {
-            setStart(true);
-            obs.disconnect();
-          }
-        }
-      },
-      // Trigger when ~30% visible — user must scroll to it
-      { threshold: 0.3, rootMargin: "0px 0px -10% 0px" }
-    );
-    obs.observe(node);
-    return () => obs.disconnect();
+
+    let started = false;
+
+    const checkVisibility = () => {
+      if (started) return;
+      const rect = node.getBoundingClientRect();
+      const vh = window.innerHeight || document.documentElement.clientHeight;
+      const isVisible = rect.top <= vh * 0.9 && rect.bottom >= vh * 0.1;
+
+      if (isVisible) {
+        started = true;
+        setStart(true);
+        window.removeEventListener("scroll", checkVisibility);
+        window.removeEventListener("resize", checkVisibility);
+      }
+    };
+
+    const rafId = window.requestAnimationFrame(checkVisibility);
+    const delayedId = window.setTimeout(checkVisibility, 1200);
+
+    window.addEventListener("scroll", checkVisibility, { passive: true });
+    window.addEventListener("resize", checkVisibility);
+
+    return () => {
+      window.cancelAnimationFrame(rafId);
+      window.clearTimeout(delayedId);
+      window.removeEventListener("scroll", checkVisibility);
+      window.removeEventListener("resize", checkVisibility);
+    };
   }, []);
 
   return (
