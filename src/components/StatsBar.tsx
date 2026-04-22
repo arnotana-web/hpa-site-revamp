@@ -70,7 +70,9 @@ export default function StatsBar() {
       return;
     }
 
+    console.debug("[StatsBar] arm start timer");
     const timer = window.setTimeout(() => {
+      console.debug("[StatsBar] setStart(true)");
       setStart(true);
     }, 2200);
 
