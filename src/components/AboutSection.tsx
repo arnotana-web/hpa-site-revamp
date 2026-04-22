@@ -1,48 +1,23 @@
-import { useEffect, useRef, useState } from "react";
-
-const stats = [
-  { value: 120, suffix: "+", label: "Projets livrés" },
-  { value: 85, suffix: "+", label: "Clients satisfaits" },
-  { value: 10, suffix: "+", label: "Années d'expérience" },
-  { value: 7, suffix: "", label: "Marques représentées" },
-];
-
-function AnimatedCounter({ target, suffix }: { target: number; suffix: string }) {
-  const [count, setCount] = useState(0);
-  const ref = useRef<HTMLDivElement>(null);
-  const started = useRef(false);
-
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    const obs = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting && !started.current) {
-          started.current = true;
-          const duration = 1800;
-          const step = target / (duration / 16);
-          let cur = 0;
-          const t = setInterval(() => {
-            cur = Math.min(cur + step, target);
-            setCount(Math.floor(cur));
-            if (cur >= target) clearInterval(t);
-          }, 16);
-        }
-      },
-      { threshold: 0.2 }
-    );
-    obs.observe(el);
-    return () => obs.disconnect();
-  }, [target]);
-
-  return (
-    <div ref={ref} className="text-5xl font-bold text-accent leading-none">
-      {count}{suffix}
-    </div>
-  );
-}
-
 export default function AboutSection() {
+  const pillars = [
+    {
+      k: "Sélection",
+      v: "Un portefeuille de marques européennes et asiatiques choisies pour leur exigence.",
+    },
+    {
+      k: "Sur-mesure",
+      v: "Une capacité de fabrication pilotée depuis l'Asie, adaptée à chaque projet.",
+    },
+    {
+      k: "Clé en main",
+      v: "Du brief initial à l'installation sur site, un interlocuteur unique.",
+    },
+    {
+      k: "Proximité",
+      v: "Une équipe basée à Maurice, au plus près de vos chantiers dans l'Océan Indien.",
+    },
+  ];
+
   return (
     <section id="about" className="section-padding bg-secondary">
       <div className="max-w-[1400px] mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
@@ -75,16 +50,18 @@ export default function AboutSection() {
           </div>
         </div>
 
-        {/* Stats */}
-        <div className="grid grid-cols-2 gap-[2px] bg-hpa-cream-dark">
-          {stats.map((stat, i) => (
-            <div
-              key={i}
-              className={`${i % 2 === 0 ? "bg-primary" : "bg-hpa-green-dark"} p-10 text-center`}
-            >
-              <AnimatedCounter target={stat.value} suffix={stat.suffix} />
-              <div className="mt-3 font-body text-[11px] text-primary-foreground/70 tracking-[1.5px] uppercase">
-                {stat.label}
+        {/* Editorial pillars — sans chiffres pour éviter les doublons avec StatsBar */}
+        <div className="grid grid-cols-1 gap-[1px] bg-border">
+          {pillars.map((p, i) => (
+            <div key={i} className="bg-card p-8 flex items-baseline gap-6">
+              <span className="font-heading text-accent text-xl shrink-0 w-10">
+                0{i + 1}
+              </span>
+              <div>
+                <div className="font-heading text-primary text-xl mb-1">{p.k}</div>
+                <p className="font-body text-[14px] text-muted-foreground leading-relaxed">
+                  {p.v}
+                </p>
               </div>
             </div>
           ))}
