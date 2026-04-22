@@ -63,30 +63,29 @@ export default function StatsBar() {
   const [start, setStart] = useState(false);
 
   useEffect(() => {
-    if (typeof window === "undefined") {
+    const node = ref.current;
+    if (!node) return;
+
+    if (typeof IntersectionObserver === "undefined") {
       setStart(true);
       return;
     }
 
-    let started = false;
+    const obs = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (entry.isIntersecting) {
+            setStart(true);
+            obs.disconnect();
+            break;
+          }
+        }
+      },
+      { threshold: 0.35 }
+    );
 
-    const trigger = () => {
-      if (started) return;
-      started = true;
-      setStart(true);
-      window.removeEventListener("scroll", trigger);
-      window.removeEventListener("touchstart", trigger);
-    };
-
-    const fallbackTimer = window.setTimeout(trigger, 2200);
-    window.addEventListener("scroll", trigger, { passive: true, once: true });
-    window.addEventListener("touchstart", trigger, { passive: true, once: true });
-
-    return () => {
-      window.clearTimeout(fallbackTimer);
-      window.removeEventListener("scroll", trigger);
-      window.removeEventListener("touchstart", trigger);
-    };
+    obs.observe(node);
+    return () => obs.disconnect();
   }, []);
 
   return (
