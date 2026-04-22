@@ -67,15 +67,12 @@ type Country = {
 };
 
 const countries: Country[] = [
-  { id: "mu", name: "Île Maurice", x: 700, y: 460, projects: 120, highlight: "Hub historique — siège HPA, hôtels & villas" },
-  { id: "mg", name: "Madagascar", x: 620, y: 410, projects: 35, highlight: "Hôtellerie & corporate — Antananarivo, Anjajavy" },
-  { id: "sc", name: "Seychelles", x: 720, y: 320, projects: 18, highlight: "Resorts premium — Mahé, Praslin" },
-  { id: "tz", name: "Zanzibar", x: 540, y: 360, projects: 14, highlight: "Boutique-hôtels & lodges balnéaires" },
-  { id: "ci", name: "Côte d'Ivoire", x: 200, y: 360, projects: 12, highlight: "Bureaux corporate — Abidjan" },
-  { id: "sn", name: "Sénégal", x: 130, y: 310, projects: 8, highlight: "Tertiaire & hôtellerie — Dakar" },
-  { id: "tg", name: "Togo", x: 270, y: 380, projects: 6, highlight: "Sièges bancaires & corporate" },
-  { id: "re", name: "La Réunion", x: 720, y: 480, projects: 9, highlight: "Résidentiel haut de gamme" },
-  { id: "ke", name: "Kenya", x: 560, y: 320, projects: 5, highlight: "Lodges & hospitality" },
+  { id: "mu", name: "Île Maurice", x: 700, y: 460, projects: 95, highlight: "Hub historique — siège HPA, hôtels & villas" },
+  { id: "mg", name: "Madagascar", x: 620, y: 410, projects: 18, highlight: "Hôtellerie & corporate — Antananarivo, Anjajavy" },
+  { id: "sc", name: "Seychelles", x: 720, y: 320, projects: 2, highlight: "Resorts premium — Mahé, Praslin" },
+  { id: "tz", name: "Tanzanie", x: 540, y: 360, projects: 2, highlight: "Boutique-hôtels & lodges balnéaires — Zanzibar" },
+  { id: "ci", name: "Côte d'Ivoire", x: 200, y: 360, projects: 1, highlight: "Bureaux corporate — Abidjan" },
+  { id: "tg", name: "Togo", x: 270, y: 380, projects: 2, highlight: "Sièges bancaires & corporate" },
 ];
 
 export default function RegionMapSection() {
