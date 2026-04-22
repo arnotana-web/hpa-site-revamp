@@ -62,55 +62,38 @@ function CountStat({ target, suffix = "", label }: { target: number; suffix?: st
 type Country = {
   id: string;
   name: string;
-  x: number;
-  y: number;
   coords: [number, number];
   projects: number;
   highlight: string;
-  // Stylised map label offset
   labelDx?: number;
   labelDy?: number;
   labelAnchor?: "start" | "end" | "middle";
-  // Geographic map label offset
-  geoLabelDx?: number;
-  geoLabelDy?: number;
-  geoLabelAnchor?: "start" | "end" | "middle";
 };
 
 const countries: Country[] = [
-  { id: "mu", name: "Île Maurice", x: 790, y: 505, coords: [57.55, -20.35], projects: 95, highlight: "Hub historique — siège HPA, hôtels & villas" },
-  { id: "mg", name: "Madagascar", x: 720, y: 470, coords: [46.87, -18.77], projects: 18, highlight: "Hôtellerie & corporate — Antananarivo, Anjajavy" },
-  { id: "sc", name: "Seychelles", x: 800, y: 390, coords: [55.49, -4.68], projects: 2, highlight: "Resorts premium — Mahé, Praslin" },
-  { id: "tz", name: "Tanzanie", x: 605, y: 430, coords: [34.89, -6.37], projects: 2, highlight: "Boutique-hôtels & lodges balnéaires — Zanzibar" },
+  { id: "mu", name: "Île Maurice", coords: [57.55, -20.35], projects: 95, highlight: "Hub historique — siège HPA, hôtels & villas" },
+  { id: "mg", name: "Madagascar", coords: [46.87, -18.77], projects: 18, highlight: "Hôtellerie & corporate — Antananarivo, Anjajavy" },
+  { id: "sc", name: "Seychelles", coords: [55.49, -4.68], projects: 2, highlight: "Resorts premium — Mahé, Praslin" },
+  { id: "tz", name: "Tanzanie", coords: [34.89, -6.37], projects: 2, highlight: "Boutique-hôtels & lodges balnéaires — Zanzibar" },
   {
     id: "ci",
     name: "Côte d'Ivoire",
-    x: 285,
-    y: 380,
     coords: [-5.55, 7.54],
     projects: 1,
     highlight: "Bureaux corporate — Abidjan",
-    labelDx: -14,
-    labelDy: 5,
+    labelDx: -12,
+    labelDy: 4,
     labelAnchor: "end",
-    geoLabelDx: -12,
-    geoLabelDy: 4,
-    geoLabelAnchor: "end",
   },
   {
     id: "tg",
     name: "Togo",
-    x: 335,
-    y: 385,
     coords: [0.82, 8.62],
     projects: 2,
     highlight: "Sièges bancaires & corporate",
-    labelDx: 14,
+    labelDx: 12,
     labelDy: -8,
     labelAnchor: "start",
-    geoLabelDx: 12,
-    geoLabelDy: -8,
-    geoLabelAnchor: "start",
   },
 ];
 
