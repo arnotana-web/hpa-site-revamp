@@ -57,6 +57,13 @@ export default function StatsBar() {
       setStart(true);
       return;
     }
+    // If already in/above viewport on mount, start immediately
+    const rect = node.getBoundingClientRect();
+    const vh = window.innerHeight || document.documentElement.clientHeight;
+    if (rect.top < vh && rect.bottom > 0) {
+      setStart(true);
+      return;
+    }
     const obs = new IntersectionObserver(
       (entries) => {
         for (const e of entries) {
@@ -66,7 +73,7 @@ export default function StatsBar() {
           }
         }
       },
-      { threshold: 0.4 }
+      { threshold: 0.15 }
     );
     obs.observe(node);
     return () => obs.disconnect();
