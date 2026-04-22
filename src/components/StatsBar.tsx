@@ -15,20 +15,31 @@ const stats: Stat[] = [
 
 function useCountUp(target: number, start: boolean, duration = 1600) {
   const [val, setVal] = useState(0);
+
   useEffect(() => {
-    if (!start) return;
-    const startTs = performance.now();
-    let raf = 0;
-    const tick = (now: number) => {
-      const p = Math.min(1, (now - startTs) / duration);
-      // ease-out cubic
-      const eased = 1 - Math.pow(1 - p, 3);
+    if (!start) {
+      setVal(0);
+      return;
+    }
+
+    const steps = 40;
+    const stepDuration = Math.max(24, Math.floor(duration / steps));
+    let currentStep = 0;
+
+    const timer = window.setInterval(() => {
+      currentStep += 1;
+      const progress = Math.min(currentStep / steps, 1);
+      const eased = 1 - Math.pow(1 - progress, 3);
       setVal(Math.round(target * eased));
-      if (p < 1) raf = requestAnimationFrame(tick);
-    };
-    raf = requestAnimationFrame(tick);
-    return () => cancelAnimationFrame(raf);
+
+      if (progress >= 1) {
+        window.clearInterval(timer);
+      }
+    }, stepDuration);
+
+    return () => window.clearInterval(timer);
   }, [target, start, duration]);
+
   return val;
 }
 
