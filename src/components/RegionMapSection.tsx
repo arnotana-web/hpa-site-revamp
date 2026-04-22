@@ -2,6 +2,8 @@ import { useEffect, useRef, useState } from "react";
 import { MapPin } from "lucide-react";
 import { ComposableMap, Geographies, Geography, Marker, Line } from "react-simple-maps";
 
+// NOTE: stylised map removed — only the geographic projection is kept.
+
 function useCountUp(target: number, start: boolean, duration = 1400) {
   const [val, setVal] = useState(0);
   useEffect(() => {
