@@ -68,13 +68,25 @@ export default function StatsBar() {
       return;
     }
 
-    console.debug("[StatsBar] arm start timer");
-    const timer = window.setTimeout(() => {
-      console.debug("[StatsBar] setStart(true)");
-      setStart(true);
-    }, 2200);
+    let started = false;
 
-    return () => window.clearTimeout(timer);
+    const trigger = () => {
+      if (started) return;
+      started = true;
+      setStart(true);
+      window.removeEventListener("scroll", trigger);
+      window.removeEventListener("touchstart", trigger);
+    };
+
+    const fallbackTimer = window.setTimeout(trigger, 2200);
+    window.addEventListener("scroll", trigger, { passive: true, once: true });
+    window.addEventListener("touchstart", trigger, { passive: true, once: true });
+
+    return () => {
+      window.clearTimeout(fallbackTimer);
+      window.removeEventListener("scroll", trigger);
+      window.removeEventListener("touchstart", trigger);
+    };
   }, []);
 
   return (
