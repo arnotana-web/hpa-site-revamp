@@ -101,7 +101,6 @@ const GEO_URL = "https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json"
 
 export default function RegionMapSection() {
   const [hovered, setHovered] = useState<Country | null>(null);
-  const [mode, setMode] = useState<"stylised" | "geographic">("stylised");
 
   return (
     <section id="region" className="bg-primary text-primary-foreground section-padding overflow-hidden">
@@ -119,218 +118,86 @@ export default function RegionMapSection() {
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-10 items-start">
-          <div>
-            {/* Toggle */}
-            <div className="flex justify-end mb-3">
-              <div className="inline-flex border border-primary-foreground/15 bg-primary-foreground/5 backdrop-blur-sm">
-                <button
-                  type="button"
-                  onClick={() => setMode("stylised")}
-                  className={`px-4 py-2 font-body text-[10px] font-bold tracking-[2px] uppercase transition-colors ${
-                    mode === "stylised"
-                      ? "bg-accent text-primary"
-                      : "text-primary-foreground/60 hover:text-primary-foreground"
-                  }`}
-                >
-                  Stylisée
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setMode("geographic")}
-                  className={`px-4 py-2 font-body text-[10px] font-bold tracking-[2px] uppercase transition-colors ${
-                    mode === "geographic"
-                      ? "bg-accent text-primary"
-                      : "text-primary-foreground/60 hover:text-primary-foreground"
-                  }`}
-                >
-                  Géographique
-                </button>
-              </div>
-            </div>
+          <div className="relative aspect-[1000/700] w-full">
+            <ComposableMap
+              projection="geoMercator"
+              projectionConfig={{ scale: 380, center: [25, -8] }}
+              width={1000}
+              height={700}
+              style={{ width: "100%", height: "100%" }}
+            >
+              <Geographies geography={GEO_URL}>
+                {({ geographies }) =>
+                  geographies.map((geo) => (
+                    <Geography
+                      key={geo.rsmKey}
+                      geography={geo}
+                      fill="currentColor"
+                      fillOpacity={0.08}
+                      stroke="currentColor"
+                      strokeOpacity={0.25}
+                      strokeWidth={0.5}
+                      style={{
+                        default: { outline: "none" },
+                        hover: { outline: "none", fillOpacity: 0.12 },
+                        pressed: { outline: "none" },
+                      }}
+                    />
+                  ))
+                }
+              </Geographies>
 
-            {mode === "stylised" ? (
-              <div className="relative aspect-[1000/700] w-full">
-                <svg
-                  viewBox="0 0 1000 700"
-                  className="w-full h-full"
-                  role="img"
-                  aria-label="Carte stylisée des projets HPA en Afrique et Océan Indien"
-                >
-                  <defs>
-                    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
-                      <path d="M 40 0 L 0 0 0 40" fill="none" stroke="currentColor" strokeOpacity="0.05" strokeWidth="0.5" />
-                    </pattern>
-                    <radialGradient id="pulse" cx="50%" cy="50%" r="50%">
-                      <stop offset="0%" stopColor="#7A5A2C" stopOpacity="0.6" />
-                      <stop offset="100%" stopColor="#7A5A2C" stopOpacity="0" />
-                    </radialGradient>
-                  </defs>
-                  <rect width="1000" height="700" fill="url(#grid)" />
-
-                  <path
-                    d="M 250 145 L 360 130 L 470 135 L 560 150 L 600 175 L 605 220 L 590 250 L 600 285 L 615 320 L 625 360 L 640 400 L 635 440 L 615 475 L 590 505 L 555 535 L 515 555 L 480 555 L 455 530 L 430 495 L 405 470 L 380 445 L 355 410 L 330 370 L 305 325 L 280 280 L 260 230 L 248 185 Z"
-                    fill="currentColor"
-                    fillOpacity="0.08"
-                    stroke="currentColor"
-                    strokeOpacity="0.25"
-                    strokeWidth="1.2"
+              {countries
+                .filter((c) => c.id !== "mu")
+                .map((c) => (
+                  <Line
+                    key={`gline-${c.id}`}
+                    from={countries[0].coords}
+                    to={c.coords}
+                    stroke="#7A5A2C"
+                    strokeOpacity={hovered?.id === c.id ? 0.7 : 0.2}
+                    strokeWidth={hovered?.id === c.id ? 1.2 : 0.7}
+                    strokeDasharray="4 4"
                   />
-                  <path
-                    d="M 705 425 Q 720 445 728 475 L 720 505 L 708 510 L 700 485 L 698 450 Z"
-                    fill="currentColor"
-                    fillOpacity="0.08"
-                    stroke="currentColor"
-                    strokeOpacity="0.25"
-                    strokeWidth="1.2"
-                  />
+                ))}
 
-                  {countries
-                    .filter((c) => c.id !== "mu")
-                    .map((c) => {
-                      const mu = countries[0];
-                      return (
-                        <line
-                          key={`line-${c.id}`}
-                          x1={mu.x}
-                          y1={mu.y}
-                          x2={c.x}
-                          y2={c.y}
-                          stroke="#7A5A2C"
-                          strokeOpacity={hovered?.id === c.id ? 0.7 : 0.15}
-                          strokeWidth={hovered?.id === c.id ? 1.2 : 0.6}
-                          strokeDasharray="4 4"
-                          className="transition-all duration-300"
-                        />
-                      );
-                    })}
-
-                  {countries.map((c) => {
-                    const isHover = hovered?.id === c.id;
-                    const isHub = c.id === "mu";
-                    return (
-                      <g
-                        key={c.id}
-                        transform={`translate(${c.x} ${c.y})`}
-                        className="cursor-pointer"
-                        onMouseEnter={() => setHovered(c)}
-                        onMouseLeave={() => setHovered(null)}
-                      >
-                        <circle r={isHub ? 32 : 22} fill="url(#pulse)" opacity={isHover || isHub ? 1 : 0.5} />
-                        <circle
-                          r={isHub ? 12 : 8}
-                          fill="none"
-                          stroke="#7A5A2C"
-                          strokeOpacity={isHover ? 1 : 0.7}
-                          strokeWidth="1.5"
-                          className="transition-all duration-300"
-                        />
-                        <circle
-                          r={isHover ? 6 : isHub ? 6 : 4}
-                          fill="#7A5A2C"
-                          className="transition-all duration-300"
-                        />
-                        <text
-                          x={c.labelDx ?? 14}
-                          y={c.labelDy ?? 5}
-                          textAnchor={c.labelAnchor ?? "start"}
-                          fill="#F6EFD9"
-                          fillOpacity={isHover || isHub ? 1 : 0.55}
-                          fontSize={isHub ? 14 : 12}
-                          fontFamily="Inter, sans-serif"
-                          fontWeight={isHub ? 700 : 500}
-                          letterSpacing="0.5"
-                          className="transition-all duration-300 pointer-events-none select-none uppercase"
-                        >
-                          {c.name}
-                        </text>
-                      </g>
-                    );
-                  })}
-                </svg>
-              </div>
-            ) : (
-              <div className="relative aspect-[1000/700] w-full">
-                <ComposableMap
-                  projection="geoMercator"
-                  projectionConfig={{ scale: 380, center: [25, -8] }}
-                  width={1000}
-                  height={700}
-                  style={{ width: "100%", height: "100%" }}
-                >
-                  <Geographies geography={GEO_URL}>
-                    {({ geographies }) =>
-                      geographies.map((geo) => (
-                        <Geography
-                          key={geo.rsmKey}
-                          geography={geo}
-                          fill="currentColor"
-                          fillOpacity={0.08}
-                          stroke="currentColor"
-                          strokeOpacity={0.25}
-                          strokeWidth={0.5}
-                          style={{
-                            default: { outline: "none" },
-                            hover: { outline: "none", fillOpacity: 0.12 },
-                            pressed: { outline: "none" },
-                          }}
-                        />
-                      ))
-                    }
-                  </Geographies>
-
-                  {countries
-                    .filter((c) => c.id !== "mu")
-                    .map((c) => (
-                      <Line
-                        key={`gline-${c.id}`}
-                        from={countries[0].coords}
-                        to={c.coords}
-                        stroke="#7A5A2C"
-                        strokeOpacity={hovered?.id === c.id ? 0.7 : 0.2}
-                        strokeWidth={hovered?.id === c.id ? 1.2 : 0.7}
-                        strokeDasharray="4 4"
-                      />
-                    ))}
-
-                  {countries.map((c) => {
-                    const isHover = hovered?.id === c.id;
-                    const isHub = c.id === "mu";
-                    return (
-                      <Marker
-                        key={c.id}
-                        coordinates={c.coords}
-                        onMouseEnter={() => setHovered(c)}
-                        onMouseLeave={() => setHovered(null)}
-                        style={{ default: { cursor: "pointer" }, hover: { cursor: "pointer" }, pressed: {} }}
-                      >
-                        <circle
-                          r={isHub ? 10 : 7}
-                          fill="none"
-                          stroke="#7A5A2C"
-                          strokeOpacity={isHover ? 1 : 0.7}
-                          strokeWidth={1.5}
-                        />
-                        <circle r={isHover ? 5 : isHub ? 5 : 3.5} fill="#7A5A2C" />
-                        <text
-                          x={c.geoLabelDx ?? 12}
-                          y={c.geoLabelDy ?? 4}
-                          textAnchor={c.geoLabelAnchor ?? "start"}
-                          fill="#F6EFD9"
-                          fillOpacity={isHover || isHub ? 1 : 0.7}
-                          fontSize={isHub ? 12 : 10}
-                          fontFamily="Inter, sans-serif"
-                          fontWeight={isHub ? 700 : 500}
-                          letterSpacing="0.5"
-                          className="pointer-events-none select-none uppercase"
-                        >
-                          {c.name}
-                        </text>
-                      </Marker>
-                    );
-                  })}
-                </ComposableMap>
-              </div>
-            )}
+              {countries.map((c) => {
+                const isHover = hovered?.id === c.id;
+                const isHub = c.id === "mu";
+                return (
+                  <Marker
+                    key={c.id}
+                    coordinates={c.coords}
+                    onMouseEnter={() => setHovered(c)}
+                    onMouseLeave={() => setHovered(null)}
+                    style={{ default: { cursor: "pointer" }, hover: { cursor: "pointer" }, pressed: {} }}
+                  >
+                    <circle
+                      r={isHub ? 10 : 7}
+                      fill="none"
+                      stroke="#7A5A2C"
+                      strokeOpacity={isHover ? 1 : 0.7}
+                      strokeWidth={1.5}
+                    />
+                    <circle r={isHover ? 5 : isHub ? 5 : 3.5} fill="#7A5A2C" />
+                    <text
+                      x={c.labelDx ?? 12}
+                      y={c.labelDy ?? 4}
+                      textAnchor={c.labelAnchor ?? "start"}
+                      fill="#F6EFD9"
+                      fillOpacity={isHover || isHub ? 1 : 0.7}
+                      fontSize={isHub ? 12 : 10}
+                      fontFamily="Inter, sans-serif"
+                      fontWeight={isHub ? 700 : 500}
+                      letterSpacing="0.5"
+                      className="pointer-events-none select-none uppercase"
+                    >
+                      {c.name}
+                    </text>
+                  </Marker>
+                );
+              })}
+            </ComposableMap>
           </div>
 
           {/* Detail panel */}
