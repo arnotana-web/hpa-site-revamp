@@ -71,14 +71,38 @@ type Country = {
 };
 
 const countries: Country[] = [
-  { id: "mu", name: "Île Maurice", coords: [57.55, -20.35], projects: 95, highlight: "Hub historique — siège HPA, hôtels & villas" },
-  { id: "mg", name: "Madagascar", coords: [46.87, -18.77], projects: 18, highlight: "Hôtellerie & corporate — Antananarivo, Anjajavy" },
-  { id: "sc", name: "Seychelles", coords: [55.49, -4.68], projects: 2, highlight: "Resorts premium — Mahé, Praslin" },
-  { id: "tz", name: "Tanzanie", coords: [34.89, -6.37], projects: 2, highlight: "Boutique-hôtels & lodges balnéaires — Zanzibar" },
+  {
+    id: "mu",
+    name: "Île Maurice",
+    coords: [57.5522, -20.3484],
+    projects: 95,
+    highlight: "Hub historique — siège HPA, hôtels & villas",
+  },
+  {
+    id: "mg",
+    name: "Madagascar",
+    coords: [47.5079, -18.8792],
+    projects: 18,
+    highlight: "Hôtellerie & corporate — Antananarivo, Anjajavy",
+  },
+  {
+    id: "sc",
+    name: "Seychelles",
+    coords: [55.45, -4.62],
+    projects: 2,
+    highlight: "Resorts premium — Mahé, Praslin",
+  },
+  {
+    id: "tz",
+    name: "Tanzanie",
+    coords: [39.2083, -6.1659],
+    projects: 2,
+    highlight: "Boutique-hôtels & lodges balnéaires — Zanzibar",
+  },
   {
     id: "ci",
     name: "Côte d'Ivoire",
-    coords: [-5.55, 7.54],
+    coords: [-4.0083, 5.3599],
     projects: 1,
     highlight: "Bureaux corporate — Abidjan",
     labelDx: -12,
@@ -88,7 +112,7 @@ const countries: Country[] = [
   {
     id: "tg",
     name: "Togo",
-    coords: [0.82, 8.62],
+    coords: [1.2255, 6.1319],
     projects: 2,
     highlight: "Sièges bancaires & corporate",
     labelDx: 12,
@@ -118,12 +142,12 @@ export default function RegionMapSection() {
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-10 items-start">
-          <div className="relative aspect-[1000/800] w-full">
+          <div className="relative aspect-[1000/760] w-full">
             <ComposableMap
-              projection="geoEquirectangular"
-              projectionConfig={{ scale: 540, center: [28, -6] }}
+              projection="geoMercator"
+              projectionConfig={{ scale: 430, center: [24, -8] }}
               width={1000}
-              height={800}
+              height={760}
               style={{ width: "100%", height: "100%" }}
             >
               <Geographies geography={GEO_URL}>
