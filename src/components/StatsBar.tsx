@@ -72,6 +72,15 @@ export default function StatsBar() {
     let started = false;
     let intervalId = 0;
 
+    const trigger = () => {
+      if (started) return;
+      started = true;
+      setStart(true);
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", checkVisibility);
+      window.clearInterval(intervalId);
+    };
+
     const checkVisibility = () => {
       if (started) return;
       const rect = node.getBoundingClientRect();
@@ -79,27 +88,23 @@ export default function StatsBar() {
       const visibleHeight = Math.min(rect.bottom, vh) - Math.max(rect.top, 0);
       const visibilityRatio = Math.max(0, visibleHeight) / Math.max(rect.height, 1);
 
-      if (visibilityRatio >= 0.3) {
-        started = true;
-        setStart(true);
-        window.removeEventListener("scroll", checkVisibility);
-        window.removeEventListener("resize", checkVisibility);
-        window.clearInterval(intervalId);
+      if (visibilityRatio >= 0.25) {
+        trigger();
       }
     };
 
-    const rafId = window.requestAnimationFrame(checkVisibility);
-    const delayedId = window.setTimeout(checkVisibility, 800);
-    intervalId = window.setInterval(checkVisibility, 200);
+    const onScroll = () => {
+      checkVisibility();
+    };
 
-    window.addEventListener("scroll", checkVisibility, { passive: true });
+    window.setTimeout(checkVisibility, 900);
+    intervalId = window.setInterval(checkVisibility, 250);
+    window.addEventListener("scroll", onScroll, { passive: true });
     window.addEventListener("resize", checkVisibility);
 
     return () => {
-      window.cancelAnimationFrame(rafId);
-      window.clearTimeout(delayedId);
       window.clearInterval(intervalId);
-      window.removeEventListener("scroll", checkVisibility);
+      window.removeEventListener("scroll", onScroll);
       window.removeEventListener("resize", checkVisibility);
     };
   }, []);
