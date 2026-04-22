@@ -9,7 +9,7 @@ import ServicesSection from "@/components/ServicesSection";
 import WhyUsSection from "@/components/WhyUsSection";
 import MarketsSection from "@/components/MarketsSection";
 import RegionMapSection from "@/components/RegionMapSection";
-import BrandsSection from "@/components/BrandsSection";
+
 import ProcessStorySection from "@/components/ProcessStorySection";
 import TestimonialsSection from "@/components/TestimonialsSection";
 import RealisationsSection from "@/components/RealisationsSection";
@@ -44,7 +44,7 @@ function Index() {
       <Reveal><WhyUsSection /></Reveal>
       <Reveal><MarketsSection /></Reveal>
       <Reveal><RegionMapSection /></Reveal>
-      <Reveal><BrandsSection /></Reveal>
+      
       <ProcessStorySection />
       <Reveal><TestimonialsSection /></Reveal>
       <Reveal><RealisationsSection /></Reveal>
