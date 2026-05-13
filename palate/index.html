@@ -448,9 +448,14 @@ body.screen-results  #screen-results { display: flex; }
 .text-input:focus { border-color: var(--burgundy); }
 input[type=file] {
   position: absolute;
-  width: 0; height: 0;
+  width: 1px; height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0,0,0,0);
+  white-space: nowrap;
+  border: 0;
   opacity: 0;
-  pointer-events: none;
 }
 
 /* ---------- Loading ---------- */
@@ -722,7 +727,7 @@ input[type=file] {
       <div class="spacer-32"></div>
     </div>
     <div class="scan-body">
-      <div class="dropzone" id="dropzone">
+      <label class="dropzone" id="dropzone" for="file">
         <div class="icon">
           <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <path d="M3 8.5A2 2 0 0 1 5 6.5h2.2l1.6-2.2A1 1 0 0 1 9.6 4h4.8a1 1 0 0 1 .8.3l1.6 2.2H19a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
@@ -730,9 +735,9 @@ input[type=file] {
           </svg>
         </div>
         <div class="label">Tap to capture menu</div>
-        <div class="hint">Camera or photo library</div>
-      </div>
-      <input type="file" id="file" accept="image/*" capture="environment">
+        <div class="hint">Photo library, camera or files</div>
+      </label>
+      <input type="file" id="file" accept="image/*">
 
       <div class="field-label">Location (optional)</div>
       <input type="text" class="text-input" id="loc" placeholder="e.g. Tao Tao Ju, Guangzhou" autocomplete="off" autocapitalize="words">
@@ -1012,11 +1017,13 @@ input[type=file] {
       </svg>
     </div>
     <div class="label">Tap to capture menu</div>
-    <div class="hint">Camera or photo library</div>
+    <div class="hint">Photo library, camera or files</div>
   `;
 
   function renderDropzone() {
     if (state.photo) {
+      // Disable the label-for behavior so tapping the X doesn't reopen the picker.
+      dz.removeAttribute('for');
       dz.classList.add('has-photo');
       dz.innerHTML = `
         <img class="preview" src="${state.photo}" alt="menu preview">
@@ -1024,6 +1031,7 @@ input[type=file] {
       `;
       analyzeBtn.disabled = false;
     } else {
+      dz.setAttribute('for', 'file');
       dz.classList.remove('has-photo');
       dz.innerHTML = emptyDropzoneHTML;
       analyzeBtn.disabled = true;
@@ -1031,13 +1039,15 @@ input[type=file] {
   }
 
   dz.addEventListener('click', (e) => {
-    if (e.target.closest('.remove-photo')) {
+    const removeBtn = e.target.closest('.remove-photo');
+    if (removeBtn) {
+      e.preventDefault();
+      e.stopPropagation();
       state.photo = null;
       fileInput.value = '';
       renderDropzone();
-      return;
     }
-    if (!state.photo) fileInput.click();
+    // When empty, the <label for="file"> handles the picker natively — no JS click needed.
   });
 
   fileInput.addEventListener('change', () => {
