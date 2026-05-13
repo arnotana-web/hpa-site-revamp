@@ -1,0 +1,1160 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no, maximum-scale=1">
+<meta name="theme-color" content="#4A1520">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Palate">
+<meta name="format-detection" content="telephone=no">
+<meta name="description" content="Palate — your global food passport. Scan any menu, get the best dishes for your taste.">
+<link rel="apple-touch-icon" href="https://d8j0ntlcm91z4.cloudfront.net/user_3CDQuYIygvqkUH2VHmNQlHT6LLz/hf_20260513_145133_dbac88a6-e698-48bb-a8db-d0b57cc83221.jpeg">
+<link rel="icon" href="https://d8j0ntlcm91z4.cloudfront.net/user_3CDQuYIygvqkUH2VHmNQlHT6LLz/hf_20260513_145133_dbac88a6-e698-48bb-a8db-d0b57cc83221.jpeg">
+<link rel="manifest" href='data:application/manifest+json,%7B%22name%22%3A%22Palate%22%2C%22short_name%22%3A%22Palate%22%2C%22start_url%22%3A%22.%2F%22%2C%22scope%22%3A%22.%2F%22%2C%22display%22%3A%22standalone%22%2C%22orientation%22%3A%22portrait%22%2C%22background_color%22%3A%22%23FAF8F3%22%2C%22theme_color%22%3A%22%234A1520%22%2C%22description%22%3A%22Your%20global%20food%20passport%22%2C%22icons%22%3A%5B%7B%22src%22%3A%22https%3A%2F%2Fd8j0ntlcm91z4.cloudfront.net%2Fuser_3CDQuYIygvqkUH2VHmNQlHT6LLz%2Fhf_20260513_145133_dbac88a6-e698-48bb-a8db-d0b57cc83221.jpeg%22%2C%22sizes%22%3A%22512x512%22%2C%22type%22%3A%22image%2Fjpeg%22%2C%22purpose%22%3A%22any%22%7D%5D%7D'>
+<title>Palate — Your global food passport</title>
+<style>
+:root {
+  --burgundy: #4A1520;
+  --burgundy-deep: #2E0D14;
+  --burgundy-soft: rgba(74,21,32,.06);
+  --cream: #FAF8F3;
+  --cream-dim: rgba(250,248,243,.7);
+  --gold: #A67C3D;
+  --ink: #1A1814;
+  --muted: #7a6e68;
+  --line: rgba(26,24,20,.1);
+  --green: #4f7a3f;
+  --red: #9a3a3a;
+  --serif: Georgia, 'Times New Roman', 'Iowan Old Style', serif;
+  --sans: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+html, body {
+  height: 100%;
+  overscroll-behavior: none;
+}
+body {
+  font-family: var(--sans);
+  color: var(--ink);
+  background: var(--burgundy-deep);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  overflow: hidden;
+  position: fixed;
+  inset: 0;
+}
+button { font: inherit; color: inherit; }
+input { font: inherit; color: inherit; }
+
+main { position: absolute; inset: 0; }
+
+.screen {
+  position: absolute;
+  inset: 0;
+  display: none;
+  flex-direction: column;
+  overflow: hidden;
+  padding-top: env(safe-area-inset-top);
+  padding-bottom: env(safe-area-inset-bottom);
+}
+body.screen-welcome  #screen-welcome,
+body.screen-swipe    #screen-swipe,
+body.screen-prefs    #screen-prefs,
+body.screen-scan     #screen-scan,
+body.screen-loading  #screen-loading,
+body.screen-results  #screen-results { display: flex; }
+
+/* ---------- Welcome ---------- */
+#screen-welcome {
+  background:
+    radial-gradient(ellipse 90% 60% at 50% 0%, #6a1a2c 0%, transparent 70%),
+    radial-gradient(ellipse 80% 70% at 50% 100%, #1f070d 0%, transparent 70%),
+    var(--burgundy);
+  color: var(--cream);
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 32px 28px;
+}
+.welcome-inner { display: flex; flex-direction: column; align-items: center; width: 100%; max-width: 360px; }
+.logo {
+  width: 120px; height: 120px;
+  border-radius: 12px;
+  object-fit: cover;
+  margin-bottom: 36px;
+  box-shadow: 0 18px 50px rgba(0,0,0,.5), 0 0 0 1px rgba(255,255,255,.06) inset;
+  background: #2a0a14;
+}
+.welcome-inner h1 {
+  font-family: var(--serif);
+  font-style: italic;
+  font-weight: 400;
+  font-size: clamp(58px, 16vw, 86px);
+  letter-spacing: -0.02em;
+  line-height: .95;
+  color: var(--cream);
+}
+.welcome-inner .tag {
+  font-family: var(--sans);
+  font-size: 14px;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--cream-dim);
+  margin-top: 18px;
+  margin-bottom: 64px;
+}
+.btn-primary, .btn-ghost {
+  display: block;
+  width: 100%;
+  padding: 16px 22px;
+  border: none;
+  border-radius: 999px;
+  font-family: var(--sans);
+  font-size: 15px;
+  font-weight: 500;
+  letter-spacing: .02em;
+  cursor: pointer;
+  transition: transform .15s ease, opacity .15s;
+}
+.btn-primary { background: var(--cream); color: var(--burgundy); margin-bottom: 10px; }
+.btn-ghost   { background: transparent; color: var(--cream); border: 1px solid rgba(250,248,243,.28); }
+.btn-primary:active, .btn-ghost:active { transform: scale(.97); }
+
+/* ---------- Top bar (shared) ---------- */
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 18px;
+  background: var(--cream);
+  border-bottom: 1px solid var(--line);
+  flex-shrink: 0;
+}
+.topbar h2 {
+  font-family: var(--serif);
+  font-style: italic;
+  font-weight: 400;
+  font-size: 20px;
+  color: var(--ink);
+  letter-spacing: -.01em;
+}
+.icon-btn {
+  background: none; border: none;
+  width: 32px; height: 32px;
+  display: flex; align-items: center; justify-content: center;
+  color: var(--ink);
+  cursor: pointer;
+  font-size: 22px;
+  line-height: 1;
+}
+.spacer-32 { width: 32px; }
+
+/* ---------- Swipe ---------- */
+#screen-swipe { background: var(--cream); }
+.swipe-top { padding: 16px 22px 0; flex-shrink: 0; }
+.progress {
+  height: 2px;
+  background: rgba(26,24,20,.08);
+  border-radius: 999px;
+  overflow: hidden;
+}
+.progress > div {
+  height: 100%;
+  width: 0%;
+  background: var(--burgundy);
+  border-radius: 999px;
+  transition: width .35s ease;
+}
+.swipe-counter {
+  font-size: 11px;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-top: 14px;
+  text-align: center;
+}
+.deck {
+  position: relative;
+  flex: 1;
+  margin: 18px 22px 4px;
+  min-height: 0;
+}
+.swipe-card {
+  position: absolute;
+  inset: 0;
+  border-radius: 18px;
+  background-color: #2a1a18;
+  background-size: cover;
+  background-position: center;
+  box-shadow: 0 18px 50px rgba(0,0,0,.22), 0 1px 3px rgba(0,0,0,.06);
+  overflow: hidden;
+  user-select: none;
+  -webkit-user-drag: none;
+  touch-action: none;
+  cursor: grab;
+  will-change: transform, opacity;
+}
+.swipe-card.top { cursor: grab; }
+.swipe-card.dragging { cursor: grabbing; transition: none !important; }
+.swipe-card::after {
+  content: '';
+  position: absolute; inset: 0;
+  background: linear-gradient(to top, rgba(0,0,0,.55) 0%, rgba(0,0,0,0) 55%);
+  pointer-events: none;
+}
+.swipe-card .label {
+  position: absolute;
+  left: 22px; bottom: 22px;
+  z-index: 2;
+  color: var(--cream);
+  font-family: var(--serif);
+  font-style: italic;
+  font-weight: 400;
+  font-size: 30px;
+  letter-spacing: -.01em;
+  text-shadow: 0 1px 12px rgba(0,0,0,.6);
+}
+.swipe-card .country {
+  position: absolute;
+  top: 22px; left: 22px;
+  z-index: 2;
+  color: var(--cream);
+  font-size: 10px;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  opacity: .8;
+  font-weight: 500;
+}
+.swipe-card .badge {
+  position: absolute;
+  top: 56px;
+  padding: 6px 14px;
+  font-weight: 800;
+  font-size: 20px;
+  letter-spacing: .15em;
+  border: 3px solid currentColor;
+  border-radius: 6px;
+  opacity: 0;
+  pointer-events: none;
+  z-index: 3;
+  background: rgba(0,0,0,.15);
+}
+.swipe-card .badge.yes  { right: 22px; color: #6fd07f; transform: rotate(18deg); }
+.swipe-card .badge.nope { left: 22px;  color: #e26a6a; transform: rotate(-18deg); }
+.swipe-actions {
+  display: flex;
+  justify-content: center;
+  gap: 36px;
+  padding: 14px 0 26px;
+  flex-shrink: 0;
+}
+.act {
+  width: 58px; height: 58px;
+  border-radius: 50%;
+  border: 1px solid var(--line);
+  background: #fff;
+  font-size: 22px;
+  line-height: 1;
+  cursor: pointer;
+  box-shadow: 0 4px 14px rgba(0,0,0,.07);
+  display: flex; align-items: center; justify-content: center;
+  transition: transform .15s ease;
+}
+.act:active { transform: scale(.9); }
+.act.no  { color: var(--red); }
+.act.yes { color: var(--green); }
+
+/* ---------- Prefs ---------- */
+#screen-prefs { background: var(--cream); }
+.scroll { flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; }
+.prefs-body { padding: 28px 22px 24px; }
+.section-title {
+  font-family: var(--serif);
+  font-style: italic;
+  font-weight: 400;
+  font-size: 26px;
+  letter-spacing: -.01em;
+  margin-bottom: 4px;
+}
+.section-sub {
+  font-size: 13px;
+  color: var(--muted);
+  margin-bottom: 18px;
+}
+.section + .section { margin-top: 36px; }
+.toggles {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+.toggle {
+  padding: 14px 16px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: #fff;
+  font-size: 14px;
+  text-align: left;
+  cursor: pointer;
+  transition: all .15s ease;
+  color: var(--ink);
+  font-weight: 500;
+}
+.toggle:active { transform: scale(.98); }
+.toggle.active {
+  background: var(--burgundy);
+  color: var(--cream);
+  border-color: var(--burgundy);
+}
+.kcal-row {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  border-bottom: 1px solid var(--line);
+  padding-bottom: 6px;
+}
+.kcal-input {
+  flex: 1;
+  font-family: var(--serif);
+  font-size: 44px;
+  font-weight: 400;
+  border: none;
+  padding: 6px 0;
+  background: transparent;
+  color: var(--ink);
+  outline: none;
+  -moz-appearance: textfield;
+  appearance: textfield;
+}
+.kcal-input::-webkit-outer-spin-button,
+.kcal-input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+.kcal-label {
+  font-size: 12px;
+  color: var(--muted);
+  letter-spacing: .14em;
+  text-transform: uppercase;
+}
+.chips { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 14px; }
+.chip {
+  padding: 8px 14px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: #fff;
+  font-size: 13px;
+  cursor: pointer;
+  color: var(--ink);
+  transition: all .15s ease;
+}
+.chip:active { transform: scale(.95); }
+.chip.active {
+  background: var(--gold);
+  color: var(--cream);
+  border-color: var(--gold);
+}
+.btn-bottom {
+  margin: 8px 22px max(22px, env(safe-area-inset-bottom));
+  padding: 16px;
+  background: var(--burgundy);
+  color: var(--cream);
+  border: none;
+  border-radius: 999px;
+  font-size: 15px;
+  font-weight: 500;
+  letter-spacing: .02em;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: opacity .15s ease, transform .15s ease;
+}
+.btn-bottom:active { transform: scale(.98); }
+.btn-bottom:disabled { opacity: .35; cursor: not-allowed; }
+
+/* ---------- Scan ---------- */
+#screen-scan { background: var(--cream); }
+.scan-body { padding: 22px; flex: 1; overflow-y: auto; }
+.dropzone {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  border: 1.5px dashed rgba(74,21,32,.32);
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  color: var(--burgundy);
+  text-align: center;
+  background: rgba(74,21,32,.03);
+  cursor: pointer;
+  overflow: hidden;
+  margin-bottom: 28px;
+  transition: background .2s ease;
+}
+.dropzone:active { background: rgba(74,21,32,.06); }
+.dropzone .icon { margin-bottom: 12px; }
+.dropzone .label {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 19px;
+  font-weight: 400;
+}
+.dropzone .hint {
+  font-size: 11px;
+  color: var(--muted);
+  margin-top: 8px;
+  letter-spacing: .15em;
+  text-transform: uppercase;
+}
+.dropzone.has-photo { border-style: solid; border-color: transparent; cursor: default; }
+.dropzone img.preview {
+  position: absolute;
+  inset: 0;
+  width: 100%; height: 100%;
+  object-fit: cover;
+}
+.remove-photo {
+  position: absolute;
+  top: 12px; right: 12px;
+  background: rgba(0,0,0,.65);
+  color: #fff;
+  border: none;
+  border-radius: 50%;
+  width: 34px; height: 34px;
+  font-size: 20px;
+  line-height: 1;
+  cursor: pointer;
+  z-index: 2;
+  display: flex; align-items: center; justify-content: center;
+}
+.field-label {
+  font-size: 11px;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 6px;
+}
+.text-input {
+  width: 100%;
+  padding: 12px 0;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid var(--line);
+  font-size: 16px;
+  color: var(--ink);
+  outline: none;
+  transition: border-color .2s;
+}
+.text-input:focus { border-color: var(--burgundy); }
+input[type=file] {
+  position: absolute;
+  width: 0; height: 0;
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* ---------- Loading ---------- */
+#screen-loading {
+  background:
+    radial-gradient(ellipse 90% 60% at 50% 0%, #6a1a2c 0%, transparent 70%),
+    radial-gradient(ellipse 80% 70% at 50% 100%, #1f070d 0%, transparent 70%),
+    var(--burgundy);
+  color: var(--cream);
+  align-items: center;
+  justify-content: center;
+  padding: 32px;
+}
+.loading-inner { display: flex; flex-direction: column; align-items: center; width: 100%; max-width: 340px; }
+.dots { display: flex; gap: 12px; margin-bottom: 48px; }
+.dots span {
+  width: 9px; height: 9px;
+  border-radius: 50%;
+  background: var(--cream);
+  opacity: .35;
+  animation: pulse 1.4s infinite ease-in-out;
+}
+.dots span:nth-child(2) { animation-delay: .2s; }
+.dots span:nth-child(3) { animation-delay: .4s; }
+@keyframes pulse {
+  0%, 80%, 100% { transform: scale(.5); opacity: .35; }
+  40% { transform: scale(1); opacity: 1; }
+}
+.steps { width: 100%; }
+.step {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 0;
+  font-size: 16px;
+  color: rgba(250,248,243,.35);
+  font-family: var(--serif);
+  font-style: italic;
+  letter-spacing: -.01em;
+  transition: color .4s ease;
+  border-bottom: 1px solid rgba(250,248,243,.08);
+}
+.step:last-child { border-bottom: none; }
+.step .marker {
+  width: 18px; height: 18px;
+  border-radius: 50%;
+  border: 1px solid rgba(250,248,243,.3);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px;
+  line-height: 1;
+  flex-shrink: 0;
+  transition: all .3s ease;
+}
+.step.active { color: var(--cream); }
+.step.active .marker {
+  border-color: var(--cream);
+  box-shadow: 0 0 0 3px rgba(250,248,243,.12);
+}
+.step.done { color: rgba(250,248,243,.65); }
+.step.done .marker {
+  background: var(--gold);
+  border-color: var(--gold);
+  color: var(--burgundy-deep);
+}
+.step.done .marker::after { content: '✓'; font-style: normal; font-weight: 700; font-size: 12px; }
+
+/* ---------- Results ---------- */
+#screen-results { background: var(--cream); }
+.results-head { padding: 22px 22px 6px; flex-shrink: 0; }
+.results-head .crumb {
+  font-size: 10px;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 8px;
+}
+.results-head h1 {
+  font-family: var(--serif);
+  font-style: italic;
+  font-weight: 400;
+  font-size: 30px;
+  line-height: 1.05;
+  letter-spacing: -.015em;
+  color: var(--ink);
+}
+.results-head .loc {
+  font-size: 13px;
+  color: var(--muted);
+  margin-top: 6px;
+}
+.profile-pill {
+  display: inline-block;
+  margin-top: 12px;
+  padding: 6px 12px;
+  background: var(--burgundy-soft);
+  color: var(--burgundy);
+  border-radius: 999px;
+  font-size: 11px;
+  letter-spacing: .05em;
+  font-weight: 500;
+}
+.results-list { padding: 16px 18px 8px; }
+.dish-card {
+  background: #fff;
+  border-radius: 12px;
+  border-left: 4px solid;
+  padding: 14px 16px;
+  margin-bottom: 10px;
+  box-shadow: 0 1px 3px rgba(0,0,0,.04);
+}
+.dish-card .tier {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+.dish-card .name {
+  font-family: var(--serif);
+  font-style: italic;
+  font-weight: 400;
+  font-size: 21px;
+  letter-spacing: -.01em;
+  color: var(--ink);
+  margin-bottom: 2px;
+}
+.dish-card .cn {
+  font-size: 12px;
+  color: var(--muted);
+  margin-bottom: 8px;
+}
+.dish-card .why {
+  font-size: 13.5px;
+  color: var(--ink);
+  line-height: 1.45;
+  margin-bottom: 8px;
+}
+.dish-card .kcal {
+  font-size: 11px;
+  color: var(--muted);
+  letter-spacing: .1em;
+  text-transform: uppercase;
+}
+.tier-top   { border-left-color: var(--green); }
+.tier-top .tier { color: var(--green); }
+.tier-great { border-left-color: var(--gold); }
+.tier-great .tier { color: var(--gold); }
+.tier-skip  { border-left-color: var(--red); opacity: .62; }
+.tier-skip .tier { color: var(--red); }
+
+.totals {
+  margin: 6px 18px 16px;
+  padding: 14px 18px;
+  background: var(--burgundy);
+  color: var(--cream);
+  border-radius: 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.totals .lab {
+  font-size: 10px;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  opacity: .65;
+  margin-bottom: 2px;
+}
+.totals .val {
+  font-family: var(--serif);
+  font-style: italic;
+  font-weight: 400;
+  font-size: 22px;
+}
+.results-actions {
+  display: flex;
+  gap: 10px;
+  padding: 4px 18px max(22px, env(safe-area-inset-bottom));
+  flex-shrink: 0;
+  background: var(--cream);
+  border-top: 1px solid var(--line);
+  padding-top: 14px;
+}
+.results-actions button {
+  flex: 1;
+  padding: 14px;
+  border-radius: 999px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  border: 1px solid var(--line);
+  transition: transform .15s ease;
+}
+.results-actions button:active { transform: scale(.97); }
+.results-actions .primary   { background: var(--burgundy); color: var(--cream); border-color: var(--burgundy); }
+.results-actions .secondary { background: #fff; color: var(--ink); }
+</style>
+</head>
+<body class="screen-welcome">
+<main>
+
+  <!-- ============ 1. WELCOME ============ -->
+  <section class="screen" id="screen-welcome">
+    <div class="welcome-inner">
+      <img class="logo" id="logo-img" alt="Palate"
+           src="https://d8j0ntlcm91z4.cloudfront.net/user_3CDQuYIygvqkUH2VHmNQlHT6LLz/hf_20260513_145133_dbac88a6-e698-48bb-a8db-d0b57cc83221.jpeg">
+      <h1>Palate</h1>
+      <div class="tag">Your global food passport</div>
+      <button class="btn-primary" data-go="swipe">Build my taste profile</button>
+      <button class="btn-ghost" data-go="scan">Skip — scan a menu</button>
+    </div>
+  </section>
+
+  <!-- ============ 2. SWIPE ============ -->
+  <section class="screen" id="screen-swipe">
+    <div class="swipe-top">
+      <div class="progress"><div id="progress-bar"></div></div>
+      <div class="swipe-counter"><span id="swipe-count">0</span> of 15 · swipe to taste</div>
+    </div>
+    <div class="deck" id="deck"></div>
+    <div class="swipe-actions">
+      <button class="act no"  id="btn-no"  aria-label="Pass">✕</button>
+      <button class="act yes" id="btn-yes" aria-label="Like">♥</button>
+    </div>
+  </section>
+
+  <!-- ============ 3. PREFERENCES ============ -->
+  <section class="screen" id="screen-prefs">
+    <div class="topbar">
+      <button class="icon-btn" data-go="welcome" aria-label="Back">‹</button>
+      <h2>Preferences</h2>
+      <div class="spacer-32"></div>
+    </div>
+    <div class="scroll">
+      <div class="prefs-body">
+        <div class="section">
+          <div class="section-title">Dietary</div>
+          <div class="section-sub">Tap any that apply</div>
+          <div class="toggles">
+            <button class="toggle" data-diet="halal">Halal</button>
+            <button class="toggle" data-diet="vegetarian">Vegetarian</button>
+            <button class="toggle" data-diet="vegan">Vegan</button>
+            <button class="toggle" data-diet="gf">Gluten-free</button>
+          </div>
+        </div>
+        <div class="section">
+          <div class="section-title">Daily calories</div>
+          <div class="section-sub">A rough target — we'll work with it</div>
+          <div class="kcal-row">
+            <input id="kcal-input" type="number" inputmode="numeric" class="kcal-input" value="1800" min="800" max="5000" step="50">
+            <span class="kcal-label">kcal / day</span>
+          </div>
+          <div class="chips">
+            <button class="chip" data-kcal="1400">1400</button>
+            <button class="chip active" data-kcal="1800">1800</button>
+            <button class="chip" data-kcal="2200">2200</button>
+            <button class="chip" data-kcal="2800">2800</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <button class="btn-bottom" data-go="scan">Continue</button>
+  </section>
+
+  <!-- ============ 4. SCAN ============ -->
+  <section class="screen" id="screen-scan">
+    <div class="topbar">
+      <button class="icon-btn" id="scan-back" aria-label="Back">‹</button>
+      <h2>Scan menu</h2>
+      <div class="spacer-32"></div>
+    </div>
+    <div class="scan-body">
+      <div class="dropzone" id="dropzone">
+        <div class="icon">
+          <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M3 8.5A2 2 0 0 1 5 6.5h2.2l1.6-2.2A1 1 0 0 1 9.6 4h4.8a1 1 0 0 1 .8.3l1.6 2.2H19a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+            <circle cx="12" cy="13" r="4"/>
+          </svg>
+        </div>
+        <div class="label">Tap to capture menu</div>
+        <div class="hint">Camera or photo library</div>
+      </div>
+      <input type="file" id="file" accept="image/*" capture="environment">
+
+      <div class="field-label">Location (optional)</div>
+      <input type="text" class="text-input" id="loc" placeholder="e.g. Tao Tao Ju, Guangzhou" autocomplete="off" autocapitalize="words">
+    </div>
+    <button class="btn-bottom" id="analyze" disabled>Analyze this menu</button>
+  </section>
+
+  <!-- ============ 5. LOADING ============ -->
+  <section class="screen" id="screen-loading">
+    <div class="loading-inner">
+      <div class="dots"><span></span><span></span><span></span></div>
+      <div class="steps" id="steps">
+        <div class="step" data-step="0"><div class="marker"></div>Reading menu</div>
+        <div class="step" data-step="1"><div class="marker"></div>Identifying dishes</div>
+        <div class="step" data-step="2"><div class="marker"></div>Matching taste profile</div>
+        <div class="step" data-step="3"><div class="marker"></div>Estimating calories</div>
+        <div class="step" data-step="4"><div class="marker"></div>Ranking recommendations</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 6. RESULTS ============ -->
+  <section class="screen" id="screen-results">
+    <div class="scroll">
+      <div class="results-head">
+        <div class="crumb">Cantonese · Guangzhou</div>
+        <h1>Tao Tao Ju 陶陶居</h1>
+        <div class="loc" id="result-loc">Guangzhou old town</div>
+        <div class="profile-pill" id="profile-pill">Profile: savory · umami-forward · 1800 kcal</div>
+      </div>
+      <div class="results-list" id="results-list"></div>
+      <div class="totals">
+        <div>
+          <div class="lab">Recommended total</div>
+          <div class="val" id="kcal-total">— kcal</div>
+        </div>
+        <div style="text-align:right">
+          <div class="lab">Your target</div>
+          <div class="val" id="kcal-target">1800</div>
+        </div>
+      </div>
+    </div>
+    <div class="results-actions">
+      <button class="secondary" data-go="welcome">Home</button>
+      <button class="primary" data-go="scan">Scan another</button>
+    </div>
+  </section>
+
+</main>
+
+<script>
+(() => {
+  'use strict';
+  const $  = (s, p = document) => p.querySelector(s);
+  const $$ = (s, p = document) => Array.from(p.querySelectorAll(s));
+
+  // ---------- Data ----------
+  const dishes = [
+    { name: 'Sushi',          country: 'Japan',     img: 'https://images.unsplash.com/photo-1579871494447-9811cf80d66c?w=800&q=80&auto=format&fit=crop' },
+    { name: 'Ramen',          country: 'Japan',     img: 'https://images.unsplash.com/photo-1623341214825-9f4f963727da?w=800&q=80&auto=format&fit=crop' },
+    { name: 'Tacos',          country: 'Mexico',    img: 'https://images.unsplash.com/photo-1565299585323-38d6b0865b47?w=800&q=80&auto=format&fit=crop' },
+    { name: 'Mezze',          country: 'Levant',    img: 'https://images.unsplash.com/photo-1540713434306-58505cf1b6fc?w=800&q=80&auto=format&fit=crop' },
+    { name: 'Biryani',        country: 'India',     img: 'https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?w=800&q=80&auto=format&fit=crop' },
+    { name: 'Octopus',        country: 'Galicia',   img: 'https://images.unsplash.com/photo-1559339352-11d035aa65de?w=800&q=80&auto=format&fit=crop' },
+    { name: 'Pad Thai',       country: 'Thailand',  img: 'https://images.unsplash.com/photo-1559314809-0d155014e29e?w=800&q=80&auto=format&fit=crop' },
+    { name: 'Beef Tartare',   country: 'France',    img: 'https://images.unsplash.com/photo-1432139509613-5c4255815697?w=800&q=80&auto=format&fit=crop' },
+    { name: 'Dim Sum',        country: 'Canton',    img: 'https://images.unsplash.com/photo-1496116218417-1a781b1c416c?w=800&q=80&auto=format&fit=crop' },
+    { name: 'Peking Duck',    country: 'Beijing',   img: 'https://images.unsplash.com/photo-1582450871972-ab5ca641643d?w=800&q=80&auto=format&fit=crop' },
+    { name: 'Shakshuka',      country: 'Maghreb',   img: 'https://images.unsplash.com/photo-1590412200988-a436970781fa?w=800&q=80&auto=format&fit=crop' },
+    { name: 'Lobster Bisque', country: 'France',    img: 'https://images.unsplash.com/photo-1553787499-6f9133860278?w=800&q=80&auto=format&fit=crop' },
+    { name: 'Churros',        country: 'Spain',     img: 'https://images.unsplash.com/photo-1624371414361-e670edf4898d?w=800&q=80&auto=format&fit=crop' },
+    { name: 'Buddha Bowl',    country: 'Modern',    img: 'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=800&q=80&auto=format&fit=crop' },
+    { name: 'Siu Mei',        country: 'Canton',    img: 'https://images.unsplash.com/photo-1525755662778-989d0524087e?w=800&q=80&auto=format&fit=crop' },
+  ];
+
+  const cantonDishes = [
+    { name: 'Siu Mei Plateau', cn: '烧味拼盘',        tier: 'top',   kcal: 500, why: 'Crispy roasted meats, deep umami — perfect match' },
+    { name: 'Crispy Pigeon',   cn: '陶陶居脆皮乳鸽',  tier: 'great', kcal: 280, why: 'Crackling skin, authentically Cantonese' },
+    { name: 'Sakura Shrimp',   cn: '樱花虾嗜荷芥兰',  tier: 'great', kcal: 160, why: 'Fresh seafood, light and balanced' },
+    { name: 'Roasted Goose',   cn: '陶陶居百年烧鹅',  tier: 'great', kcal: 420, why: 'Century-old recipe, rich umami' },
+    { name: 'BBQ Pork',        cn: '金牌秘制叉烧',    tier: 'great', kcal: 380, why: 'Sweet-savory glaze, a Cantonese classic' },
+    { name: 'Clay Pot Meats',  cn: '化皮烧腩仔',      tier: 'skip',  kcal: 520, why: 'Too salty and smoked — not your profile' },
+    { name: 'Cucumber Pickle', cn: '紫苏胡瓜嗜子',    tier: 'skip',  kcal: 45,  why: 'Acidic and herbal — not your taste' },
+  ];
+
+  const palette = ['#3a1820', '#2c3a25', '#3a2a18', '#1f2d3a', '#3a2018', '#2a1f30', '#1f2f2a', '#3a2828'];
+
+  // ---------- State ----------
+  const state = {
+    idx: 0,
+    liked: [],
+    disliked: [],
+    diets: new Set(),
+    kcal: 1800,
+    photo: null,
+    loc: '',
+  };
+
+  // ---------- Navigation ----------
+  function show(name) {
+    document.body.className = 'screen-' + name;
+    window.scrollTo(0, 0);
+  }
+  document.addEventListener('click', (e) => {
+    const go = e.target.closest('[data-go]');
+    if (go) show(go.dataset.go);
+  });
+
+  // Preload dish images so the deck doesn't flicker
+  dishes.forEach(d => { const img = new Image(); img.src = d.img; });
+
+  // ---------- Swipe deck ----------
+  const deck = $('#deck');
+  let dragState = null;
+
+  function renderDeck() {
+    deck.innerHTML = '';
+    const remaining = dishes.slice(state.idx);
+    const visible = Math.min(3, remaining.length);
+    // build back-to-front so top is last in DOM (highest z by order, but we set z explicitly)
+    for (let depth = visible - 1; depth >= 0; depth--) {
+      const d = remaining[depth];
+      const card = document.createElement('div');
+      card.className = 'swipe-card' + (depth === 0 ? ' top' : '');
+      card.style.backgroundColor = palette[(state.idx + depth) % palette.length];
+      card.style.backgroundImage = `url("${d.img}")`;
+      card.style.zIndex = String(10 - depth);
+      card.style.transform = `scale(${1 - depth * 0.045}) translateY(${depth * 10}px)`;
+      card.style.opacity = depth === 2 ? '0.85' : '1';
+      card.innerHTML = `
+        <span class="country">${d.country}</span>
+        <span class="badge yes">LIKE</span>
+        <span class="badge nope">NOPE</span>
+        <span class="label">${d.name}</span>
+      `;
+      deck.appendChild(card);
+    }
+    bindTop();
+    updateProgress();
+  }
+
+  function updateProgress() {
+    $('#swipe-count').textContent = String(state.idx);
+    $('#progress-bar').style.width = ((state.idx / 15) * 100) + '%';
+  }
+
+  function topCard() { return deck.querySelector('.swipe-card.top'); }
+
+  function bindTop() {
+    const card = topCard();
+    if (!card) return;
+    card.addEventListener('pointerdown', onDown);
+  }
+
+  function onDown(e) {
+    if (e.button !== undefined && e.button !== 0) return;
+    const card = e.currentTarget;
+    if (!card.classList.contains('top')) return;
+    dragState = {
+      card,
+      pointerId: e.pointerId,
+      startX: e.clientX,
+      startY: e.clientY,
+      dx: 0,
+      dy: 0,
+      baseTransform: card.style.transform,
+    };
+    card.classList.add('dragging');
+    try { card.setPointerCapture(e.pointerId); } catch (_) {}
+    card.addEventListener('pointermove', onMove);
+    card.addEventListener('pointerup', onUp);
+    card.addEventListener('pointercancel', onUp);
+    e.preventDefault();
+  }
+
+  function onMove(e) {
+    if (!dragState) return;
+    dragState.dx = e.clientX - dragState.startX;
+    dragState.dy = e.clientY - dragState.startY;
+    const rot = dragState.dx * 0.06;
+    dragState.card.style.transform =
+      `translate(${dragState.dx}px, ${dragState.dy}px) rotate(${rot}deg)`;
+    const yes  = dragState.card.querySelector('.badge.yes');
+    const nope = dragState.card.querySelector('.badge.nope');
+    yes.style.opacity  = Math.min(1, Math.max(0,  dragState.dx / 100));
+    nope.style.opacity = Math.min(1, Math.max(0, -dragState.dx / 100));
+  }
+
+  function onUp() {
+    if (!dragState) return;
+    const { card, dx } = dragState;
+    card.removeEventListener('pointermove', onMove);
+    card.removeEventListener('pointerup', onUp);
+    card.removeEventListener('pointercancel', onUp);
+    card.classList.remove('dragging');
+    const threshold = 90;
+    if (dx > threshold)  { flyOff('like');    return; }
+    if (dx < -threshold) { flyOff('dislike'); return; }
+    // snap back
+    card.style.transition = 'transform .3s cubic-bezier(.2,.8,.2,1)';
+    card.style.transform = dragState.baseTransform || '';
+    card.querySelector('.badge.yes').style.opacity = 0;
+    card.querySelector('.badge.nope').style.opacity = 0;
+    setTimeout(() => { if (card) card.style.transition = ''; }, 300);
+    dragState = null;
+  }
+
+  function flyOff(direction) {
+    const dir = direction === 'like' ? 1 : -1;
+    const card = (dragState && dragState.card) || topCard();
+    if (!card) return;
+    const carryY = (dragState && dragState.dy) ? dragState.dy : 0;
+    card.style.transition = 'transform .35s ease-out, opacity .35s ease-out';
+    card.style.transform = `translate(${dir * 600}px, ${carryY + 80}px) rotate(${dir * 28}deg)`;
+    card.style.opacity = '0';
+    const dishName = dishes[state.idx] ? dishes[state.idx].name : '';
+    (direction === 'like' ? state.liked : state.disliked).push(dishName);
+    dragState = null;
+
+    setTimeout(() => {
+      state.idx++;
+      if (state.idx >= 15) {
+        show('prefs');
+        // keep deck rendered (idx >=15 leaves remaining empty); no rerender needed
+      } else {
+        renderDeck();
+      }
+    }, 330);
+  }
+
+  $('#btn-yes').addEventListener('click', () => { if (topCard()) flyOff('like'); });
+  $('#btn-no').addEventListener('click',  () => { if (topCard()) flyOff('dislike'); });
+
+  window.addEventListener('keydown', (e) => {
+    if (!document.body.classList.contains('screen-swipe')) return;
+    if (e.key === 'ArrowLeft')  { e.preventDefault(); if (topCard()) flyOff('dislike'); }
+    if (e.key === 'ArrowRight') { e.preventDefault(); if (topCard()) flyOff('like'); }
+  });
+
+  // Build initial deck once on load so transitioning to the swipe screen is instant
+  renderDeck();
+
+  // ---------- Preferences ----------
+  $$('.toggle').forEach(btn => {
+    btn.addEventListener('click', () => {
+      btn.classList.toggle('active');
+      const k = btn.dataset.diet;
+      if (state.diets.has(k)) state.diets.delete(k); else state.diets.add(k);
+    });
+  });
+  function syncChips() {
+    $$('.chip').forEach(c => c.classList.toggle('active', parseInt(c.dataset.kcal, 10) === state.kcal));
+  }
+  $$('.chip').forEach(c => {
+    c.addEventListener('click', () => {
+      state.kcal = parseInt(c.dataset.kcal, 10);
+      $('#kcal-input').value = state.kcal;
+      syncChips();
+    });
+  });
+  $('#kcal-input').addEventListener('input', (e) => {
+    const v = parseInt(e.target.value, 10);
+    state.kcal = isFinite(v) ? v : 1800;
+    syncChips();
+  });
+
+  // ---------- Scan ----------
+  const fileInput = $('#file');
+  const dz = $('#dropzone');
+  const analyzeBtn = $('#analyze');
+
+  const emptyDropzoneHTML = `
+    <div class="icon">
+      <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M3 8.5A2 2 0 0 1 5 6.5h2.2l1.6-2.2A1 1 0 0 1 9.6 4h4.8a1 1 0 0 1 .8.3l1.6 2.2H19a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+        <circle cx="12" cy="13" r="4"/>
+      </svg>
+    </div>
+    <div class="label">Tap to capture menu</div>
+    <div class="hint">Camera or photo library</div>
+  `;
+
+  function renderDropzone() {
+    if (state.photo) {
+      dz.classList.add('has-photo');
+      dz.innerHTML = `
+        <img class="preview" src="${state.photo}" alt="menu preview">
+        <button class="remove-photo" type="button" aria-label="Remove photo">×</button>
+      `;
+      analyzeBtn.disabled = false;
+    } else {
+      dz.classList.remove('has-photo');
+      dz.innerHTML = emptyDropzoneHTML;
+      analyzeBtn.disabled = true;
+    }
+  }
+
+  dz.addEventListener('click', (e) => {
+    if (e.target.closest('.remove-photo')) {
+      state.photo = null;
+      fileInput.value = '';
+      renderDropzone();
+      return;
+    }
+    if (!state.photo) fileInput.click();
+  });
+
+  fileInput.addEventListener('change', () => {
+    const f = fileInput.files && fileInput.files[0];
+    if (!f) return;
+    const reader = new FileReader();
+    reader.onload = () => { state.photo = reader.result; renderDropzone(); };
+    reader.readAsDataURL(f);
+  });
+
+  // Scan back: if user went through swipe/prefs first, go to prefs; otherwise welcome
+  $('#scan-back').addEventListener('click', () => {
+    show(state.liked.length || state.diets.size ? 'prefs' : 'welcome');
+  });
+
+  // ---------- Analyze → Loading ----------
+  analyzeBtn.addEventListener('click', () => {
+    if (analyzeBtn.disabled) return;
+    state.loc = $('#loc').value.trim();
+    show('loading');
+    runLoading();
+  });
+
+  function runLoading() {
+    const steps = $$('.step');
+    steps.forEach(s => s.classList.remove('active', 'done'));
+    let i = 0;
+    steps[0].classList.add('active');
+    const tick = () => {
+      steps[i].classList.remove('active');
+      steps[i].classList.add('done');
+      i++;
+      if (i >= steps.length) {
+        setTimeout(() => { renderResults(); show('results'); }, 400);
+        return;
+      }
+      steps[i].classList.add('active');
+      setTimeout(tick, 1520); // ~5 * 1.5s ≈ 7.6s + 400ms tail = 8s total
+    };
+    setTimeout(tick, 1520);
+  }
+
+  // ---------- Results ----------
+  function buildProfilePill() {
+    const dietTags = [];
+    if (state.diets.has('halal'))      dietTags.push('halal');
+    if (state.diets.has('vegetarian')) dietTags.push('vegetarian');
+    if (state.diets.has('vegan'))      dietTags.push('vegan');
+    if (state.diets.has('gf'))         dietTags.push('gluten-free');
+
+    const tasteMap = {
+      'Sushi': 'clean umami', 'Ramen': 'broth-forward', 'Tacos': 'punchy heat',
+      'Mezze': 'mediterranean', 'Biryani': 'aromatic spice', 'Octopus': 'umami seafood',
+      'Pad Thai': 'tangy-sweet', 'Beef Tartare': 'raw & refined', 'Dim Sum': 'cantonese-friendly',
+      'Peking Duck': 'rich roasts', 'Shakshuka': 'spiced tomato', 'Lobster Bisque': 'creamy luxe',
+      'Churros': 'sweet tooth', 'Buddha Bowl': 'plant-forward', 'Siu Mei': 'cantonese-friendly',
+    };
+    const tastes = Array.from(new Set(state.liked.map(n => tasteMap[n]).filter(Boolean)));
+    if (tastes.length === 0) tastes.push('savory', 'umami-forward');
+    const top = tastes.slice(0, 2);
+    const parts = [];
+    if (dietTags.length) parts.push(dietTags.join(' & '));
+    parts.push(...top);
+    parts.push(state.kcal + ' kcal');
+    return 'Profile: ' + parts.join(' · ');
+  }
+
+  function renderResults() {
+    const list = $('#results-list');
+    list.innerHTML = cantonDishes.map(d => {
+      const tierLabel = d.tier === 'top' ? 'Top pick' : d.tier === 'great' ? 'Great' : 'Skip';
+      return `
+        <div class="dish-card tier-${d.tier}">
+          <div class="tier">${tierLabel}</div>
+          <div class="name">${d.name}</div>
+          <div class="cn">${d.cn}</div>
+          <div class="why">${d.why}</div>
+          <div class="kcal">${d.kcal} kcal</div>
+        </div>
+      `;
+    }).join('');
+    const goodTotal = cantonDishes
+      .filter(d => d.tier !== 'skip')
+      .reduce((s, d) => s + d.kcal, 0);
+    $('#kcal-total').textContent = goodTotal + ' kcal';
+    $('#kcal-target').textContent = String(state.kcal);
+    $('#profile-pill').textContent = buildProfilePill();
+    if (state.loc) $('#result-loc').textContent = state.loc;
+    else $('#result-loc').textContent = 'Guangzhou old town';
+  }
+
+  // Reset selected file when leaving via Home/Scan-another
+  document.addEventListener('click', (e) => {
+    const go = e.target.closest('[data-go]');
+    if (!go) return;
+    if (go.dataset.go === 'scan') {
+      // keep photo if user wants to re-analyze? clear it for a fresh scan.
+      state.photo = null;
+      fileInput.value = '';
+      renderDropzone();
+      if ($('#loc')) $('#loc').value = '';
+    }
+    if (go.dataset.go === 'welcome') {
+      // soft reset of swipe state so a returning user starts fresh
+      state.idx = 0;
+      state.liked = [];
+      state.disliked = [];
+      renderDeck();
+    }
+  });
+
+  // Disable text selection on long press (iOS callout) for non-input elements
+  document.addEventListener('touchstart', (e) => {
+    if (e.target.closest('input, textarea')) return;
+  }, { passive: true });
+
+})();
+</script>
+</body>
+</html>
