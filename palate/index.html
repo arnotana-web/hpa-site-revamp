@@ -897,21 +897,21 @@ input[type=file] {
 
   // ---------- Data ----------
   const dishes = [
-    { name: 'Sushi',          country: 'Japan',     wiki: 'Sushi' },
-    { name: 'Ramen',          country: 'Japan',     wiki: 'Ramen' },
-    { name: 'Tacos',          country: 'Mexico',    wiki: 'Taco' },
-    { name: 'Mezze',          country: 'Levant',    wiki: 'Meze' },
-    { name: 'Biryani',        country: 'India',     wiki: 'Biryani' },
-    { name: 'Octopus',        country: 'Galicia',   wiki: 'Polbo_á_feira' },
-    { name: 'Pad Thai',       country: 'Thailand',  wiki: 'Pad_thai' },
-    { name: 'Beef Tartare',   country: 'France',    wiki: 'Steak_tartare' },
-    { name: 'Dim Sum',        country: 'Canton',    wiki: 'Dim_sum' },
-    { name: 'Peking Duck',    country: 'Beijing',   wiki: 'Peking_duck' },
-    { name: 'Shakshuka',      country: 'Maghreb',   wiki: 'Shakshouka' },
-    { name: 'Lobster Bisque', country: 'France',    wiki: 'Bisque_(food)' },
-    { name: 'Churros',        country: 'Spain',     wiki: 'Churro' },
-    { name: 'Buddha Bowl',    country: 'Modern',    wiki: 'Buddha_bowl' },
-    { name: 'Siu Mei',        country: 'Canton',    wiki: 'Siu_mei' },
+    { name: 'Sushi',            country: 'Japan',    wiki: 'Sushi' },
+    { name: 'Tacos',            country: 'Mexico',   wiki: 'Taco' },
+    { name: 'Mezze',            country: 'Levant',   wiki: 'Meze' },
+    { name: 'Margherita Pizza', country: 'Italy',    wiki: 'Pizza_Margherita' },
+    { name: 'Biryani',          country: 'India',    wiki: 'Biryani' },
+    { name: 'Beef Tartare',     country: 'France',   wiki: 'Steak_tartare' },
+    { name: 'Shakshuka',        country: 'Maghreb',  wiki: 'Shakshouka' },
+    { name: 'Pad Thai',         country: 'Thailand', wiki: 'Pad_thai' },
+    { name: 'Lobster Bisque',   country: 'France',   wiki: 'Bisque_(food)' },
+    { name: 'Dim Sum',          country: 'Canton',   wiki: 'Dim_sum' },
+    { name: 'Octopus',          country: 'Galicia',  wiki: 'Polbo_á_feira' },
+    { name: 'Peking Duck',      country: 'Beijing',  wiki: 'Peking_duck' },
+    { name: 'Churros',          country: 'Spain',    wiki: 'Churro' },
+    { name: 'Buddha Bowl',      country: 'Modern',   wiki: 'Buddha_bowl' },
+    { name: 'Siu Mei',          country: 'Canton',   wiki: 'Siu_mei' },
   ];
 
   const fixtures = {
@@ -990,7 +990,7 @@ input[type=file] {
   // What each swipe dish signals you enjoy
   const swipeFlavor = {
     'Sushi': ['umami','seafood','clean','raw','light'],
-    'Ramen': ['umami','rich','savory'],
+    'Margherita Pizza': ['umami','rich','savory','fresh'],
     'Tacos': ['spicy','savory','smoky'],
     'Mezze': ['herbal','fresh','veg'],
     'Biryani': ['spice','rich','aromatic'],
@@ -1422,7 +1422,7 @@ input[type=file] {
     if (state.diets.has('gf'))         dietTags.push('gluten-free');
 
     const tasteMap = {
-      'Sushi': 'clean umami', 'Ramen': 'broth-forward', 'Tacos': 'punchy heat',
+      'Sushi': 'clean umami', 'Margherita Pizza': 'italian comfort', 'Tacos': 'punchy heat',
       'Mezze': 'mediterranean', 'Biryani': 'aromatic spice', 'Octopus': 'umami seafood',
       'Pad Thai': 'tangy-sweet', 'Beef Tartare': 'raw & refined', 'Dim Sum': 'cantonese-friendly',
       'Peking Duck': 'rich roasts', 'Shakshuka': 'spiced tomato', 'Lobster Bisque': 'creamy luxe',
