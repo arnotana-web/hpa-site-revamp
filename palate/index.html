@@ -559,6 +559,27 @@ input[type=file] {
   font-weight: 500;
 }
 .results-list { padding: 16px 18px 8px; }
+.rec-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 22px;
+  color: var(--ink);
+  margin: 18px 4px 12px;
+}
+.rec-head:first-child { margin-top: 4px; }
+.rec-head span {
+  font-family: var(--sans);
+  font-style: normal;
+  font-size: 11px;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.rec-head.muted { color: var(--muted); }
+
 .dish-card {
   background: #fff;
   border-radius: 12px;
@@ -567,39 +588,42 @@ input[type=file] {
   box-shadow: 0 1px 3px rgba(0,0,0,.04);
   overflow: hidden;
 }
-.dish-card .dish-photo {
-  position: relative;
-  height: 140px;
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
+.dish-card .dish-body { padding: 16px; }
+.dish-card .dish-head {
   display: flex;
-  align-items: flex-end;
-}
-.dish-card .dish-photo-name {
-  padding: 10px 14px;
-  font-family: var(--serif);
-  font-style: italic;
-  font-size: 18px;
-  color: rgba(250,248,243,.9);
-  text-shadow: 0 1px 6px rgba(0,0,0,.5);
-}
-.dish-card .dish-photo.has-img .dish-photo-name { display: none; }
-.dish-card .dish-body {
-  padding: 14px 16px;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
 }
 .dish-card .tier {
   font-size: 10px;
   font-weight: 700;
-  letter-spacing: .18em;
+  letter-spacing: .16em;
   text-transform: uppercase;
-  margin-bottom: 6px;
+}
+.dish-card .match {
+  display: flex;
+  align-items: baseline;
+  gap: 3px;
+  color: var(--ink);
+}
+.dish-card .match b {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 22px;
+  font-weight: 400;
+}
+.dish-card .match span {
+  font-size: 10px;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--muted);
 }
 .dish-card .name {
   font-family: var(--serif);
   font-style: italic;
   font-weight: 400;
-  font-size: 21px;
+  font-size: 22px;
   letter-spacing: -.01em;
   color: var(--ink);
   margin-bottom: 2px;
@@ -607,26 +631,49 @@ input[type=file] {
 .dish-card .cn {
   font-size: 12px;
   color: var(--muted);
-  margin-bottom: 8px;
+  margin-bottom: 10px;
 }
-.dish-card .why {
+.dish-card .desc {
   font-size: 13.5px;
   color: var(--ink);
-  line-height: 1.45;
+  line-height: 1.5;
   margin-bottom: 8px;
 }
-.dish-card .kcal {
+.dish-card .reason {
+  font-size: 12.5px;
+  color: var(--muted);
+  line-height: 1.45;
+  font-style: italic;
+  margin-bottom: 12px;
+}
+.dish-card .kcal-line { display: flex; align-items: center; gap: 10px; }
+.dish-card .kcal-bar {
+  flex: 1;
+  height: 4px;
+  background: rgba(26,24,20,.08);
+  border-radius: 999px;
+  overflow: hidden;
+}
+.dish-card .kcal-bar i {
+  display: block;
+  height: 100%;
+  background: var(--gold);
+  border-radius: 999px;
+}
+.dish-card .kcal-txt {
   font-size: 11px;
   color: var(--muted);
-  letter-spacing: .1em;
-  text-transform: uppercase;
+  letter-spacing: .04em;
+  white-space: nowrap;
 }
 .tier-top   { border-left-color: var(--green); }
 .tier-top .tier { color: var(--green); }
+.tier-top .kcal-bar i { background: var(--green); }
 .tier-great { border-left-color: var(--gold); }
 .tier-great .tier { color: var(--gold); }
-.tier-skip  { border-left-color: var(--red); opacity: .62; }
+.tier-skip  { border-left-color: var(--red); opacity: .66; }
 .tier-skip .tier { color: var(--red); }
+.tier-skip .kcal-bar i { background: var(--red); }
 
 .totals {
   margin: 6px 18px 16px;
@@ -634,10 +681,28 @@ input[type=file] {
   background: var(--burgundy);
   color: var(--cream);
   border-radius: 12px;
+}
+.totals .totals-row {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
+.totals .budget-bar {
+  margin-top: 12px;
+  height: 5px;
+  background: rgba(250,248,243,.16);
+  border-radius: 999px;
+  overflow: hidden;
+}
+.totals .budget-bar i {
+  display: block;
+  height: 100%;
+  width: 0%;
+  background: var(--cream);
+  border-radius: 999px;
+  transition: width .5s ease;
+}
+.totals .budget-bar i.over { background: #e08a8a; }
 .totals .lab {
   font-size: 10px;
   letter-spacing: .18em;
@@ -803,14 +868,17 @@ input[type=file] {
       </div>
       <div class="results-list" id="results-list"></div>
       <div class="totals">
-        <div>
-          <div class="lab">Recommended total</div>
-          <div class="val" id="kcal-total">— kcal</div>
+        <div class="totals-row">
+          <div>
+            <div class="lab">Recommended total</div>
+            <div class="val" id="kcal-total">— kcal</div>
+          </div>
+          <div style="text-align:right">
+            <div class="lab">Your target</div>
+            <div class="val" id="kcal-target">1800</div>
+          </div>
         </div>
-        <div style="text-align:right">
-          <div class="lab">Your target</div>
-          <div class="val" id="kcal-target">1800</div>
-        </div>
+        <div class="budget-bar"><i id="kcal-fill"></i></div>
       </div>
     </div>
     <div class="results-actions">
@@ -852,13 +920,13 @@ input[type=file] {
       name:  'Tao Tao Ju 陶陶居',
       loc:   'Guangzhou old town',
       dishes: [
-        { name: 'Siu Mei Plateau', cn: '烧味拼盘',        tier: 'top',   kcal: 500, why: 'Crispy roasted meats, deep umami — perfect match', wiki: 'Siu_mei' },
-        { name: 'Crispy Pigeon',   cn: '陶陶居脆皮乳鸽',  tier: 'great', kcal: 280, why: 'Crackling skin, authentically Cantonese',          wiki: 'Squab_(food)' },
-        { name: 'Sakura Shrimp',   cn: '樱花虾嗜荷芥兰',  tier: 'great', kcal: 160, why: 'Fresh seafood, light and balanced',                wiki: 'Sakura_shrimp' },
-        { name: 'Roasted Goose',   cn: '陶陶居百年烧鹅',  tier: 'great', kcal: 420, why: 'Century-old recipe, rich umami',                   wiki: 'Roast_goose' },
-        { name: 'BBQ Pork',        cn: '金牌秘制叉烧',    tier: 'great', kcal: 380, why: 'Sweet-savory glaze, a Cantonese classic',          wiki: 'Char_siu' },
-        { name: 'Clay Pot Meats',  cn: '化皮烧腩仔',      tier: 'skip',  kcal: 520, why: 'Too salty and smoked — not your profile',          wiki: 'Siu_yuk' },
-        { name: 'Cucumber Pickle', cn: '紫苏胡瓜嗜子',    tier: 'skip',  kcal: 45,  why: 'Acidic and herbal — not your taste',               wiki: 'Pickled_cucumber' },
+        { name: 'Siu Mei Plateau', cn: '烧味拼盘',   kcal: 500, tags: ['roast','umami','savory','rich','pork','meat'],   desc: 'A platter of Cantonese roast meats — char siu, soy chicken and crackling pork — lacquered, smoky and deeply savoury.' },
+        { name: 'Crispy Pigeon',   cn: '陶陶居脆皮乳鸽', kcal: 280, tags: ['roast','umami','savory','poultry','meat'],        desc: 'Whole squab fried to a glass-crisp skin with juicy flesh — the signature of a Cantonese banquet.' },
+        { name: 'Sakura Shrimp',   cn: '樱花虾嗜荷芥兰', kcal: 160, tags: ['seafood','light','fresh','clean'],                desc: 'Tiny sakura shrimp tossed through blanched gai lan — delicate, sea-sweet and clean.' },
+        { name: 'Roasted Goose',   cn: '陶陶居百年烧鹅', kcal: 420, tags: ['roast','rich','umami','poultry','meat'],          desc: 'Wood-fired goose with mahogany skin and deep, fatty richness — a century-old house recipe.' },
+        { name: 'BBQ Pork',        cn: '金牌秘制叉烧', kcal: 380, tags: ['roast','sweet','savory','umami','pork','meat'],   desc: 'Honey-glazed char siu with caramelised edges and a tender, smoky bite.' },
+        { name: 'Clay Pot Meats',  cn: '化皮烧腩仔',   kcal: 520, tags: ['smoky','rich','salty','pork','meat'],             desc: 'Crackling pork belly finished in a clay pot — intensely salted, smoky and very heavy.' },
+        { name: 'Cucumber Pickle', cn: '紫苏胡瓜嗜子', kcal: 45,  tags: ['fresh','tangy','herbal','veg','vegan'],           desc: 'Cold cucumber in shiso and vinegar — sharp, acidic and herbal, more a palate reset than a dish.' },
       ],
     },
     lebanese: {
@@ -866,13 +934,13 @@ input[type=file] {
       name:  'Em Sherif إم شريف',
       loc:   'Achrafieh, Beirut',
       dishes: [
-        { name: 'Hummus Beiruti',   cn: 'حمص بيروتي',  tier: 'top',   kcal: 320, why: 'Silky chickpea with garlic-lemon — clean, balanced', wiki: 'Hummus' },
-        { name: 'Tabbouleh',        cn: 'تبولة',        tier: 'great', kcal: 180, why: 'Parsley-forward, bright acidity — on profile',       wiki: 'Tabbouleh' },
-        { name: 'Fattoush',         cn: 'فتوش',         tier: 'great', kcal: 220, why: 'Sumac-pomegranate dressing, crisp greens',           wiki: 'Fattoush' },
-        { name: 'Shish Taouk',      cn: 'شيش طاووق',   tier: 'great', kcal: 380, why: 'Char-grilled chicken, deep savory notes',            wiki: 'Shish_taouk' },
-        { name: 'Kibbeh Nayyeh',    cn: 'كبة نيئة',     tier: 'great', kcal: 290, why: 'Raw beef & bulgur — refined and clean',              wiki: 'Kibbeh' },
-        { name: 'Frikeh Lamb',      cn: 'فريكة باللحم', tier: 'skip',  kcal: 540, why: 'Heavy smoked lamb — over your target',               wiki: 'Freekeh' },
-        { name: 'Knafeh',           cn: 'كنافة',        tier: 'skip',  kcal: 480, why: 'Sweet syrup-soaked cheese — clashes with savory',    wiki: 'Kunafa' },
+        { name: 'Hummus Beiruti', cn: 'حمص بيروتي', kcal: 320, tags: ['fresh','clean','herbal','veg','vegan'],        desc: 'Stone-ground chickpea with tahini and lemon, finished with a green swirl of herbs and chilli.' },
+        { name: 'Tabbouleh',      cn: 'تبولة',      kcal: 180, tags: ['fresh','herbal','tangy','veg','vegan','gluten'], desc: 'Mostly parsley and mint, cut with fine bulgur, lemon and tomato — bright and grassy.' },
+        { name: 'Fattoush',       cn: 'فتوش',       kcal: 220, tags: ['fresh','tangy','herbal','veg','vegan','gluten'], desc: 'Crisp greens and toasted bread in a sumac and pomegranate dressing.' },
+        { name: 'Shish Taouk',    cn: 'شيش طاووق', kcal: 380, tags: ['savory','smoky','roast','poultry','meat'],     desc: 'Garlic-marinated chicken skewers char-grilled until smoky and juicy.' },
+        { name: 'Kibbeh Nayyeh',  cn: 'كبة نيئة',   kcal: 290, tags: ['raw','clean','refined','beef','meat','gluten'], desc: 'Raw lean beef pounded with fine bulgur and spices — silky, refined and pristine.' },
+        { name: 'Frikeh Lamb',    cn: 'فريكة باللحم', kcal: 540, tags: ['smoky','rich','heavy','meat'],               desc: 'Slow-cooked lamb over smoky green freekeh — deeply savoury and very filling.' },
+        { name: 'Knafeh',         cn: 'كنافة',      kcal: 480, tags: ['sweet','creamy','dessert','dairy'],            desc: 'Warm stretched cheese under crisp shredded pastry, soaked in orange-blossom syrup.' },
       ],
     },
     japanese: {
@@ -880,13 +948,13 @@ input[type=file] {
       name:  'Tsubame 燕',
       loc:   'Shibuya, Tokyo',
       dishes: [
-        { name: 'Hamachi Sashimi',  cn: 'はまち刺身',     tier: 'top',   kcal: 180, why: 'Buttery yellowtail, clean umami — perfect match', wiki: 'Sashimi' },
-        { name: 'Tsukune',          cn: 'つくね',         tier: 'great', kcal: 260, why: 'Charcoal-grilled chicken meatball, savory glaze',  wiki: 'Tsukune' },
-        { name: 'Agedashi Tofu',    cn: '揚げ出し豆腐',   tier: 'great', kcal: 220, why: 'Crisp tofu in dashi, delicate and warming',        wiki: 'Agedashi_tofu' },
-        { name: 'Wagyu Tataki',     cn: '和牛たたき',     tier: 'great', kcal: 340, why: 'Lightly seared beef, refined umami',               wiki: 'Tataki' },
-        { name: 'Yakitori Negima',  cn: '焼き鳥ねぎま',   tier: 'great', kcal: 200, why: 'Chicken-scallion skewer, classic izakaya',         wiki: 'Yakitori' },
-        { name: 'Karaage Mountain', cn: '唐揚げ盛り合わせ', tier: 'skip', kcal: 620, why: 'Deep-fried platter — over your target',            wiki: 'Karaage' },
-        { name: 'Natto Maki',       cn: '納豆巻き',       tier: 'skip',  kcal: 130, why: 'Fermented soybean — pungent, not your profile',    wiki: 'Nattō' },
+        { name: 'Hamachi Sashimi',  cn: 'はまち刺身',   kcal: 180, tags: ['raw','clean','umami','seafood','light'],       desc: 'Buttery yellowtail sliced thick — clean, oily and quietly umami.' },
+        { name: 'Tsukune',          cn: 'つくね',       kcal: 260, tags: ['savory','roast','umami','poultry','meat'],     desc: 'Charcoal-grilled minced chicken skewer lacquered in a sweet-savoury tare.' },
+        { name: 'Agedashi Tofu',    cn: '揚げ出し豆腐', kcal: 220, tags: ['umami','light','clean','veg'],                desc: 'Silken tofu lightly fried and bathed in warm dashi — delicate and soothing.' },
+        { name: 'Wagyu Tataki',     cn: '和牛たたき',   kcal: 340, tags: ['raw','refined','umami','rich','beef','meat'], desc: 'Wagyu seared at the edges, rare within — marbled, refined and deeply umami.' },
+        { name: 'Yakitori Negima',  cn: '焼き鳥ねぎま', kcal: 200, tags: ['savory','roast','umami','poultry','meat'],     desc: 'Chicken thigh and scallion grilled over binchōtan — the classic izakaya skewer.' },
+        { name: 'Karaage Mountain', cn: '唐揚げ盛り合わせ', kcal: 620, tags: ['rich','heavy','savory','poultry','meat'], desc: 'A towering platter of deep-fried marinated chicken — moreish but very heavy.' },
+        { name: 'Natto Maki',       cn: '納豆巻き',     kcal: 130, tags: ['fermented','pungent','veg','vegan'],          desc: 'Sticky fermented soybean rolled in rice and nori — funky and polarising.' },
       ],
     },
     italian: {
@@ -894,13 +962,13 @@ input[type=file] {
       name:  'Roscioli',
       loc:   "Campo de' Fiori, Roma",
       dishes: [
-        { name: 'Cacio e Pepe',          cn: 'cacio e pepe',        tier: 'top',   kcal: 520, why: 'Pecorino-pepper magic — deep umami, no fillers', wiki: 'Cacio_e_pepe' },
-        { name: 'Carciofi alla Romana',  cn: 'carciofi alla romana', tier: 'great', kcal: 180, why: 'Slow-braised artichoke, herbal and bright',       wiki: 'Carciofi_alla_romana' },
-        { name: 'Vitello Tonnato',       cn: 'vitello tonnato',     tier: 'great', kcal: 340, why: 'Cold veal in tuna-caper sauce, refined',          wiki: 'Vitello_tonnato' },
-        { name: 'Burrata Pugliese',      cn: 'burrata pugliese',    tier: 'great', kcal: 380, why: 'Stretched curd, balanced richness',               wiki: 'Burrata' },
-        { name: 'Carbonara',             cn: 'carbonara',           tier: 'great', kcal: 620, why: 'Guanciale & egg — bold but on profile',           wiki: 'Carbonara' },
-        { name: 'Trippa alla Romana',    cn: 'trippa alla romana',  tier: 'skip',  kcal: 480, why: 'Offal in tomato — assertive, not your taste',     wiki: 'Trippa_alla_romana' },
-        { name: 'Tiramisù',              cn: 'tiramisù',            tier: 'skip',  kcal: 520, why: 'Mascarpone-coffee bomb — too sweet for now',      wiki: 'Tiramisu' },
+        { name: 'Cacio e Pepe',         cn: 'cacio e pepe',         kcal: 520, tags: ['umami','rich','savory','veg','dairy','gluten'],       desc: 'Just pasta, pecorino and cracked pepper emulsified into a glossy, peppery sauce.' },
+        { name: 'Carciofi alla Romana', cn: 'carciofi alla romana', kcal: 180, tags: ['herbal','fresh','light','veg','vegan'],               desc: 'Whole artichokes braised with mint and garlic in olive oil until silky.' },
+        { name: 'Vitello Tonnato',      cn: 'vitello tonnato',      kcal: 340, tags: ['raw','refined','clean','beef','seafood','meat'],      desc: 'Cold sliced veal under a creamy tuna-caper sauce — cool, refined and savoury.' },
+        { name: 'Burrata Pugliese',     cn: 'burrata pugliese',     kcal: 380, tags: ['creamy','fresh','rich','veg','dairy'],                desc: 'Hand-pulled curd oozing stracciatella cream — milky, fresh and rich.' },
+        { name: 'Carbonara',            cn: 'carbonara',            kcal: 620, tags: ['rich','umami','savory','pork','egg','meat','gluten'], desc: 'Guanciale, egg yolk and pecorino bound into a glossy, bold pasta.' },
+        { name: 'Trippa alla Romana',   cn: 'trippa alla romana',   kcal: 480, tags: ['rich','smoky','assertive','meat'],                    desc: 'Tripe slow-stewed in tomato and mint — assertive, offal-forward and intense.' },
+        { name: 'Tiramisù',             cn: 'tiramisù',             kcal: 520, tags: ['sweet','creamy','dessert','dairy','egg','gluten','alcohol'], desc: 'Coffee-soaked savoiardi layered with mascarpone — sweet, boozy and indulgent.' },
       ],
     },
     mexican: {
@@ -908,16 +976,88 @@ input[type=file] {
       name:  'Pujol',
       loc:   'Polanco, Ciudad de México',
       dishes: [
-        { name: 'Mole Madre',           cn: 'mole madre',           tier: 'top',   kcal: 420, why: 'Aged mole over heritage corn — singular umami',  wiki: 'Mole_(sauce)' },
-        { name: 'Tetela',               cn: 'tetela',               tier: 'great', kcal: 280, why: 'Crisp masa with bean — earthy and clean',        wiki: 'Tlacoyo' },
-        { name: 'Aguachile Verde',      cn: 'aguachile verde',      tier: 'great', kcal: 160, why: 'Raw shrimp in chile-lime — bright and balanced', wiki: 'Aguachile' },
-        { name: 'Tlayuda',              cn: 'tlayuda',              tier: 'great', kcal: 460, why: 'Oaxacan crisp tortilla, layered and savory',     wiki: 'Tlayuda' },
-        { name: 'Chapulines',           cn: 'chapulines',           tier: 'great', kcal: 120, why: 'Toasted grasshoppers, lime — adventurous, on profile', wiki: 'Chapulines' },
-        { name: 'Carnitas Tacos',       cn: 'tacos de carnitas',    tier: 'skip',  kcal: 580, why: 'Heavy lard-confit pork — over your target',      wiki: 'Carnitas' },
-        { name: 'Churros con Chocolate', cn: 'churros con chocolate', tier: 'skip', kcal: 540, why: 'Fried dough & sweet chocolate — clashes with savory', wiki: 'Churro' },
+        { name: 'Mole Madre',            cn: 'mole madre',            kcal: 420, tags: ['umami','rich','spice','complex','veg'],          desc: 'Aged mole — dozens of chillies, seeds and spices — spooned over heritage corn.' },
+        { name: 'Tetela',                cn: 'tetela',                kcal: 280, tags: ['savory','earthy','clean','veg','vegan'],         desc: 'Triangular masa pocket filled with smoky beans — earthy, clean and naturally corn-based.' },
+        { name: 'Aguachile Verde',       cn: 'aguachile verde',       kcal: 160, tags: ['raw','fresh','spicy','tangy','seafood'],        desc: 'Raw shrimp cured in lime with green chilli and cucumber — bright and fiery.' },
+        { name: 'Tlayuda',               cn: 'tlayuda',               kcal: 460, tags: ['savory','smoky','rich','meat','dairy'],          desc: 'Giant crisp Oaxacan tortilla layered with beans, cheese and grilled meat.' },
+        { name: 'Chapulines',            cn: 'chapulines',            kcal: 120, tags: ['savory','tangy','adventurous','light'],          desc: 'Toasted grasshoppers with lime and chilli — crunchy, nutty and adventurous.' },
+        { name: 'Carnitas Tacos',        cn: 'tacos de carnitas',     kcal: 580, tags: ['rich','heavy','savory','pork','meat'],           desc: 'Lard-confit pork piled into corn tortillas — fatty, heavy and indulgent.' },
+        { name: 'Churros con Chocolate', cn: 'churros con chocolate', kcal: 540, tags: ['sweet','dessert','rich','gluten','dairy'],       desc: 'Fried dough dusted in cinnamon sugar with thick drinking chocolate.' },
       ],
     },
   };
+
+  // What each swipe dish signals you enjoy
+  const swipeFlavor = {
+    'Sushi': ['umami','seafood','clean','raw','light'],
+    'Ramen': ['umami','rich','savory'],
+    'Tacos': ['spicy','savory','smoky'],
+    'Mezze': ['herbal','fresh','veg'],
+    'Biryani': ['spice','rich','aromatic'],
+    'Octopus': ['seafood','umami','smoky'],
+    'Pad Thai': ['sweet','tangy','savory'],
+    'Beef Tartare': ['raw','refined','beef','clean'],
+    'Dim Sum': ['umami','savory','roast'],
+    'Peking Duck': ['roast','rich','umami'],
+    'Shakshuka': ['spice','fresh','savory'],
+    'Lobster Bisque': ['creamy','rich','seafood'],
+    'Churros': ['sweet','dessert'],
+    'Buddha Bowl': ['fresh','veg','clean','light'],
+    'Siu Mei': ['roast','umami','savory','rich'],
+  };
+  const FLAVOR_TOKENS = ['umami','savory','rich','roast','seafood','raw','clean','fresh','herbal','spice','spicy','sweet','creamy','tangy','smoky','fermented','light','refined','aromatic','complex','earthy','adventurous'];
+
+  function dietConflict(tags) {
+    const has = t => tags.indexOf(t) !== -1;
+    if (state.diets.has('vegan') && (has('meat')||has('pork')||has('beef')||has('poultry')||has('seafood')||has('dairy')||has('egg')))
+      return 'Not vegan';
+    if (state.diets.has('vegetarian') && (has('meat')||has('pork')||has('beef')||has('poultry')||has('seafood')))
+      return 'Not vegetarian';
+    if (state.diets.has('halal') && (has('pork')||has('alcohol')))
+      return has('pork') ? 'Contains pork' : 'Contains alcohol';
+    if (state.diets.has('gf') && has('gluten'))
+      return 'Contains gluten';
+    return null;
+  }
+
+  function scoreDish(d) {
+    // taste affinity from your swipes
+    const liked = new Set();
+    state.liked.forEach(n => (swipeFlavor[n]||[]).forEach(f => liked.add(f)));
+    const flavors = d.tags.filter(t => FLAVOR_TOKENS.indexOf(t) !== -1);
+    const overlap = flavors.filter(f => liked.has(f));
+    let score = 58 + Math.min(4, overlap.length) * 8;          // taste match
+    // calorie fit vs a sensible per-dish share of your daily target
+    const share = (state.kcal || 1800) * 0.28;
+    if (d.kcal <= share)            score += 10;
+    else if (d.kcal <= share * 1.3) score += 2;
+    else                            score -= 14;               // heavy
+    const conflict = dietConflict(d.tags);
+    if (conflict) score = Math.min(score, 34);
+    score = Math.max(18, Math.min(99, Math.round(score)));
+    return { score, overlap, conflict };
+  }
+
+  function reasonText(d, s) {
+    if (s.conflict) {
+      const map = { 'Not vegan':'outside your vegan choice', 'Not vegetarian':'outside your vegetarian choice',
+                    'Contains pork':'pork is outside your halal preference', 'Contains alcohol':'alcohol is outside your halal preference',
+                    'Contains gluten':'gluten is off your list' };
+      return s.conflict + ' — ' + (map[s.conflict] || 'outside your preferences') + '.';
+    }
+    const share = (state.kcal || 1800) * 0.28;
+    const parts = [];
+    if (s.overlap.length) {
+      const likedNames = state.liked.filter(n => (swipeFlavor[n]||[]).some(f => s.overlap.indexOf(f) !== -1)).slice(0, 2);
+      parts.push('Matches your taste for ' + s.overlap.slice(0, 2).join(' & ')
+        + (likedNames.length ? ' (you liked ' + likedNames.join(', ') + ')' : ''));
+    } else {
+      parts.push('A solid pick, just outside your usual flavours');
+    }
+    if (d.kcal <= share) parts.push('and light on your calorie budget');
+    else if (d.kcal > share * 1.3) parts.push('but heavy against your ' + (state.kcal||1800) + ' kcal target');
+    return parts.join(' ') + '.';
+  }
 
   const cuisineHints = [
     { keys: ['beirut','beyrouth','liban','lebanon','dubai','dubaï','abu dhabi','riyadh','riyad','doha','tunis','casablanca','marrakech','tanger','tangier','cairo','caire','maroc','morocco','egypt','jordan','jordanie','amman','levant','arab','arabe','arabic','arabia'], to: 'lebanese' },
@@ -1298,20 +1438,33 @@ input[type=file] {
     return 'Profile: ' + parts.join(' · ');
   }
 
-  // Render each result card's real photo (Wikipedia lead image), keeping the
-  // coloured band + dish name as a graceful fallback.
-  function loadDishPhotos(root) {
-    root.querySelectorAll('.dish-photo[data-wiki]').forEach(el => {
-      wikiImage(el.getAttribute('data-wiki')).then(src => {
-        if (!src) return;
-        const pre = new Image();
-        pre.onload = () => {
-          el.style.backgroundImage = `url('${src}')`;
-          el.classList.add('has-img');
-        };
-        pre.src = src;
-      });
-    });
+  function dishCardHTML(d, s) {
+    const cls = s.conflict ? 'tier-skip'
+              : s.score >= 82 ? 'tier-top'
+              : s.score >= 64 ? 'tier-great' : 'tier-skip';
+    const label = s.conflict ? s.conflict
+                : s.score >= 82 ? 'Top pick for you'
+                : s.score >= 64 ? 'Great match' : 'Worth a look';
+    const target = state.kcal || 1800;
+    const pct = Math.round((d.kcal / target) * 100);
+    const barW = Math.max(4, Math.min(100, pct));
+    return `
+      <div class="dish-card ${cls}">
+        <div class="dish-body">
+          <div class="dish-head">
+            <div class="tier">${label}</div>
+            <div class="match"><b>${s.score}</b><span>% for you</span></div>
+          </div>
+          <div class="name">${d.name}</div>
+          <div class="cn">${d.cn}</div>
+          <div class="desc">${d.desc}</div>
+          <div class="reason">${reasonText(d, s)}</div>
+          <div class="kcal-line">
+            <div class="kcal-bar"><i style="width:${barW}%"></i></div>
+            <div class="kcal-txt">${d.kcal} kcal · ${pct}% of your ${target}</div>
+          </div>
+        </div>
+      </div>`;
   }
 
   function renderResults() {
@@ -1322,31 +1475,32 @@ input[type=file] {
     $('#result-name').textContent = f.name;
     $('#result-loc').textContent = state.loc ? state.loc : f.loc;
 
-    const list = $('#results-list');
-    list.innerHTML = f.dishes.map((d, n) => {
-      const tierLabel = d.tier === 'top' ? 'Top pick' : d.tier === 'great' ? 'Great' : 'Skip';
-      const bg = palette[n % palette.length];
-      return `
-        <div class="dish-card tier-${d.tier}">
-          <div class="dish-photo" data-wiki="${d.wiki}" style="background-color:${bg}">
-            <span class="dish-photo-name">${d.name}</span>
-          </div>
-          <div class="dish-body">
-            <div class="tier">${tierLabel}</div>
-            <div class="name">${d.name}</div>
-            <div class="cn">${d.cn}</div>
-            <div class="why">${d.why}</div>
-            <div class="kcal">${d.kcal} kcal</div>
-          </div>
-        </div>
-      `;
-    }).join('');
-    loadDishPhotos(list);
-    const goodTotal = f.dishes
-      .filter(d => d.tier !== 'skip')
-      .reduce((s, d) => s + d.kcal, 0);
-    $('#kcal-total').textContent = goodTotal + ' kcal';
-    $('#kcal-target').textContent = String(state.kcal);
+    const scored = f.dishes.map(d => ({ d, s: scoreDish(d) }));
+    const recommend = scored.filter(x => !x.s.conflict && x.s.score >= 52)
+                            .sort((a, b) => b.s.score - a.s.score);
+    const avoid = scored.filter(x => x.s.conflict || x.s.score < 52)
+                        .sort((a, b) => b.s.score - a.s.score);
+
+    let html = '';
+    if (recommend.length) {
+      html += `<div class="rec-head">Recommended for you<span>${recommend.length} dishes</span></div>`;
+      html += recommend.map(x => dishCardHTML(x.d, x.s)).join('');
+    }
+    if (avoid.length) {
+      html += `<div class="rec-head muted">Better skipped<span>${avoid.length} dishes</span></div>`;
+      html += avoid.map(x => dishCardHTML(x.d, x.s)).join('');
+    }
+    $('#results-list').innerHTML = html;
+
+    const recTotal = recommend.reduce((sum, x) => sum + x.d.kcal, 0);
+    const target = state.kcal || 1800;
+    $('#kcal-total').textContent = recTotal + ' kcal';
+    $('#kcal-target').textContent = String(target);
+    const fill = $('#kcal-fill');
+    if (fill) {
+      fill.style.width = Math.min(100, Math.round((recTotal / target) * 100)) + '%';
+      fill.classList.toggle('over', recTotal > target);
+    }
     $('#profile-pill').textContent = buildProfilePill();
   }
 
