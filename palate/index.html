@@ -593,6 +593,22 @@ input[type=file] {
   font-weight: 500;
 }
 .results-list { padding: 16px 18px 8px; }
+.empty-note {
+  padding: 8px 20px 24px;
+  color: var(--ink);
+  font-size: 14px;
+  line-height: 1.55;
+}
+.empty-note p { margin: 0 0 10px; }
+.empty-note .empty-sub {
+  font-size: 11px;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-top: 18px;
+}
+.empty-note ul { margin: 6px 0 0; padding-left: 18px; color: var(--muted); }
+.empty-note li { margin: 4px 0; }
 .rec-head {
   display: flex;
   align-items: baseline;
@@ -964,80 +980,6 @@ input[type=file] {
   const flavorByName = {};
   pool.forEach(d => { flavorByName[d.name] = d.flavors; });
 
-  const fixtures = {
-    cantonese: {
-      crumb: 'Cantonese · Guangzhou',
-      name:  'Tao Tao Ju 陶陶居',
-      loc:   'Guangzhou old town',
-      dishes: [
-        { name: 'Siu Mei Plateau', cn: '烧味拼盘',   kcal: 500, tags: ['roast','umami','savory','rich','pork','meat'],   desc: 'A platter of Cantonese roast meats — char siu, soy chicken and crackling pork — lacquered, smoky and deeply savoury.' },
-        { name: 'Crispy Pigeon',   cn: '陶陶居脆皮乳鸽', kcal: 280, tags: ['roast','umami','savory','poultry','meat'],        desc: 'Whole squab fried to a glass-crisp skin with juicy flesh — the signature of a Cantonese banquet.' },
-        { name: 'Sakura Shrimp',   cn: '樱花虾嗜荷芥兰', kcal: 160, tags: ['seafood','light','fresh','clean'],                desc: 'Tiny sakura shrimp tossed through blanched gai lan — delicate, sea-sweet and clean.' },
-        { name: 'Roasted Goose',   cn: '陶陶居百年烧鹅', kcal: 420, tags: ['roast','rich','umami','poultry','meat'],          desc: 'Wood-fired goose with mahogany skin and deep, fatty richness — a century-old house recipe.' },
-        { name: 'BBQ Pork',        cn: '金牌秘制叉烧', kcal: 380, tags: ['roast','sweet','savory','umami','pork','meat'],   desc: 'Honey-glazed char siu with caramelised edges and a tender, smoky bite.' },
-        { name: 'Clay Pot Meats',  cn: '化皮烧腩仔',   kcal: 520, tags: ['smoky','rich','salty','pork','meat'],             desc: 'Crackling pork belly finished in a clay pot — intensely salted, smoky and very heavy.' },
-        { name: 'Cucumber Pickle', cn: '紫苏胡瓜嗜子', kcal: 45,  tags: ['fresh','tangy','herbal','veg','vegan'],           desc: 'Cold cucumber in shiso and vinegar — sharp, acidic and herbal, more a palate reset than a dish.' },
-      ],
-    },
-    lebanese: {
-      crumb: 'Levantine · Beirut',
-      name:  'Em Sherif إم شريف',
-      loc:   'Achrafieh, Beirut',
-      dishes: [
-        { name: 'Hummus Beiruti', cn: 'حمص بيروتي', kcal: 320, tags: ['fresh','clean','herbal','veg','vegan'],        desc: 'Stone-ground chickpea with tahini and lemon, finished with a green swirl of herbs and chilli.' },
-        { name: 'Tabbouleh',      cn: 'تبولة',      kcal: 180, tags: ['fresh','herbal','tangy','veg','vegan','gluten'], desc: 'Mostly parsley and mint, cut with fine bulgur, lemon and tomato — bright and grassy.' },
-        { name: 'Fattoush',       cn: 'فتوش',       kcal: 220, tags: ['fresh','tangy','herbal','veg','vegan','gluten'], desc: 'Crisp greens and toasted bread in a sumac and pomegranate dressing.' },
-        { name: 'Shish Taouk',    cn: 'شيش طاووق', kcal: 380, tags: ['savory','smoky','roast','poultry','meat'],     desc: 'Garlic-marinated chicken skewers char-grilled until smoky and juicy.' },
-        { name: 'Kibbeh Nayyeh',  cn: 'كبة نيئة',   kcal: 290, tags: ['raw','clean','refined','beef','meat','gluten'], desc: 'Raw lean beef pounded with fine bulgur and spices — silky, refined and pristine.' },
-        { name: 'Frikeh Lamb',    cn: 'فريكة باللحم', kcal: 540, tags: ['smoky','rich','heavy','meat'],               desc: 'Slow-cooked lamb over smoky green freekeh — deeply savoury and very filling.' },
-        { name: 'Knafeh',         cn: 'كنافة',      kcal: 480, tags: ['sweet','creamy','dessert','dairy'],            desc: 'Warm stretched cheese under crisp shredded pastry, soaked in orange-blossom syrup.' },
-      ],
-    },
-    japanese: {
-      crumb: 'Japanese · Tokyo',
-      name:  'Tsubame 燕',
-      loc:   'Shibuya, Tokyo',
-      dishes: [
-        { name: 'Hamachi Sashimi',  cn: 'はまち刺身',   kcal: 180, tags: ['raw','clean','umami','seafood','light'],       desc: 'Buttery yellowtail sliced thick — clean, oily and quietly umami.' },
-        { name: 'Tsukune',          cn: 'つくね',       kcal: 260, tags: ['savory','roast','umami','poultry','meat'],     desc: 'Charcoal-grilled minced chicken skewer lacquered in a sweet-savoury tare.' },
-        { name: 'Agedashi Tofu',    cn: '揚げ出し豆腐', kcal: 220, tags: ['umami','light','clean','veg'],                desc: 'Silken tofu lightly fried and bathed in warm dashi — delicate and soothing.' },
-        { name: 'Wagyu Tataki',     cn: '和牛たたき',   kcal: 340, tags: ['raw','refined','umami','rich','beef','meat'], desc: 'Wagyu seared at the edges, rare within — marbled, refined and deeply umami.' },
-        { name: 'Yakitori Negima',  cn: '焼き鳥ねぎま', kcal: 200, tags: ['savory','roast','umami','poultry','meat'],     desc: 'Chicken thigh and scallion grilled over binchōtan — the classic izakaya skewer.' },
-        { name: 'Karaage Mountain', cn: '唐揚げ盛り合わせ', kcal: 620, tags: ['rich','heavy','savory','poultry','meat'], desc: 'A towering platter of deep-fried marinated chicken — moreish but very heavy.' },
-        { name: 'Natto Maki',       cn: '納豆巻き',     kcal: 130, tags: ['fermented','pungent','veg','vegan'],          desc: 'Sticky fermented soybean rolled in rice and nori — funky and polarising.' },
-      ],
-    },
-    italian: {
-      crumb: 'Italian · Roma',
-      name:  'Roscioli',
-      loc:   "Campo de' Fiori, Roma",
-      dishes: [
-        { name: 'Cacio e Pepe',         cn: 'cacio e pepe',         kcal: 520, tags: ['umami','rich','savory','veg','dairy','gluten'],       desc: 'Just pasta, pecorino and cracked pepper emulsified into a glossy, peppery sauce.' },
-        { name: 'Carciofi alla Romana', cn: 'carciofi alla romana', kcal: 180, tags: ['herbal','fresh','light','veg','vegan'],               desc: 'Whole artichokes braised with mint and garlic in olive oil until silky.' },
-        { name: 'Vitello Tonnato',      cn: 'vitello tonnato',      kcal: 340, tags: ['raw','refined','clean','beef','seafood','meat'],      desc: 'Cold sliced veal under a creamy tuna-caper sauce — cool, refined and savoury.' },
-        { name: 'Burrata Pugliese',     cn: 'burrata pugliese',     kcal: 380, tags: ['creamy','fresh','rich','veg','dairy'],                desc: 'Hand-pulled curd oozing stracciatella cream — milky, fresh and rich.' },
-        { name: 'Carbonara',            cn: 'carbonara',            kcal: 620, tags: ['rich','umami','savory','pork','egg','meat','gluten'], desc: 'Guanciale, egg yolk and pecorino bound into a glossy, bold pasta.' },
-        { name: 'Trippa alla Romana',   cn: 'trippa alla romana',   kcal: 480, tags: ['rich','smoky','assertive','meat'],                    desc: 'Tripe slow-stewed in tomato and mint — assertive, offal-forward and intense.' },
-        { name: 'Tiramisù',             cn: 'tiramisù',             kcal: 520, tags: ['sweet','creamy','dessert','dairy','egg','gluten','alcohol'], desc: 'Coffee-soaked savoiardi layered with mascarpone — sweet, boozy and indulgent.' },
-      ],
-    },
-    mexican: {
-      crumb: 'Mexican · CDMX',
-      name:  'Pujol',
-      loc:   'Polanco, Ciudad de México',
-      dishes: [
-        { name: 'Mole Madre',            cn: 'mole madre',            kcal: 420, tags: ['umami','rich','spice','complex','veg'],          desc: 'Aged mole — dozens of chillies, seeds and spices — spooned over heritage corn.' },
-        { name: 'Tetela',                cn: 'tetela',                kcal: 280, tags: ['savory','earthy','clean','veg','vegan'],         desc: 'Triangular masa pocket filled with smoky beans — earthy, clean and naturally corn-based.' },
-        { name: 'Aguachile Verde',       cn: 'aguachile verde',       kcal: 160, tags: ['raw','fresh','spicy','tangy','seafood'],        desc: 'Raw shrimp cured in lime with green chilli and cucumber — bright and fiery.' },
-        { name: 'Tlayuda',               cn: 'tlayuda',               kcal: 460, tags: ['savory','smoky','rich','meat','dairy'],          desc: 'Giant crisp Oaxacan tortilla layered with beans, cheese and grilled meat.' },
-        { name: 'Chapulines',            cn: 'chapulines',            kcal: 120, tags: ['savory','tangy','adventurous','light'],          desc: 'Toasted grasshoppers with lime and chilli — crunchy, nutty and adventurous.' },
-        { name: 'Carnitas Tacos',        cn: 'tacos de carnitas',     kcal: 580, tags: ['rich','heavy','savory','pork','meat'],           desc: 'Lard-confit pork piled into corn tortillas — fatty, heavy and indulgent.' },
-        { name: 'Churros con Chocolate', cn: 'churros con chocolate', kcal: 540, tags: ['sweet','dessert','rich','gluten','dairy'],       desc: 'Fried dough dusted in cinnamon sugar with thick drinking chocolate.' },
-      ],
-    },
-  };
-
-  // What each swipe dish signals you enjoy
   const FLAVOR_TOKENS = ['umami','savory','rich','roast','seafood','raw','clean','fresh','herbal','spice','spicy','sweet','creamy','tangy','smoky','fermented','light','refined','aromatic','complex','earthy','adventurous','veg','dessert'];
 
   function dietConflict(tags) {
@@ -1107,33 +1049,6 @@ input[type=file] {
     return parts.join(' ') + '.';
   }
 
-  const cuisineHints = [
-    { keys: ['beirut','beyrouth','liban','lebanon','dubai','dubaï','abu dhabi','riyadh','riyad','doha','tunis','casablanca','marrakech','tanger','tangier','cairo','caire','maroc','morocco','egypt','jordan','jordanie','amman','levant','arab','arabe','arabic','arabia'], to: 'lebanese' },
-    { keys: ['tokyo','osaka','kyoto','japan','japon','tokio','shibuya'], to: 'japanese' },
-    { keys: ['roma','rome','milano','milan','italia','italy','italie','napoli','naples','firenze','florence','torino','turin'], to: 'italian' },
-    { keys: ['mexico','cdmx','mexique','oaxaca','guadalajara','tulum'], to: 'mexican' },
-    { keys: ['canton','guangzhou','china','chine','shanghai','beijing','pekin','hong kong','hongkong','shenzhen','chinese','chinois'], to: 'cantonese' },
-  ];
-
-  let fallbackIdx = -1;
-  function pickCuisine() {
-    // 1. Explicit manual choice always wins
-    if (state.cuisine && state.cuisine !== 'auto' && fixtures[state.cuisine]) return state.cuisine;
-    // 2. Cuisine inferred from the scanned menu text by on-device OCR
-    if (state.detected && fixtures[state.detected]) return state.detected;
-    // 3. Keyword in the Location field
-    const s = (state.loc || '').toLowerCase();
-    if (s) {
-      for (const e of cuisineHints) {
-        if (e.keys.some(k => s.includes(k))) return e.to;
-      }
-    }
-    // 4. No signal at all — rotate through cuisines so repeated scans
-    //    don't always land on the same restaurant.
-    const keys = Object.keys(fixtures);
-    fallbackIdx = (fallbackIdx + 1) % keys.length;
-    return keys[fallbackIdx];
-  }
 
   // Score OCR'd menu text against per-cuisine vocab; best hit count wins.
   const cuisineLexicon = {
@@ -1142,6 +1057,7 @@ input[type=file] {
     japanese:  ['sushi','ramen','sashimi','tempura','miso','udon','yakitori','teriyaki','izakaya','nigiri','maki','donburi','gyoza','wasabi','sake','matcha','bento','katsu','soba','edamame'],
     lebanese:  ['hummus','houmous','falafel','shawarma','tabbouleh','tabouleh','kebab','tahini','baba','manakish','fattoush','kibbeh','mezze','meze','labneh','halloumi','zaatar','shish','moutabal'],
     cantonese: ['dim sum','char siu','wonton','congee','chow mein','har gow','siu mai','siu mei','bok choy','hoisin','dumpling','noodle','fried rice','peking','szechuan','sichuan','canton','wok','chinese','xiao long','pak choi'],
+    indian:    ['curry','masala','tikka','tandoori','biryani','naan','paneer','dal','dhal','samosa','korma','vindaloo','rogan','saag','bhaji','pakora','chutney','raita','dosa','idli','vada','chana','aloo','gobi','jalfrezi','madras','bhuna','lassi','papadum','poppadom','keema','butter chicken','garam'],
   };
 
   function cuisineFromText(text) {
@@ -1157,7 +1073,7 @@ input[type=file] {
 
   const cuisineLabel = {
     italian: 'Italian', mexican: 'Mexican', japanese: 'Japanese',
-    lebanese: 'Levantine', cantonese: 'Cantonese',
+    lebanese: 'Levantine', cantonese: 'Cantonese', indian: 'Indian',
   };
 
   // --- Heuristic food engine: turn a dish name into flavours + diet + kcal ---
@@ -1174,7 +1090,7 @@ input[type=file] {
     sweet:   ['honey','caramel','sweet','teriyaki','hoisin','glazed','maple','mango','plum'],
     seafood: ['fish','shrimp','prawn','salmon','tuna','octopus','squid','calamari','scallop','crab','lobster','clam','vongole','mussel','oyster','anchovy','seafood','ceviche','sashimi','sushi'],
     umami:   ['mushroom','soy','miso','parmesan','parmigian','truffle','tomato','anchovy','dashi','seaweed','bacon','aged'],
-    raw:     ['tartare','carpaccio','ceviche','sashimi','crudo','raw'],
+    raw:     ['tartare','carpaccio','ceviche','sashimi','crudo'],
     clean:   ['steamed','poached','broth','consomme'],
     light:   ['salad','steamed','broth','soup','poke','clear','grilled vegetable'],
     earthy:  ['mushroom','lentil','bean','beet','truffle','eggplant','aubergine','chickpea'],
@@ -1211,15 +1127,16 @@ input[type=file] {
     if (tags.indexOf('dessert') !== -1) kcal = 420;
     kcal = Math.max(120, Math.min(900, Math.round(kcal / 10) * 10));
 
-    const flav = tags.filter(t => FLAVOR_TOKENS.indexOf(t) !== -1 && t !== 'dessert');
+    const flav = Array.from(new Set(
+      tags.filter(t => FLAVOR_TOKENS.indexOf(t) !== -1 && t !== 'dessert')));
     let desc;
     if (tags.indexOf('dessert') !== -1) desc = 'A sweet course to finish.';
     else if (flav.length) desc = flav.slice(0, 3).join(', ').replace(/^./, c => c.toUpperCase()) + '.';
     else desc = 'Read from your menu.';
-    return { name, cn: '', kcal, tags, desc };
+    return { name, cn: '', kcal, tags: Array.from(new Set(tags)), desc };
   }
 
-  const SECTION = /^(menu|carte|antipasti|primi|secondi|contorni|dolci|desserts?|starters?|appetiz\w+|mains?|entr[ée]es?|sides?|salads?|soups?|drinks?|beverages?|wines?|bar|cocktails?|specials?|plats?|formule|pizze?|pasta|sushi|sashimi|nigiri|maki|kids?|extras?|today'?s? specials?|set menu|à la carte|chef'?s? selection)$/i;
+  const SECTION = /^(menu|carte|antipasti|primi|secondi|contorni|dolci|desserts?|starters?|appetiz\w+|main(s| courses?| dishes)?|entr[ée]es?|sides?|salads?|soups?|drinks?|beverages?|wines?|bar|cocktails?|specials?|plats?|formule|pizze?|pasta|sushi|sashimi|nigiri|maki|kids?|extras?|breads?|rice|noodles?|curries|tandoori|vegetarian|accompaniments?|today'?s? specials?|house specials?|set menu|à la carte|chef'?s? selection)$/i;
 
   function titleCase(s) {
     return s.toLowerCase().replace(/\b([a-zà-ÿ])([a-zà-ÿ']*)/g,
@@ -1629,27 +1546,42 @@ input[type=file] {
   }
 
   function renderResults() {
-    const key = pickCuisine();
-    const f = fixtures[key];
     const menu = parseMenu(state.menuText);
-    const fromMenu = menu.length >= 3;
+    const totals = $('.totals');
 
-    if (fromMenu) {
-      $('#result-crumb').textContent =
-        (cuisineLabel[key] || 'Scanned') + ' menu · your photo';
-      $('#result-name').textContent = state.loc || 'Your menu';
-      $('#result-loc').textContent =
-        menu.length + ' dishes read from your photo, ranked for you';
-    } else {
-      $('#result-crumb').textContent = f.crumb;
-      $('#result-name').textContent = f.name;
-      $('#result-loc').textContent = state.menuText
-        ? "Couldn't read your menu clearly — popular " + (cuisineLabel[key] || '') + ' picks'
-        : (state.loc ? state.loc : f.loc);
+    // We only ever rank the dishes that are really on the scanned photo.
+    // If we can't read it, we say so — never substitute another menu.
+    if (menu.length < 2) {
+      $('#result-crumb').textContent = 'Scan';
+      $('#result-name').textContent = "Couldn't read this menu";
+      $('#result-loc').textContent = state.loc || '';
+      $('#profile-pill').textContent = buildProfilePill();
+      $('#results-list').innerHTML =
+        `<div class="empty-note">
+           <p>We couldn't reliably read the dishes on your photo, so we won't
+           guess with a different restaurant's menu.</p>
+           <p class="empty-sub">For a clean scan:</p>
+           <ul>
+             <li>Fill the frame with the menu, straight on</li>
+             <li>Even lighting — avoid glare and shadows</li>
+             <li>One page at a time, text in focus</li>
+           </ul>
+         </div>`;
+      if (totals) totals.style.display = 'none';
+      return;
     }
+    if (totals) totals.style.display = '';
 
-    const dishes = fromMenu ? menu : f.dishes;
-    const scored = dishes.map(d => ({ d, s: scoreDish(d) }));
+    const ck = (state.cuisine && state.cuisine !== 'auto')
+                 ? state.cuisine : state.detected;
+    const label = cuisineLabel[ck];
+    $('#result-crumb').textContent =
+      (label ? label + ' menu' : 'Your menu') + ' · your photo';
+    $('#result-name').textContent = state.loc || 'Your menu';
+    $('#result-loc').textContent =
+      menu.length + ' dishes read from your photo, ranked for you';
+
+    const scored = menu.map(d => ({ d, s: scoreDish(d) }));
     const recommend = scored.filter(x => !x.s.conflict && x.s.score >= 52)
                             .sort((a, b) => b.s.score - a.s.score);
     const avoid = scored.filter(x => x.s.conflict || x.s.score < 52)
