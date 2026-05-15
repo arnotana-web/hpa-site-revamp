@@ -178,95 +178,129 @@ body.screen-results  #screen-results { display: flex; }
   text-align: center;
 }
 .deck {
-  position: relative;
   flex: 1;
-  margin: 18px 22px 4px;
+  margin: 16px 22px 4px;
   min-height: 0;
 }
-.swipe-card {
-  position: absolute;
-  inset: 0;
+.deck.duel {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 10px;
+  position: relative;
+}
+.duel-card {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  border: none;
   border-radius: 18px;
   background-color: #2a1a18;
   background-size: cover;
   background-position: center;
-  box-shadow: 0 18px 50px rgba(0,0,0,.22), 0 1px 3px rgba(0,0,0,.06);
+  box-shadow: 0 14px 36px rgba(0,0,0,.20), 0 1px 3px rgba(0,0,0,.06);
   overflow: hidden;
-  user-select: none;
-  -webkit-user-drag: none;
-  touch-action: none;
-  cursor: grab;
-  will-change: transform, opacity;
+  cursor: pointer;
+  text-align: left;
+  padding: 0;
+  color: var(--cream);
+  -webkit-tap-highlight-color: transparent;
+  transition: transform .35s cubic-bezier(.2,.8,.2,1), opacity .35s ease, box-shadow .2s ease;
 }
-.swipe-card.top { cursor: grab; }
-.swipe-card.dragging { cursor: grabbing; transition: none !important; }
-.swipe-card::after {
+.duel-card::after {
   content: '';
   position: absolute; inset: 0;
-  background: linear-gradient(to top, rgba(0,0,0,.55) 0%, rgba(0,0,0,0) 55%);
+  background: linear-gradient(to top, rgba(0,0,0,.62) 0%, rgba(0,0,0,0) 60%);
   pointer-events: none;
 }
-.swipe-card .label {
+.duel-card:active { transform: scale(.985); }
+.duel-card .country {
   position: absolute;
-  left: 22px; bottom: 22px;
+  top: 16px; left: 18px;
   z-index: 2;
-  color: var(--cream);
-  font-family: var(--serif);
-  font-style: italic;
-  font-weight: 400;
-  font-size: 30px;
-  letter-spacing: -.01em;
-  text-shadow: 0 1px 12px rgba(0,0,0,.6);
-}
-.swipe-card .country {
-  position: absolute;
-  top: 22px; left: 22px;
-  z-index: 2;
-  color: var(--cream);
   font-size: 10px;
   letter-spacing: .2em;
   text-transform: uppercase;
-  opacity: .8;
+  opacity: .85;
   font-weight: 500;
 }
-.swipe-card .badge {
+.duel-card .pick {
   position: absolute;
-  top: 56px;
-  padding: 6px 14px;
+  top: 14px; right: 16px;
+  z-index: 3;
+  padding: 5px 12px;
+  font-size: 11px;
   font-weight: 800;
-  font-size: 20px;
-  letter-spacing: .15em;
-  border: 3px solid currentColor;
+  letter-spacing: .16em;
+  border: 2px solid var(--cream);
   border-radius: 6px;
   opacity: 0;
-  pointer-events: none;
-  z-index: 3;
-  background: rgba(0,0,0,.15);
+  transition: opacity .15s ease;
 }
-.swipe-card .badge.yes  { right: 22px; color: #6fd07f; transform: rotate(18deg); }
-.swipe-card .badge.nope { left: 22px;  color: #e26a6a; transform: rotate(-18deg); }
+.duel-card .meta {
+  position: absolute;
+  left: 18px; right: 18px; bottom: 16px;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+.duel-card .name {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 27px;
+  letter-spacing: -.01em;
+  text-shadow: 0 1px 12px rgba(0,0,0,.6);
+}
+.duel-card .desc {
+  font-size: 12.5px;
+  line-height: 1.35;
+  opacity: .88;
+  text-shadow: 0 1px 8px rgba(0,0,0,.6);
+}
+@media (hover: hover) {
+  .duel-card:hover .pick { opacity: 1; }
+  .duel-card:hover { box-shadow: 0 18px 44px rgba(0,0,0,.28); }
+}
+.duel-card.win {
+  transform: scale(1.03);
+  box-shadow: 0 0 0 3px var(--cream), 0 18px 44px rgba(0,0,0,.3);
+}
+.duel-card.win .pick { opacity: 1; }
+.duel-card.lose { opacity: .25; transform: scale(.94); }
+.duel-vs {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 5;
+  width: 44px; height: 44px;
+  border-radius: 50%;
+  background: var(--cream);
+  color: var(--ink);
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 16px;
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 4px 14px rgba(0,0,0,.22);
+  pointer-events: none;
+}
 .swipe-actions {
   display: flex;
   justify-content: center;
-  gap: 36px;
-  padding: 14px 0 26px;
+  padding: 12px 0 24px;
   flex-shrink: 0;
 }
-.act {
-  width: 58px; height: 58px;
-  border-radius: 50%;
-  border: 1px solid var(--line);
-  background: #fff;
-  font-size: 22px;
-  line-height: 1;
+.duel-skip {
+  border: none;
+  background: none;
+  color: var(--muted);
+  font-size: 12px;
+  letter-spacing: .12em;
+  text-transform: uppercase;
   cursor: pointer;
-  box-shadow: 0 4px 14px rgba(0,0,0,.07);
-  display: flex; align-items: center; justify-content: center;
-  transition: transform .15s ease;
+  padding: 8px 14px;
 }
-.act:active { transform: scale(.9); }
-.act.no  { color: var(--red); }
-.act.yes { color: var(--green); }
+.duel-skip:active { opacity: .6; }
 
 /* ---------- Prefs ---------- */
 #screen-prefs { background: var(--cream); }
@@ -759,12 +793,11 @@ input[type=file] {
   <section class="screen" id="screen-swipe">
     <div class="swipe-top">
       <div class="progress"><div id="progress-bar"></div></div>
-      <div class="swipe-counter"><span id="swipe-count">0</span> of 15 · swipe to taste</div>
+      <div class="swipe-counter">Round <span id="swipe-count">0</span> of <span id="swipe-total">12</span> · which would you order?</div>
     </div>
-    <div class="deck" id="deck"></div>
+    <div class="deck duel" id="deck"></div>
     <div class="swipe-actions">
-      <button class="act no"  id="btn-no"  aria-label="Pass">✕</button>
-      <button class="act yes" id="btn-yes" aria-label="Like">♥</button>
+      <button class="duel-skip" id="btn-skip" type="button">No preference — skip</button>
     </div>
   </section>
 
@@ -896,23 +929,41 @@ input[type=file] {
   const $$ = (s, p = document) => Array.from(p.querySelectorAll(s));
 
   // ---------- Data ----------
-  const dishes = [
-    { name: 'Sushi',            country: 'Japan',    wiki: 'Sushi' },
-    { name: 'Tacos',            country: 'Mexico',   wiki: 'Taco' },
-    { name: 'Mezze',            country: 'Levant',   wiki: 'Meze' },
-    { name: 'Margherita Pizza', country: 'Italy',    wiki: 'Pizza_Margherita' },
-    { name: 'Biryani',          country: 'India',    wiki: 'Biryani' },
-    { name: 'Beef Tartare',     country: 'France',   wiki: 'Steak_tartare' },
-    { name: 'Shakshuka',        country: 'Maghreb',  wiki: 'Shakshouka' },
-    { name: 'Pad Thai',         country: 'Thailand', wiki: 'Pad_thai' },
-    { name: 'Lobster Bisque',   country: 'France',   wiki: 'Bisque_(food)' },
-    { name: 'Dim Sum',          country: 'Canton',   wiki: 'Dim_sum' },
-    { name: 'Octopus',          country: 'Galicia',  wiki: 'Polbo_á_feira' },
-    { name: 'Peking Duck',      country: 'Beijing',  wiki: 'Peking_duck' },
-    { name: 'Churros',          country: 'Spain',    wiki: 'Churro' },
-    { name: 'Buddha Bowl',      country: 'Modern',   wiki: 'Buddha_bowl' },
-    { name: 'Siu Mei',          country: 'Canton',   wiki: 'Siu_mei' },
+  // Larger pool — each session draws a fresh, region-mixed set of duels.
+  const pool = [
+    { name: 'Sushi',            country: 'Japan',    region: 'asia',     wiki: 'Sushi',           flavors: ['umami','seafood','clean','raw','light'], desc: 'Vinegared rice with pristine raw fish.' },
+    { name: 'Ramen',            country: 'Japan',    region: 'asia',     wiki: 'Ramen',           flavors: ['umami','rich','savory'],                 desc: 'Wheat noodles in a deep pork or miso broth.' },
+    { name: 'Sashimi',          country: 'Japan',    region: 'asia',     wiki: 'Sashimi',         flavors: ['raw','clean','umami','light'],            desc: 'Pure sliced raw fish, nothing else.' },
+    { name: 'Peking Duck',      country: 'Beijing',  region: 'asia',     wiki: 'Peking_duck',     flavors: ['roast','rich','umami'],                   desc: 'Lacquered roast duck with crisp skin.' },
+    { name: 'Dim Sum',          country: 'Canton',   region: 'asia',     wiki: 'Dim_sum',         flavors: ['umami','savory','roast'],                 desc: 'Steamed and fried bite-size dumplings.' },
+    { name: 'Siu Mei',          country: 'Canton',   region: 'asia',     wiki: 'Siu_mei',         flavors: ['roast','umami','savory','rich'],          desc: 'Cantonese roast meats with glassy glaze.' },
+    { name: 'Pad Thai',         country: 'Thailand', region: 'asia',     wiki: 'Pad_thai',        flavors: ['sweet','tangy','savory'],                 desc: 'Stir-fried rice noodles, tamarind, peanut.' },
+    { name: 'Tom Yum',          country: 'Thailand', region: 'asia',     wiki: 'Tom_yum',         flavors: ['spicy','tangy','aromatic'],               desc: 'Hot-and-sour shrimp soup with lemongrass.' },
+    { name: 'Pho',              country: 'Vietnam',  region: 'asia',     wiki: 'Pho',             flavors: ['umami','clean','aromatic','light'],       desc: 'Clear beef broth over rice noodles.' },
+    { name: 'Biryani',          country: 'India',    region: 'asia',     wiki: 'Biryani',         flavors: ['spice','rich','aromatic'],                desc: 'Layered spiced rice baked with meat.' },
+    { name: 'Bibimbap',         country: 'Korea',    region: 'asia',     wiki: 'Bibimbap',        flavors: ['savory','fresh','spicy'],                 desc: 'Rice topped with vegetables, beef, chilli.' },
+    { name: 'Kimchi Stew',      country: 'Korea',    region: 'asia',     wiki: 'Kimchi-jjigae',   flavors: ['spicy','fermented','savory'],             desc: 'Bubbling stew of aged kimchi and pork.' },
+    { name: 'Margherita Pizza', country: 'Italy',    region: 'europe',   wiki: 'Pizza_Margherita', flavors: ['umami','rich','savory','fresh'],         desc: 'Tomato, mozzarella and basil, blistered.' },
+    { name: 'Burrata',          country: 'Italy',    region: 'europe',   wiki: 'Burrata',         flavors: ['creamy','fresh','rich'],                  desc: 'Soft cheese pouch oozing cream.' },
+    { name: 'Beef Tartare',     country: 'France',   region: 'europe',   wiki: 'Steak_tartare',   flavors: ['raw','refined','clean'],                  desc: 'Hand-cut raw beef, capers, egg yolk.' },
+    { name: 'Lobster Bisque',   country: 'France',   region: 'europe',   wiki: 'Bisque_(food)',   flavors: ['creamy','rich','seafood'],                desc: 'Silky shellfish soup finished with cream.' },
+    { name: 'Croissant',        country: 'France',   region: 'europe',   wiki: 'Croissant',       flavors: ['rich','sweet'],                           desc: 'Buttery laminated pastry, flaky and light.' },
+    { name: 'Octopus',          country: 'Galicia',  region: 'europe',   wiki: 'Polbo_á_feira',   flavors: ['seafood','umami','smoky'],                desc: 'Boiled octopus with paprika and oil.' },
+    { name: 'Paella',           country: 'Spain',    region: 'europe',   wiki: 'Paella',          flavors: ['savory','seafood','smoky','aromatic'],   desc: 'Saffron rice with seafood over fire.' },
+    { name: 'Churros',          country: 'Spain',    region: 'europe',   wiki: 'Churro',          flavors: ['sweet','dessert'],                        desc: 'Fried dough ribbons in cinnamon sugar.' },
+    { name: 'Moussaka',         country: 'Greece',   region: 'europe',   wiki: 'Moussaka',        flavors: ['rich','savory','creamy'],                 desc: 'Layered aubergine, lamb and béchamel.' },
+    { name: 'Hummus',           country: 'Levant',   region: 'mena',     wiki: 'Hummus',          flavors: ['herbal','fresh','veg','clean'],           desc: 'Whipped chickpea with tahini and lemon.' },
+    { name: 'Falafel',          country: 'Levant',   region: 'mena',     wiki: 'Falafel',         flavors: ['savory','herbal','fresh'],                desc: 'Crisp fried chickpea fritters with herbs.' },
+    { name: 'Tabbouleh',        country: 'Levant',   region: 'mena',     wiki: 'Tabbouleh',       flavors: ['herbal','fresh','tangy'],                 desc: 'Parsley salad with bulgur, mint, lemon.' },
+    { name: 'Shakshuka',        country: 'Maghreb',  region: 'mena',     wiki: 'Shakshouka',      flavors: ['spice','fresh','savory'],                 desc: 'Eggs poached in spiced tomato sauce.' },
+    { name: 'Tacos',            country: 'Mexico',   region: 'americas', wiki: 'Taco',            flavors: ['spicy','savory','smoky'],                 desc: 'Corn tortillas, grilled fillings, salsa.' },
+    { name: 'Mole',             country: 'Mexico',   region: 'americas', wiki: 'Mole_sauce',      flavors: ['complex','rich','spice','earthy'],        desc: 'Aged sauce of chillies, spice, chocolate.' },
+    { name: 'Ceviche',          country: 'Peru',     region: 'americas', wiki: 'Ceviche',         flavors: ['raw','tangy','fresh','seafood'],          desc: 'Raw fish cured in citrus and chilli.' },
+    { name: 'Feijoada',         country: 'Brazil',   region: 'americas', wiki: 'Feijoada',        flavors: ['rich','smoky','savory','earthy'],         desc: 'Slow-cooked black bean and pork stew.' },
+    { name: 'Buddha Bowl',      country: 'Modern',   region: 'americas', wiki: 'Buddha_bowl',     flavors: ['fresh','veg','clean','light'],            desc: 'Grains, greens and seeds, balanced.' },
   ];
+  const flavorByName = {};
+  pool.forEach(d => { flavorByName[d.name] = d.flavors; });
 
   const fixtures = {
     cantonese: {
@@ -988,24 +1039,7 @@ input[type=file] {
   };
 
   // What each swipe dish signals you enjoy
-  const swipeFlavor = {
-    'Sushi': ['umami','seafood','clean','raw','light'],
-    'Margherita Pizza': ['umami','rich','savory','fresh'],
-    'Tacos': ['spicy','savory','smoky'],
-    'Mezze': ['herbal','fresh','veg'],
-    'Biryani': ['spice','rich','aromatic'],
-    'Octopus': ['seafood','umami','smoky'],
-    'Pad Thai': ['sweet','tangy','savory'],
-    'Beef Tartare': ['raw','refined','beef','clean'],
-    'Dim Sum': ['umami','savory','roast'],
-    'Peking Duck': ['roast','rich','umami'],
-    'Shakshuka': ['spice','fresh','savory'],
-    'Lobster Bisque': ['creamy','rich','seafood'],
-    'Churros': ['sweet','dessert'],
-    'Buddha Bowl': ['fresh','veg','clean','light'],
-    'Siu Mei': ['roast','umami','savory','rich'],
-  };
-  const FLAVOR_TOKENS = ['umami','savory','rich','roast','seafood','raw','clean','fresh','herbal','spice','spicy','sweet','creamy','tangy','smoky','fermented','light','refined','aromatic','complex','earthy','adventurous'];
+  const FLAVOR_TOKENS = ['umami','savory','rich','roast','seafood','raw','clean','fresh','herbal','spice','spicy','sweet','creamy','tangy','smoky','fermented','light','refined','aromatic','complex','earthy','adventurous','veg','dessert'];
 
   function dietConflict(tags) {
     const has = t => tags.indexOf(t) !== -1;
@@ -1020,22 +1054,37 @@ input[type=file] {
     return null;
   }
 
+  // Largest-magnitude taste weight, so scores normalise regardless of round count
+  function tasteScale() {
+    let m = 1;
+    Object.keys(state.taste).forEach(k => { m = Math.max(m, Math.abs(state.taste[k])); });
+    return m;
+  }
+
   function scoreDish(d) {
-    // taste affinity from your swipes
-    const liked = new Set();
-    state.liked.forEach(n => (swipeFlavor[n]||[]).forEach(f => liked.add(f)));
     const flavors = d.tags.filter(t => FLAVOR_TOKENS.indexOf(t) !== -1);
-    const overlap = flavors.filter(f => liked.has(f));
-    let score = 58 + Math.min(4, overlap.length) * 8;          // taste match
+    // Project the dish onto your learned taste vector (likes minus dislikes)
+    let raw = 0;
+    flavors.forEach(f => { raw += (state.taste[f] || 0); });
+    const norm = raw / (flavors.length || 1) / tasteScale();   // ~[-1, 1]
+    let score = 60 + norm * 30;                                 // taste match
+    const liked = flavors.filter(f => (state.taste[f] || 0) > 0)
+                         .sort((a, b) => state.taste[b] - state.taste[a]);
     // calorie fit vs a sensible per-dish share of your daily target
     const share = (state.kcal || 1800) * 0.28;
-    if (d.kcal <= share)            score += 10;
+    if (d.kcal <= share)            score += 8;
     else if (d.kcal <= share * 1.3) score += 2;
     else                            score -= 14;               // heavy
     const conflict = dietConflict(d.tags);
     if (conflict) score = Math.min(score, 34);
     score = Math.max(18, Math.min(99, Math.round(score)));
-    return { score, overlap, conflict };
+    return { score, overlap: liked, conflict };
+  }
+
+  // Winner dishes you picked that carry one of these flavours
+  function pickedWith(flavors) {
+    return state.liked.filter(n =>
+      (flavorByName[n] || []).some(f => flavors.indexOf(f) !== -1));
   }
 
   function reasonText(d, s) {
@@ -1048,9 +1097,9 @@ input[type=file] {
     const share = (state.kcal || 1800) * 0.28;
     const parts = [];
     if (s.overlap.length) {
-      const likedNames = state.liked.filter(n => (swipeFlavor[n]||[]).some(f => s.overlap.indexOf(f) !== -1)).slice(0, 2);
+      const names = pickedWith(s.overlap.slice(0, 2)).slice(0, 2);
       parts.push('Matches your taste for ' + s.overlap.slice(0, 2).join(' & ')
-        + (likedNames.length ? ' (you liked ' + likedNames.join(', ') + ')' : ''));
+        + (names.length ? ' (you chose ' + names.join(', ') + ')' : ''));
     } else {
       parts.push('A solid pick, just outside your usual flavours');
     }
@@ -1110,6 +1159,10 @@ input[type=file] {
     idx: 0,
     liked: [],
     disliked: [],
+    taste: {},        // flavour token -> learned weight (likes minus dislikes)
+    duels: [],        // [ [dishA, dishB], ... ] for this session
+    round: 0,
+    rounds: 12,
     diets: new Set(),
     kcal: 1800,
     photo: null,
@@ -1148,139 +1201,126 @@ input[type=file] {
       .catch(() => { wikiCache[title] = null; return null; });
   }
 
-  // Warm the cache so the swipe deck doesn't flicker
-  dishes.forEach(d => { wikiImage(d.wiki).then(src => { if (src) { const i = new Image(); i.src = src; } }); });
+  // Warm the cache so duel cards don't flicker (first slice is enough)
+  pool.slice(0, 16).forEach(d => { wikiImage(d.wiki).then(src => { if (src) { const i = new Image(); i.src = src; } }); });
 
-  // ---------- Swipe deck ----------
+  // ---------- Taste duels (A vs B) ----------
   const deck = $('#deck');
-  let dragState = null;
+  let duelLock = false;
 
-  function renderDeck() {
-    deck.innerHTML = '';
-    const remaining = dishes.slice(state.idx);
-    const visible = Math.min(3, remaining.length);
-    // build back-to-front so top is last in DOM (highest z by order, but we set z explicitly)
-    for (let depth = visible - 1; depth >= 0; depth--) {
-      const d = remaining[depth];
-      const card = document.createElement('div');
-      card.className = 'swipe-card' + (depth === 0 ? ' top' : '');
-      card.style.backgroundColor = palette[(state.idx + depth) % palette.length];
-      wikiImage(d.wiki).then(src => { if (src) card.style.backgroundImage = `url("${src}")`; });
-      card.style.zIndex = String(10 - depth);
-      card.style.transform = `scale(${1 - depth * 0.045}) translateY(${depth * 10}px)`;
-      card.style.opacity = depth === 2 ? '0.85' : '1';
-      card.innerHTML = `
-        <span class="country">${d.country}</span>
-        <span class="badge yes">LIKE</span>
-        <span class="badge nope">NOPE</span>
-        <span class="label">${d.name}</span>
-      `;
-      deck.appendChild(card);
+  function shuffle(a) {
+    for (let i = a.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [a[i], a[j]] = [a[j], a[i]];
     }
-    bindTop();
+    return a;
+  }
+
+  // Fresh, region-mixed pairs every session
+  function buildDuels() {
+    const items = shuffle(pool.slice());
+    const pairs = [];
+    while (pairs.length < 12 && items.length >= 2) {
+      const a = items.shift();
+      let pi = items.findIndex(x => x.region !== a.region);
+      if (pi === -1) pi = 0;
+      const b = items.splice(pi, 1)[0];
+      pairs.push([a, b]);
+    }
+    state.duels   = pairs;
+    state.rounds  = pairs.length;
+    state.round   = 0;
+    state.taste   = {};
+    state.liked   = [];
+    state.disliked = [];
+  }
+
+  function panelHTML(d, side) {
+    return `<button class="duel-card" data-side="${side}" type="button">
+        <span class="country">${d.country}</span>
+        <span class="pick">PICK</span>
+        <span class="meta">
+          <span class="name">${d.name}</span>
+          <span class="desc">${d.desc}</span>
+        </span>
+      </button>`;
+  }
+
+  function renderDuel() {
+    const pair = state.duels[state.round];
+    if (!pair) { show('prefs'); return; }
+    duelLock = false;
+    deck.className = 'deck duel';
+    deck.innerHTML =
+      panelHTML(pair[0], 0) +
+      `<span class="duel-vs">or</span>` +
+      panelHTML(pair[1], 1);
+    deck.querySelectorAll('.duel-card').forEach((el, i) => {
+      el.style.backgroundColor = palette[(state.round * 2 + i) % palette.length];
+      wikiImage(pair[i].wiki).then(src => { if (src) el.style.backgroundImage = `url("${src}")`; });
+      el.addEventListener('click', () => choose(i));
+    });
     updateProgress();
   }
 
-  function updateProgress() {
-    $('#swipe-count').textContent = String(state.idx);
-    $('#progress-bar').style.width = ((state.idx / 15) * 100) + '%';
+  // Comparative signal: the winner's flavours go up, the loser's go down
+  function choose(side) {
+    if (duelLock) return;
+    const pair = state.duels[state.round];
+    if (!pair) return;
+    duelLock = true;
+    const win = pair[side], lose = pair[1 - side];
+    (win.flavors  || []).forEach(f => state.taste[f] = (state.taste[f] || 0) + 1);
+    (lose.flavors || []).forEach(f => state.taste[f] = (state.taste[f] || 0) - 0.7);
+    state.liked.push(win.name);
+    state.disliked.push(lose.name);
+    const cards = deck.querySelectorAll('.duel-card');
+    cards[side].classList.add('win');
+    cards[1 - side].classList.add('lose');
+    advance();
   }
 
-  function topCard() { return deck.querySelector('.swipe-card.top'); }
-
-  function bindTop() {
-    const card = topCard();
-    if (!card) return;
-    card.addEventListener('pointerdown', onDown);
+  function skipRound() {
+    if (duelLock) return;
+    duelLock = true;
+    const pair = state.duels[state.round];
+    if (pair) pair.forEach(d => (d.flavors || []).forEach(
+      f => state.taste[f] = (state.taste[f] || 0) + 0.15));
+    advance();
   }
 
-  function onDown(e) {
-    if (e.button !== undefined && e.button !== 0) return;
-    const card = e.currentTarget;
-    if (!card.classList.contains('top')) return;
-    dragState = {
-      card,
-      pointerId: e.pointerId,
-      startX: e.clientX,
-      startY: e.clientY,
-      dx: 0,
-      dy: 0,
-      baseTransform: card.style.transform,
-    };
-    card.classList.add('dragging');
-    try { card.setPointerCapture(e.pointerId); } catch (_) {}
-    card.addEventListener('pointermove', onMove);
-    card.addEventListener('pointerup', onUp);
-    card.addEventListener('pointercancel', onUp);
-    e.preventDefault();
-  }
-
-  function onMove(e) {
-    if (!dragState) return;
-    dragState.dx = e.clientX - dragState.startX;
-    dragState.dy = e.clientY - dragState.startY;
-    const rot = dragState.dx * 0.06;
-    dragState.card.style.transform =
-      `translate(${dragState.dx}px, ${dragState.dy}px) rotate(${rot}deg)`;
-    const yes  = dragState.card.querySelector('.badge.yes');
-    const nope = dragState.card.querySelector('.badge.nope');
-    yes.style.opacity  = Math.min(1, Math.max(0,  dragState.dx / 100));
-    nope.style.opacity = Math.min(1, Math.max(0, -dragState.dx / 100));
-  }
-
-  function onUp() {
-    if (!dragState) return;
-    const { card, dx } = dragState;
-    card.removeEventListener('pointermove', onMove);
-    card.removeEventListener('pointerup', onUp);
-    card.removeEventListener('pointercancel', onUp);
-    card.classList.remove('dragging');
-    const threshold = 90;
-    if (dx > threshold)  { flyOff('like');    return; }
-    if (dx < -threshold) { flyOff('dislike'); return; }
-    // snap back
-    card.style.transition = 'transform .3s cubic-bezier(.2,.8,.2,1)';
-    card.style.transform = dragState.baseTransform || '';
-    card.querySelector('.badge.yes').style.opacity = 0;
-    card.querySelector('.badge.nope').style.opacity = 0;
-    setTimeout(() => { if (card) card.style.transition = ''; }, 300);
-    dragState = null;
-  }
-
-  function flyOff(direction) {
-    const dir = direction === 'like' ? 1 : -1;
-    const card = (dragState && dragState.card) || topCard();
-    if (!card) return;
-    const carryY = (dragState && dragState.dy) ? dragState.dy : 0;
-    card.style.transition = 'transform .35s ease-out, opacity .35s ease-out';
-    card.style.transform = `translate(${dir * 600}px, ${carryY + 80}px) rotate(${dir * 28}deg)`;
-    card.style.opacity = '0';
-    const dishName = dishes[state.idx] ? dishes[state.idx].name : '';
-    (direction === 'like' ? state.liked : state.disliked).push(dishName);
-    dragState = null;
-
+  function advance() {
     setTimeout(() => {
-      state.idx++;
-      if (state.idx >= 15) {
-        show('prefs');
-        // keep deck rendered (idx >=15 leaves remaining empty); no rerender needed
-      } else {
-        renderDeck();
-      }
-    }, 330);
+      state.round++;
+      if (state.round >= state.rounds) show('prefs');
+      else renderDuel();
+    }, 380);
   }
 
-  $('#btn-yes').addEventListener('click', () => { if (topCard()) flyOff('like'); });
-  $('#btn-no').addEventListener('click',  () => { if (topCard()) flyOff('dislike'); });
+  function updateProgress() {
+    $('#swipe-count').textContent = String(state.round);
+    const tot = $('#swipe-total');
+    if (tot) tot.textContent = String(state.rounds);
+    $('#progress-bar').style.width = ((state.round / state.rounds) * 100) + '%';
+  }
+
+  const skipBtn = $('#btn-skip');
+  if (skipBtn) skipBtn.addEventListener('click', skipRound);
 
   window.addEventListener('keydown', (e) => {
     if (!document.body.classList.contains('screen-swipe')) return;
-    if (e.key === 'ArrowLeft')  { e.preventDefault(); if (topCard()) flyOff('dislike'); }
-    if (e.key === 'ArrowRight') { e.preventDefault(); if (topCard()) flyOff('like'); }
+    if (e.key === 'ArrowUp'   || e.key === 'ArrowLeft')  { e.preventDefault(); choose(0); }
+    if (e.key === 'ArrowDown' || e.key === 'ArrowRight') { e.preventDefault(); choose(1); }
+    if (e.key === ' ')        { e.preventDefault(); skipRound(); }
   });
 
-  // Build initial deck once on load so transitioning to the swipe screen is instant
-  renderDeck();
+  // Rebuild a fresh set every time the user enters the taste screen
+  document.addEventListener('click', (e) => {
+    if (e.target.closest('[data-go="swipe"]')) { buildDuels(); renderDuel(); }
+  });
+
+  buildDuels();
+  renderDuel();
 
   // ---------- Preferences ----------
   $$('.toggle').forEach(btn => {
@@ -1421,19 +1461,24 @@ input[type=file] {
     if (state.diets.has('vegan'))      dietTags.push('vegan');
     if (state.diets.has('gf'))         dietTags.push('gluten-free');
 
-    const tasteMap = {
-      'Sushi': 'clean umami', 'Margherita Pizza': 'italian comfort', 'Tacos': 'punchy heat',
-      'Mezze': 'mediterranean', 'Biryani': 'aromatic spice', 'Octopus': 'umami seafood',
-      'Pad Thai': 'tangy-sweet', 'Beef Tartare': 'raw & refined', 'Dim Sum': 'cantonese-friendly',
-      'Peking Duck': 'rich roasts', 'Shakshuka': 'spiced tomato', 'Lobster Bisque': 'creamy luxe',
-      'Churros': 'sweet tooth', 'Buddha Bowl': 'plant-forward', 'Siu Mei': 'cantonese-friendly',
+    // Top positive flavours from the duels become the taste descriptors
+    const label = {
+      umami: 'umami-forward', savory: 'savoury', rich: 'rich & bold', roast: 'roasted',
+      seafood: 'seafood-led', raw: 'raw & clean', clean: 'clean', fresh: 'fresh',
+      herbal: 'herbal', spice: 'spiced', spicy: 'loves heat', sweet: 'sweet tooth',
+      creamy: 'creamy', tangy: 'tangy', smoky: 'smoky', fermented: 'fermented',
+      light: 'light', refined: 'refined', aromatic: 'aromatic', complex: 'complex',
+      earthy: 'earthy', adventurous: 'adventurous', veg: 'plant-forward', dessert: 'sweet tooth',
     };
-    const tastes = Array.from(new Set(state.liked.map(n => tasteMap[n]).filter(Boolean)));
-    if (tastes.length === 0) tastes.push('savory', 'umami-forward');
-    const top = tastes.slice(0, 2);
+    const top = Object.keys(state.taste)
+      .filter(k => state.taste[k] > 0)
+      .sort((a, b) => state.taste[b] - state.taste[a])
+      .map(k => label[k] || k);
+    const tastes = Array.from(new Set(top)).slice(0, 2);
+    if (tastes.length === 0) tastes.push('savoury', 'umami-forward');
     const parts = [];
     if (dietTags.length) parts.push(dietTags.join(' & '));
-    parts.push(...top);
+    parts.push(...tastes);
     parts.push(state.kcal + ' kcal');
     return 'Profile: ' + parts.join(' · ');
   }
@@ -1521,11 +1566,9 @@ input[type=file] {
         x.classList.toggle('active', x.dataset.cuisine === 'auto'));
     }
     if (go.dataset.go === 'welcome') {
-      // soft reset of swipe state so a returning user starts fresh
-      state.idx = 0;
-      state.liked = [];
-      state.disliked = [];
-      renderDeck();
+      // fresh duel set so a returning user starts over
+      buildDuels();
+      renderDuel();
     }
   });
 
