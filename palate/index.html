@@ -568,11 +568,23 @@ input[type=file] {
   overflow: hidden;
 }
 .dish-card .dish-photo {
+  position: relative;
   height: 140px;
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
+  display: flex;
+  align-items: flex-end;
 }
+.dish-card .dish-photo-name {
+  padding: 10px 14px;
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 18px;
+  color: rgba(250,248,243,.9);
+  text-shadow: 0 1px 6px rgba(0,0,0,.5);
+}
+.dish-card .dish-photo.has-img .dish-photo-name { display: none; }
 .dish-card .dish-body {
   padding: 14px 16px;
 }
@@ -817,37 +829,36 @@ input[type=file] {
 
   // ---------- Data ----------
   const dishes = [
-    { name: 'Sushi',          country: 'Japan',     img: 'https://loremflickr.com/640/800/sushi?lock=21' },
-    { name: 'Ramen',          country: 'Japan',     img: 'https://loremflickr.com/640/800/ramen?lock=22' },
-    { name: 'Tacos',          country: 'Mexico',    img: 'https://loremflickr.com/640/800/tacos?lock=23' },
-    { name: 'Mezze',          country: 'Levant',    img: 'https://loremflickr.com/640/800/hummus,mezze?lock=24' },
-    { name: 'Biryani',        country: 'India',     img: 'https://loremflickr.com/640/800/biryani?lock=25' },
-    { name: 'Octopus',        country: 'Galicia',   img: 'https://loremflickr.com/640/800/octopus,grilled?lock=26' },
-    { name: 'Pad Thai',       country: 'Thailand',  img: 'https://loremflickr.com/640/800/padthai?lock=27' },
-    { name: 'Beef Tartare',   country: 'France',    img: 'https://loremflickr.com/640/800/tartare,beef?lock=28' },
-    { name: 'Dim Sum',        country: 'Canton',    img: 'https://loremflickr.com/640/800/dimsum,dumpling?lock=29' },
-    { name: 'Peking Duck',    country: 'Beijing',   img: 'https://loremflickr.com/640/800/pekingduck?lock=30' },
-    { name: 'Shakshuka',      country: 'Maghreb',   img: 'https://loremflickr.com/640/800/shakshuka?lock=31' },
-    { name: 'Lobster Bisque', country: 'France',    img: 'https://loremflickr.com/640/800/bisque,soup?lock=32' },
-    { name: 'Churros',        country: 'Spain',     img: 'https://loremflickr.com/640/800/churros?lock=33' },
-    { name: 'Buddha Bowl',    country: 'Modern',    img: 'https://loremflickr.com/640/800/buddhabowl,salad?lock=34' },
-    { name: 'Siu Mei',        country: 'Canton',    img: 'https://loremflickr.com/640/800/charsiu,roastpork?lock=35' },
+    { name: 'Sushi',          country: 'Japan',     wiki: 'Sushi' },
+    { name: 'Ramen',          country: 'Japan',     wiki: 'Ramen' },
+    { name: 'Tacos',          country: 'Mexico',    wiki: 'Taco' },
+    { name: 'Mezze',          country: 'Levant',    wiki: 'Meze' },
+    { name: 'Biryani',        country: 'India',     wiki: 'Biryani' },
+    { name: 'Octopus',        country: 'Galicia',   wiki: 'Polbo_á_feira' },
+    { name: 'Pad Thai',       country: 'Thailand',  wiki: 'Pad_thai' },
+    { name: 'Beef Tartare',   country: 'France',    wiki: 'Steak_tartare' },
+    { name: 'Dim Sum',        country: 'Canton',    wiki: 'Dim_sum' },
+    { name: 'Peking Duck',    country: 'Beijing',   wiki: 'Peking_duck' },
+    { name: 'Shakshuka',      country: 'Maghreb',   wiki: 'Shakshouka' },
+    { name: 'Lobster Bisque', country: 'France',    wiki: 'Bisque_(food)' },
+    { name: 'Churros',        country: 'Spain',     wiki: 'Churro' },
+    { name: 'Buddha Bowl',    country: 'Modern',    wiki: 'Buddha_bowl' },
+    { name: 'Siu Mei',        country: 'Canton',    wiki: 'Siu_mei' },
   ];
 
-  const IMG = (kw, lock) => `https://loremflickr.com/360/240/${kw}?lock=${lock}`;
   const fixtures = {
     cantonese: {
       crumb: 'Cantonese · Guangzhou',
       name:  'Tao Tao Ju 陶陶居',
       loc:   'Guangzhou old town',
       dishes: [
-        { name: 'Siu Mei Plateau', cn: '烧味拼盘',        tier: 'top',   kcal: 500, why: 'Crispy roasted meats, deep umami — perfect match', img: IMG('charsiu,roastpork', 41) },
-        { name: 'Crispy Pigeon',   cn: '陶陶居脆皮乳鸽',  tier: 'great', kcal: 280, why: 'Crackling skin, authentically Cantonese',          img: IMG('roastpigeon,squab', 42) },
-        { name: 'Sakura Shrimp',   cn: '樱花虾嗜荷芥兰',  tier: 'great', kcal: 160, why: 'Fresh seafood, light and balanced',                img: IMG('shrimp,seafood', 43) },
-        { name: 'Roasted Goose',   cn: '陶陶居百年烧鹅',  tier: 'great', kcal: 420, why: 'Century-old recipe, rich umami',                   img: IMG('roastgoose,duck', 44) },
-        { name: 'BBQ Pork',        cn: '金牌秘制叉烧',    tier: 'great', kcal: 380, why: 'Sweet-savory glaze, a Cantonese classic',          img: IMG('charsiu,bbqpork', 45) },
-        { name: 'Clay Pot Meats',  cn: '化皮烧腩仔',      tier: 'skip',  kcal: 520, why: 'Too salty and smoked — not your profile',          img: IMG('porkbelly,claypot', 46) },
-        { name: 'Cucumber Pickle', cn: '紫苏胡瓜嗜子',    tier: 'skip',  kcal: 45,  why: 'Acidic and herbal — not your taste',               img: IMG('cucumber,pickle', 47) },
+        { name: 'Siu Mei Plateau', cn: '烧味拼盘',        tier: 'top',   kcal: 500, why: 'Crispy roasted meats, deep umami — perfect match', wiki: 'Siu_mei' },
+        { name: 'Crispy Pigeon',   cn: '陶陶居脆皮乳鸽',  tier: 'great', kcal: 280, why: 'Crackling skin, authentically Cantonese',          wiki: 'Squab_(food)' },
+        { name: 'Sakura Shrimp',   cn: '樱花虾嗜荷芥兰',  tier: 'great', kcal: 160, why: 'Fresh seafood, light and balanced',                wiki: 'Sakura_shrimp' },
+        { name: 'Roasted Goose',   cn: '陶陶居百年烧鹅',  tier: 'great', kcal: 420, why: 'Century-old recipe, rich umami',                   wiki: 'Roast_goose' },
+        { name: 'BBQ Pork',        cn: '金牌秘制叉烧',    tier: 'great', kcal: 380, why: 'Sweet-savory glaze, a Cantonese classic',          wiki: 'Char_siu' },
+        { name: 'Clay Pot Meats',  cn: '化皮烧腩仔',      tier: 'skip',  kcal: 520, why: 'Too salty and smoked — not your profile',          wiki: 'Siu_yuk' },
+        { name: 'Cucumber Pickle', cn: '紫苏胡瓜嗜子',    tier: 'skip',  kcal: 45,  why: 'Acidic and herbal — not your taste',               wiki: 'Pickled_cucumber' },
       ],
     },
     lebanese: {
@@ -855,13 +866,13 @@ input[type=file] {
       name:  'Em Sherif إم شريف',
       loc:   'Achrafieh, Beirut',
       dishes: [
-        { name: 'Hummus Beiruti',   cn: 'حمص بيروتي',  tier: 'top',   kcal: 320, why: 'Silky chickpea with garlic-lemon — clean, balanced', img: IMG('hummus', 48) },
-        { name: 'Tabbouleh',        cn: 'تبولة',        tier: 'great', kcal: 180, why: 'Parsley-forward, bright acidity — on profile',       img: IMG('tabbouleh,salad', 49) },
-        { name: 'Fattoush',         cn: 'فتوش',         tier: 'great', kcal: 220, why: 'Sumac-pomegranate dressing, crisp greens',           img: IMG('fattoush,salad', 50) },
-        { name: 'Shish Taouk',      cn: 'شيش طاووق',   tier: 'great', kcal: 380, why: 'Char-grilled chicken, deep savory notes',            img: IMG('shishtaouk,chicken', 51) },
-        { name: 'Kibbeh Nayyeh',    cn: 'كبة نيئة',     tier: 'great', kcal: 290, why: 'Raw beef & bulgur — refined and clean',              img: IMG('kibbeh', 52) },
-        { name: 'Frikeh Lamb',      cn: 'فريكة باللحم', tier: 'skip',  kcal: 540, why: 'Heavy smoked lamb — over your target',               img: IMG('lamb,freekeh', 53) },
-        { name: 'Knafeh',           cn: 'كنافة',        tier: 'skip',  kcal: 480, why: 'Sweet syrup-soaked cheese — clashes with savory',    img: IMG('knafeh,dessert', 54) },
+        { name: 'Hummus Beiruti',   cn: 'حمص بيروتي',  tier: 'top',   kcal: 320, why: 'Silky chickpea with garlic-lemon — clean, balanced', wiki: 'Hummus' },
+        { name: 'Tabbouleh',        cn: 'تبولة',        tier: 'great', kcal: 180, why: 'Parsley-forward, bright acidity — on profile',       wiki: 'Tabbouleh' },
+        { name: 'Fattoush',         cn: 'فتوش',         tier: 'great', kcal: 220, why: 'Sumac-pomegranate dressing, crisp greens',           wiki: 'Fattoush' },
+        { name: 'Shish Taouk',      cn: 'شيش طاووق',   tier: 'great', kcal: 380, why: 'Char-grilled chicken, deep savory notes',            wiki: 'Shish_taouk' },
+        { name: 'Kibbeh Nayyeh',    cn: 'كبة نيئة',     tier: 'great', kcal: 290, why: 'Raw beef & bulgur — refined and clean',              wiki: 'Kibbeh' },
+        { name: 'Frikeh Lamb',      cn: 'فريكة باللحم', tier: 'skip',  kcal: 540, why: 'Heavy smoked lamb — over your target',               wiki: 'Freekeh' },
+        { name: 'Knafeh',           cn: 'كنافة',        tier: 'skip',  kcal: 480, why: 'Sweet syrup-soaked cheese — clashes with savory',    wiki: 'Kunafa' },
       ],
     },
     japanese: {
@@ -869,13 +880,13 @@ input[type=file] {
       name:  'Tsubame 燕',
       loc:   'Shibuya, Tokyo',
       dishes: [
-        { name: 'Hamachi Sashimi',  cn: 'はまち刺身',     tier: 'top',   kcal: 180, why: 'Buttery yellowtail, clean umami — perfect match', img: IMG('sashimi', 55) },
-        { name: 'Tsukune',          cn: 'つくね',         tier: 'great', kcal: 260, why: 'Charcoal-grilled chicken meatball, savory glaze',  img: IMG('yakitori,tsukune', 56) },
-        { name: 'Agedashi Tofu',    cn: '揚げ出し豆腐',   tier: 'great', kcal: 220, why: 'Crisp tofu in dashi, delicate and warming',        img: IMG('tofu,japanese', 57) },
-        { name: 'Wagyu Tataki',     cn: '和牛たたき',     tier: 'great', kcal: 340, why: 'Lightly seared beef, refined umami',               img: IMG('wagyu,beef', 58) },
-        { name: 'Yakitori Negima',  cn: '焼き鳥ねぎま',   tier: 'great', kcal: 200, why: 'Chicken-scallion skewer, classic izakaya',         img: IMG('yakitori', 59) },
-        { name: 'Karaage Mountain', cn: '唐揚げ盛り合わせ', tier: 'skip', kcal: 620, why: 'Deep-fried platter — over your target',            img: IMG('karaage,friedchicken', 60) },
-        { name: 'Natto Maki',       cn: '納豆巻き',       tier: 'skip',  kcal: 130, why: 'Fermented soybean — pungent, not your profile',    img: IMG('sushi,maki', 61) },
+        { name: 'Hamachi Sashimi',  cn: 'はまち刺身',     tier: 'top',   kcal: 180, why: 'Buttery yellowtail, clean umami — perfect match', wiki: 'Sashimi' },
+        { name: 'Tsukune',          cn: 'つくね',         tier: 'great', kcal: 260, why: 'Charcoal-grilled chicken meatball, savory glaze',  wiki: 'Tsukune' },
+        { name: 'Agedashi Tofu',    cn: '揚げ出し豆腐',   tier: 'great', kcal: 220, why: 'Crisp tofu in dashi, delicate and warming',        wiki: 'Agedashi_tofu' },
+        { name: 'Wagyu Tataki',     cn: '和牛たたき',     tier: 'great', kcal: 340, why: 'Lightly seared beef, refined umami',               wiki: 'Tataki' },
+        { name: 'Yakitori Negima',  cn: '焼き鳥ねぎま',   tier: 'great', kcal: 200, why: 'Chicken-scallion skewer, classic izakaya',         wiki: 'Yakitori' },
+        { name: 'Karaage Mountain', cn: '唐揚げ盛り合わせ', tier: 'skip', kcal: 620, why: 'Deep-fried platter — over your target',            wiki: 'Karaage' },
+        { name: 'Natto Maki',       cn: '納豆巻き',       tier: 'skip',  kcal: 130, why: 'Fermented soybean — pungent, not your profile',    wiki: 'Nattō' },
       ],
     },
     italian: {
@@ -883,13 +894,13 @@ input[type=file] {
       name:  'Roscioli',
       loc:   "Campo de' Fiori, Roma",
       dishes: [
-        { name: 'Cacio e Pepe',          cn: 'cacio e pepe',        tier: 'top',   kcal: 520, why: 'Pecorino-pepper magic — deep umami, no fillers', img: IMG('pasta,cacioepepe', 62) },
-        { name: 'Carciofi alla Romana',  cn: 'carciofi alla romana', tier: 'great', kcal: 180, why: 'Slow-braised artichoke, herbal and bright',       img: IMG('artichoke', 63) },
-        { name: 'Vitello Tonnato',       cn: 'vitello tonnato',     tier: 'great', kcal: 340, why: 'Cold veal in tuna-caper sauce, refined',          img: IMG('vitellotonnato', 64) },
-        { name: 'Burrata Pugliese',      cn: 'burrata pugliese',    tier: 'great', kcal: 380, why: 'Stretched curd, balanced richness',               img: IMG('burrata', 65) },
-        { name: 'Carbonara',             cn: 'carbonara',           tier: 'great', kcal: 620, why: 'Guanciale & egg — bold but on profile',           img: IMG('carbonara,pasta', 66) },
-        { name: 'Trippa alla Romana',    cn: 'trippa alla romana',  tier: 'skip',  kcal: 480, why: 'Offal in tomato — assertive, not your taste',     img: IMG('tripe,trippa', 67) },
-        { name: 'Tiramisù',              cn: 'tiramisù',            tier: 'skip',  kcal: 520, why: 'Mascarpone-coffee bomb — too sweet for now',      img: IMG('tiramisu', 68) },
+        { name: 'Cacio e Pepe',          cn: 'cacio e pepe',        tier: 'top',   kcal: 520, why: 'Pecorino-pepper magic — deep umami, no fillers', wiki: 'Cacio_e_pepe' },
+        { name: 'Carciofi alla Romana',  cn: 'carciofi alla romana', tier: 'great', kcal: 180, why: 'Slow-braised artichoke, herbal and bright',       wiki: 'Carciofi_alla_romana' },
+        { name: 'Vitello Tonnato',       cn: 'vitello tonnato',     tier: 'great', kcal: 340, why: 'Cold veal in tuna-caper sauce, refined',          wiki: 'Vitello_tonnato' },
+        { name: 'Burrata Pugliese',      cn: 'burrata pugliese',    tier: 'great', kcal: 380, why: 'Stretched curd, balanced richness',               wiki: 'Burrata' },
+        { name: 'Carbonara',             cn: 'carbonara',           tier: 'great', kcal: 620, why: 'Guanciale & egg — bold but on profile',           wiki: 'Carbonara' },
+        { name: 'Trippa alla Romana',    cn: 'trippa alla romana',  tier: 'skip',  kcal: 480, why: 'Offal in tomato — assertive, not your taste',     wiki: 'Trippa_alla_romana' },
+        { name: 'Tiramisù',              cn: 'tiramisù',            tier: 'skip',  kcal: 520, why: 'Mascarpone-coffee bomb — too sweet for now',      wiki: 'Tiramisu' },
       ],
     },
     mexican: {
@@ -897,13 +908,13 @@ input[type=file] {
       name:  'Pujol',
       loc:   'Polanco, Ciudad de México',
       dishes: [
-        { name: 'Mole Madre',           cn: 'mole madre',           tier: 'top',   kcal: 420, why: 'Aged mole over heritage corn — singular umami',  img: IMG('mole,mexican', 69) },
-        { name: 'Tetela',               cn: 'tetela',               tier: 'great', kcal: 280, why: 'Crisp masa with bean — earthy and clean',        img: IMG('mexican,masa', 70) },
-        { name: 'Aguachile Verde',      cn: 'aguachile verde',      tier: 'great', kcal: 160, why: 'Raw shrimp in chile-lime — bright and balanced', img: IMG('aguachile,shrimp', 71) },
-        { name: 'Tlayuda',              cn: 'tlayuda',              tier: 'great', kcal: 460, why: 'Oaxacan crisp tortilla, layered and savory',     img: IMG('tlayuda,oaxaca', 72) },
-        { name: 'Chapulines',           cn: 'chapulines',           tier: 'great', kcal: 120, why: 'Toasted grasshoppers, lime — adventurous, on profile', img: IMG('chapulines', 73) },
-        { name: 'Carnitas Tacos',       cn: 'tacos de carnitas',    tier: 'skip',  kcal: 580, why: 'Heavy lard-confit pork — over your target',      img: IMG('tacos,carnitas', 74) },
-        { name: 'Churros con Chocolate', cn: 'churros con chocolate', tier: 'skip', kcal: 540, why: 'Fried dough & sweet chocolate — clashes with savory', img: IMG('churros', 75) },
+        { name: 'Mole Madre',           cn: 'mole madre',           tier: 'top',   kcal: 420, why: 'Aged mole over heritage corn — singular umami',  wiki: 'Mole_(sauce)' },
+        { name: 'Tetela',               cn: 'tetela',               tier: 'great', kcal: 280, why: 'Crisp masa with bean — earthy and clean',        wiki: 'Tlacoyo' },
+        { name: 'Aguachile Verde',      cn: 'aguachile verde',      tier: 'great', kcal: 160, why: 'Raw shrimp in chile-lime — bright and balanced', wiki: 'Aguachile' },
+        { name: 'Tlayuda',              cn: 'tlayuda',              tier: 'great', kcal: 460, why: 'Oaxacan crisp tortilla, layered and savory',     wiki: 'Tlayuda' },
+        { name: 'Chapulines',           cn: 'chapulines',           tier: 'great', kcal: 120, why: 'Toasted grasshoppers, lime — adventurous, on profile', wiki: 'Chapulines' },
+        { name: 'Carnitas Tacos',       cn: 'tacos de carnitas',    tier: 'skip',  kcal: 580, why: 'Heavy lard-confit pork — over your target',      wiki: 'Carnitas' },
+        { name: 'Churros con Chocolate', cn: 'churros con chocolate', tier: 'skip', kcal: 540, why: 'Fried dough & sweet chocolate — clashes with savory', wiki: 'Churro' },
       ],
     },
   };
@@ -978,8 +989,27 @@ input[type=file] {
     if (go) show(go.dataset.go);
   });
 
-  // Preload dish images so the deck doesn't flicker
-  dishes.forEach(d => { const img = new Image(); img.src = d.img; });
+  // Resolve a dish's real photo from its Wikipedia article lead image
+  // (cached, so it always matches the dish and only fetches once).
+  const wikiCache = {};
+  function wikiImage(title) {
+    if (!title) return Promise.resolve(null);
+    if (wikiCache[title] !== undefined) return Promise.resolve(wikiCache[title]);
+    const url = 'https://en.wikipedia.org/api/rest_v1/page/summary/'
+              + encodeURIComponent(title) + '?redirect=true';
+    return fetch(url, { headers: { Accept: 'application/json' } })
+      .then(r => (r && r.ok) ? r.json() : null)
+      .then(d => {
+        const src = (d && ((d.thumbnail && d.thumbnail.source)
+                        || (d.originalimage && d.originalimage.source))) || null;
+        wikiCache[title] = src;
+        return src;
+      })
+      .catch(() => { wikiCache[title] = null; return null; });
+  }
+
+  // Warm the cache so the swipe deck doesn't flicker
+  dishes.forEach(d => { wikiImage(d.wiki).then(src => { if (src) { const i = new Image(); i.src = src; } }); });
 
   // ---------- Swipe deck ----------
   const deck = $('#deck');
@@ -995,7 +1025,7 @@ input[type=file] {
       const card = document.createElement('div');
       card.className = 'swipe-card' + (depth === 0 ? ' top' : '');
       card.style.backgroundColor = palette[(state.idx + depth) % palette.length];
-      card.style.backgroundImage = `url("${d.img}")`;
+      wikiImage(d.wiki).then(src => { if (src) card.style.backgroundImage = `url("${src}")`; });
       card.style.zIndex = String(10 - depth);
       card.style.transform = `scale(${1 - depth * 0.045}) translateY(${depth * 10}px)`;
       card.style.opacity = depth === 2 ? '0.85' : '1';
@@ -1268,6 +1298,22 @@ input[type=file] {
     return 'Profile: ' + parts.join(' · ');
   }
 
+  // Render each result card's real photo (Wikipedia lead image), keeping the
+  // coloured band + dish name as a graceful fallback.
+  function loadDishPhotos(root) {
+    root.querySelectorAll('.dish-photo[data-wiki]').forEach(el => {
+      wikiImage(el.getAttribute('data-wiki')).then(src => {
+        if (!src) return;
+        const pre = new Image();
+        pre.onload = () => {
+          el.style.backgroundImage = `url('${src}')`;
+          el.classList.add('has-img');
+        };
+        pre.src = src;
+      });
+    });
+  }
+
   function renderResults() {
     const key = pickCuisine();
     const f = fixtures[key];
@@ -1282,7 +1328,9 @@ input[type=file] {
       const bg = palette[n % palette.length];
       return `
         <div class="dish-card tier-${d.tier}">
-          <div class="dish-photo" style="background-color:${bg};background-image:url('${d.img}')"></div>
+          <div class="dish-photo" data-wiki="${d.wiki}" style="background-color:${bg}">
+            <span class="dish-photo-name">${d.name}</span>
+          </div>
           <div class="dish-body">
             <div class="tier">${tierLabel}</div>
             <div class="name">${d.name}</div>
@@ -1293,6 +1341,7 @@ input[type=file] {
         </div>
       `;
     }).join('');
+    loadDishPhotos(list);
     const goodTotal = f.dishes
       .filter(d => d.tier !== 'skip')
       .reduce((s, d) => s + d.kcal, 0);
