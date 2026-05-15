@@ -14,6 +14,7 @@
 <link rel="icon" href="https://d8j0ntlcm91z4.cloudfront.net/user_3CDQuYIygvqkUH2VHmNQlHT6LLz/hf_20260513_145133_dbac88a6-e698-48bb-a8db-d0b57cc83221.jpeg">
 <link rel="manifest" href='data:application/manifest+json,%7B%22name%22%3A%22Palate%22%2C%22short_name%22%3A%22Palate%22%2C%22start_url%22%3A%22.%2F%22%2C%22scope%22%3A%22.%2F%22%2C%22display%22%3A%22standalone%22%2C%22orientation%22%3A%22portrait%22%2C%22background_color%22%3A%22%23FAF8F3%22%2C%22theme_color%22%3A%22%234A1520%22%2C%22description%22%3A%22Your%20global%20food%20passport%22%2C%22icons%22%3A%5B%7B%22src%22%3A%22https%3A%2F%2Fd8j0ntlcm91z4.cloudfront.net%2Fuser_3CDQuYIygvqkUH2VHmNQlHT6LLz%2Fhf_20260513_145133_dbac88a6-e698-48bb-a8db-d0b57cc83221.jpeg%22%2C%22sizes%22%3A%22512x512%22%2C%22type%22%3A%22image%2Fjpeg%22%2C%22purpose%22%3A%22any%22%7D%5D%7D'>
 <title>Palate — Your global food passport</title>
+<script src="https://cdn.jsdelivr.net/npm/tesseract.js@5.1.1/dist/tesseract.min.js" defer></script>
 <style>
 :root {
   --burgundy: #4A1520;
@@ -562,9 +563,18 @@ input[type=file] {
   background: #fff;
   border-radius: 12px;
   border-left: 4px solid;
-  padding: 14px 16px;
   margin-bottom: 10px;
   box-shadow: 0 1px 3px rgba(0,0,0,.04);
+  overflow: hidden;
+}
+.dish-card .dish-photo {
+  height: 140px;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+.dish-card .dish-body {
+  padding: 14px 16px;
 }
 .dish-card .tier {
   font-size: 10px;
@@ -707,7 +717,7 @@ input[type=file] {
             <input id="kcal-input" type="number" inputmode="numeric" class="kcal-input" value="1800" min="800" max="5000" step="50">
             <span class="kcal-label">kcal / day</span>
           </div>
-          <div class="chips">
+          <div class="chips" id="kcal-chips">
             <button class="chip" data-kcal="1400">1400</button>
             <button class="chip active" data-kcal="1800">1800</button>
             <button class="chip" data-kcal="2200">2200</button>
@@ -738,6 +748,17 @@ input[type=file] {
         <div class="hint">Photo library, camera or files</div>
       </label>
       <input type="file" id="file" accept="image/*">
+
+      <div class="field-label">Cuisine</div>
+      <div class="section-sub" style="margin-bottom:12px;font-size:12px">We can't read the photo on-device — tell us the kitchen</div>
+      <div class="chips" id="cuisine-chips" style="margin-top:0;margin-bottom:26px">
+        <button class="chip active" data-cuisine="auto">Auto-detect</button>
+        <button class="chip" data-cuisine="cantonese">Cantonese</button>
+        <button class="chip" data-cuisine="lebanese">Levantine</button>
+        <button class="chip" data-cuisine="japanese">Japanese</button>
+        <button class="chip" data-cuisine="italian">Italian</button>
+        <button class="chip" data-cuisine="mexican">Mexican</button>
+      </div>
 
       <div class="field-label">Location (optional)</div>
       <input type="text" class="text-input" id="loc" placeholder="e.g. Tao Tao Ju, Guangzhou" autocomplete="off" autocapitalize="words">
@@ -813,19 +834,20 @@ input[type=file] {
     { name: 'Siu Mei',        country: 'Canton',    img: 'https://loremflickr.com/640/800/charsiu,roastpork?lock=35' },
   ];
 
+  const IMG = (kw, lock) => `https://loremflickr.com/360/240/${kw}?lock=${lock}`;
   const fixtures = {
     cantonese: {
       crumb: 'Cantonese · Guangzhou',
       name:  'Tao Tao Ju 陶陶居',
       loc:   'Guangzhou old town',
       dishes: [
-        { name: 'Siu Mei Plateau', cn: '烧味拼盘',        tier: 'top',   kcal: 500, why: 'Crispy roasted meats, deep umami — perfect match' },
-        { name: 'Crispy Pigeon',   cn: '陶陶居脆皮乳鸽',  tier: 'great', kcal: 280, why: 'Crackling skin, authentically Cantonese' },
-        { name: 'Sakura Shrimp',   cn: '樱花虾嗜荷芥兰',  tier: 'great', kcal: 160, why: 'Fresh seafood, light and balanced' },
-        { name: 'Roasted Goose',   cn: '陶陶居百年烧鹅',  tier: 'great', kcal: 420, why: 'Century-old recipe, rich umami' },
-        { name: 'BBQ Pork',        cn: '金牌秘制叉烧',    tier: 'great', kcal: 380, why: 'Sweet-savory glaze, a Cantonese classic' },
-        { name: 'Clay Pot Meats',  cn: '化皮烧腩仔',      tier: 'skip',  kcal: 520, why: 'Too salty and smoked — not your profile' },
-        { name: 'Cucumber Pickle', cn: '紫苏胡瓜嗜子',    tier: 'skip',  kcal: 45,  why: 'Acidic and herbal — not your taste' },
+        { name: 'Siu Mei Plateau', cn: '烧味拼盘',        tier: 'top',   kcal: 500, why: 'Crispy roasted meats, deep umami — perfect match', img: IMG('charsiu,roastpork', 41) },
+        { name: 'Crispy Pigeon',   cn: '陶陶居脆皮乳鸽',  tier: 'great', kcal: 280, why: 'Crackling skin, authentically Cantonese',          img: IMG('roastpigeon,squab', 42) },
+        { name: 'Sakura Shrimp',   cn: '樱花虾嗜荷芥兰',  tier: 'great', kcal: 160, why: 'Fresh seafood, light and balanced',                img: IMG('shrimp,seafood', 43) },
+        { name: 'Roasted Goose',   cn: '陶陶居百年烧鹅',  tier: 'great', kcal: 420, why: 'Century-old recipe, rich umami',                   img: IMG('roastgoose,duck', 44) },
+        { name: 'BBQ Pork',        cn: '金牌秘制叉烧',    tier: 'great', kcal: 380, why: 'Sweet-savory glaze, a Cantonese classic',          img: IMG('charsiu,bbqpork', 45) },
+        { name: 'Clay Pot Meats',  cn: '化皮烧腩仔',      tier: 'skip',  kcal: 520, why: 'Too salty and smoked — not your profile',          img: IMG('porkbelly,claypot', 46) },
+        { name: 'Cucumber Pickle', cn: '紫苏胡瓜嗜子',    tier: 'skip',  kcal: 45,  why: 'Acidic and herbal — not your taste',               img: IMG('cucumber,pickle', 47) },
       ],
     },
     lebanese: {
@@ -833,13 +855,13 @@ input[type=file] {
       name:  'Em Sherif إم شريف',
       loc:   'Achrafieh, Beirut',
       dishes: [
-        { name: 'Hummus Beiruti',   cn: 'حمص بيروتي',  tier: 'top',   kcal: 320, why: 'Silky chickpea with garlic-lemon — clean, balanced' },
-        { name: 'Tabbouleh',        cn: 'تبولة',        tier: 'great', kcal: 180, why: 'Parsley-forward, bright acidity — on profile' },
-        { name: 'Fattoush',         cn: 'فتوش',         tier: 'great', kcal: 220, why: 'Sumac-pomegranate dressing, crisp greens' },
-        { name: 'Shish Taouk',      cn: 'شيش طاووق',   tier: 'great', kcal: 380, why: 'Char-grilled chicken, deep savory notes' },
-        { name: 'Kibbeh Nayyeh',    cn: 'كبة نيئة',     tier: 'great', kcal: 290, why: 'Raw beef & bulgur — refined and clean' },
-        { name: 'Frikeh Lamb',      cn: 'فريكة باللحم', tier: 'skip',  kcal: 540, why: 'Heavy smoked lamb — over your target' },
-        { name: 'Knafeh',           cn: 'كنافة',        tier: 'skip',  kcal: 480, why: 'Sweet syrup-soaked cheese — clashes with savory' },
+        { name: 'Hummus Beiruti',   cn: 'حمص بيروتي',  tier: 'top',   kcal: 320, why: 'Silky chickpea with garlic-lemon — clean, balanced', img: IMG('hummus', 48) },
+        { name: 'Tabbouleh',        cn: 'تبولة',        tier: 'great', kcal: 180, why: 'Parsley-forward, bright acidity — on profile',       img: IMG('tabbouleh,salad', 49) },
+        { name: 'Fattoush',         cn: 'فتوش',         tier: 'great', kcal: 220, why: 'Sumac-pomegranate dressing, crisp greens',           img: IMG('fattoush,salad', 50) },
+        { name: 'Shish Taouk',      cn: 'شيش طاووق',   tier: 'great', kcal: 380, why: 'Char-grilled chicken, deep savory notes',            img: IMG('shishtaouk,chicken', 51) },
+        { name: 'Kibbeh Nayyeh',    cn: 'كبة نيئة',     tier: 'great', kcal: 290, why: 'Raw beef & bulgur — refined and clean',              img: IMG('kibbeh', 52) },
+        { name: 'Frikeh Lamb',      cn: 'فريكة باللحم', tier: 'skip',  kcal: 540, why: 'Heavy smoked lamb — over your target',               img: IMG('lamb,freekeh', 53) },
+        { name: 'Knafeh',           cn: 'كنافة',        tier: 'skip',  kcal: 480, why: 'Sweet syrup-soaked cheese — clashes with savory',    img: IMG('knafeh,dessert', 54) },
       ],
     },
     japanese: {
@@ -847,13 +869,13 @@ input[type=file] {
       name:  'Tsubame 燕',
       loc:   'Shibuya, Tokyo',
       dishes: [
-        { name: 'Hamachi Sashimi',  cn: 'はまち刺身',     tier: 'top',   kcal: 180, why: 'Buttery yellowtail, clean umami — perfect match' },
-        { name: 'Tsukune',          cn: 'つくね',         tier: 'great', kcal: 260, why: 'Charcoal-grilled chicken meatball, savory glaze' },
-        { name: 'Agedashi Tofu',    cn: '揚げ出し豆腐',   tier: 'great', kcal: 220, why: 'Crisp tofu in dashi, delicate and warming' },
-        { name: 'Wagyu Tataki',     cn: '和牛たたき',     tier: 'great', kcal: 340, why: 'Lightly seared beef, refined umami' },
-        { name: 'Yakitori Negima',  cn: '焼き鳥ねぎま',   tier: 'great', kcal: 200, why: 'Chicken-scallion skewer, classic izakaya' },
-        { name: 'Karaage Mountain', cn: '唐揚げ盛り合わせ', tier: 'skip', kcal: 620, why: 'Deep-fried platter — over your target' },
-        { name: 'Natto Maki',       cn: '納豆巻き',       tier: 'skip',  kcal: 130, why: 'Fermented soybean — pungent, not your profile' },
+        { name: 'Hamachi Sashimi',  cn: 'はまち刺身',     tier: 'top',   kcal: 180, why: 'Buttery yellowtail, clean umami — perfect match', img: IMG('sashimi', 55) },
+        { name: 'Tsukune',          cn: 'つくね',         tier: 'great', kcal: 260, why: 'Charcoal-grilled chicken meatball, savory glaze',  img: IMG('yakitori,tsukune', 56) },
+        { name: 'Agedashi Tofu',    cn: '揚げ出し豆腐',   tier: 'great', kcal: 220, why: 'Crisp tofu in dashi, delicate and warming',        img: IMG('tofu,japanese', 57) },
+        { name: 'Wagyu Tataki',     cn: '和牛たたき',     tier: 'great', kcal: 340, why: 'Lightly seared beef, refined umami',               img: IMG('wagyu,beef', 58) },
+        { name: 'Yakitori Negima',  cn: '焼き鳥ねぎま',   tier: 'great', kcal: 200, why: 'Chicken-scallion skewer, classic izakaya',         img: IMG('yakitori', 59) },
+        { name: 'Karaage Mountain', cn: '唐揚げ盛り合わせ', tier: 'skip', kcal: 620, why: 'Deep-fried platter — over your target',            img: IMG('karaage,friedchicken', 60) },
+        { name: 'Natto Maki',       cn: '納豆巻き',       tier: 'skip',  kcal: 130, why: 'Fermented soybean — pungent, not your profile',    img: IMG('sushi,maki', 61) },
       ],
     },
     italian: {
@@ -861,13 +883,13 @@ input[type=file] {
       name:  'Roscioli',
       loc:   "Campo de' Fiori, Roma",
       dishes: [
-        { name: 'Cacio e Pepe',          cn: 'cacio e pepe',        tier: 'top',   kcal: 520, why: 'Pecorino-pepper magic — deep umami, no fillers' },
-        { name: 'Carciofi alla Romana',  cn: 'carciofi alla romana', tier: 'great', kcal: 180, why: 'Slow-braised artichoke, herbal and bright' },
-        { name: 'Vitello Tonnato',       cn: 'vitello tonnato',     tier: 'great', kcal: 340, why: 'Cold veal in tuna-caper sauce, refined' },
-        { name: 'Burrata Pugliese',      cn: 'burrata pugliese',    tier: 'great', kcal: 380, why: 'Stretched curd, balanced richness' },
-        { name: 'Carbonara',             cn: 'carbonara',           tier: 'great', kcal: 620, why: 'Guanciale & egg — bold but on profile' },
-        { name: 'Trippa alla Romana',    cn: 'trippa alla romana',  tier: 'skip',  kcal: 480, why: 'Offal in tomato — assertive, not your taste' },
-        { name: 'Tiramisù',              cn: 'tiramisù',            tier: 'skip',  kcal: 520, why: 'Mascarpone-coffee bomb — too sweet for now' },
+        { name: 'Cacio e Pepe',          cn: 'cacio e pepe',        tier: 'top',   kcal: 520, why: 'Pecorino-pepper magic — deep umami, no fillers', img: IMG('pasta,cacioepepe', 62) },
+        { name: 'Carciofi alla Romana',  cn: 'carciofi alla romana', tier: 'great', kcal: 180, why: 'Slow-braised artichoke, herbal and bright',       img: IMG('artichoke', 63) },
+        { name: 'Vitello Tonnato',       cn: 'vitello tonnato',     tier: 'great', kcal: 340, why: 'Cold veal in tuna-caper sauce, refined',          img: IMG('vitellotonnato', 64) },
+        { name: 'Burrata Pugliese',      cn: 'burrata pugliese',    tier: 'great', kcal: 380, why: 'Stretched curd, balanced richness',               img: IMG('burrata', 65) },
+        { name: 'Carbonara',             cn: 'carbonara',           tier: 'great', kcal: 620, why: 'Guanciale & egg — bold but on profile',           img: IMG('carbonara,pasta', 66) },
+        { name: 'Trippa alla Romana',    cn: 'trippa alla romana',  tier: 'skip',  kcal: 480, why: 'Offal in tomato — assertive, not your taste',     img: IMG('tripe,trippa', 67) },
+        { name: 'Tiramisù',              cn: 'tiramisù',            tier: 'skip',  kcal: 520, why: 'Mascarpone-coffee bomb — too sweet for now',      img: IMG('tiramisu', 68) },
       ],
     },
     mexican: {
@@ -875,13 +897,13 @@ input[type=file] {
       name:  'Pujol',
       loc:   'Polanco, Ciudad de México',
       dishes: [
-        { name: 'Mole Madre',           cn: 'mole madre',           tier: 'top',   kcal: 420, why: 'Aged mole over heritage corn — singular umami' },
-        { name: 'Tetela',               cn: 'tetela',               tier: 'great', kcal: 280, why: 'Crisp masa with bean — earthy and clean' },
-        { name: 'Aguachile Verde',      cn: 'aguachile verde',      tier: 'great', kcal: 160, why: 'Raw shrimp in chile-lime — bright and balanced' },
-        { name: 'Tlayuda',              cn: 'tlayuda',              tier: 'great', kcal: 460, why: 'Oaxacan crisp tortilla, layered and savory' },
-        { name: 'Chapulines',           cn: 'chapulines',           tier: 'great', kcal: 120, why: 'Toasted grasshoppers, lime — adventurous, on profile' },
-        { name: 'Carnitas Tacos',       cn: 'tacos de carnitas',    tier: 'skip',  kcal: 580, why: 'Heavy lard-confit pork — over your target' },
-        { name: 'Churros con Chocolate', cn: 'churros con chocolate', tier: 'skip', kcal: 540, why: 'Fried dough & sweet chocolate — clashes with savory' },
+        { name: 'Mole Madre',           cn: 'mole madre',           tier: 'top',   kcal: 420, why: 'Aged mole over heritage corn — singular umami',  img: IMG('mole,mexican', 69) },
+        { name: 'Tetela',               cn: 'tetela',               tier: 'great', kcal: 280, why: 'Crisp masa with bean — earthy and clean',        img: IMG('mexican,masa', 70) },
+        { name: 'Aguachile Verde',      cn: 'aguachile verde',      tier: 'great', kcal: 160, why: 'Raw shrimp in chile-lime — bright and balanced', img: IMG('aguachile,shrimp', 71) },
+        { name: 'Tlayuda',              cn: 'tlayuda',              tier: 'great', kcal: 460, why: 'Oaxacan crisp tortilla, layered and savory',     img: IMG('tlayuda,oaxaca', 72) },
+        { name: 'Chapulines',           cn: 'chapulines',           tier: 'great', kcal: 120, why: 'Toasted grasshoppers, lime — adventurous, on profile', img: IMG('chapulines', 73) },
+        { name: 'Carnitas Tacos',       cn: 'tacos de carnitas',    tier: 'skip',  kcal: 580, why: 'Heavy lard-confit pork — over your target',      img: IMG('tacos,carnitas', 74) },
+        { name: 'Churros con Chocolate', cn: 'churros con chocolate', tier: 'skip', kcal: 540, why: 'Fried dough & sweet chocolate — clashes with savory', img: IMG('churros', 75) },
       ],
     },
   };
@@ -894,15 +916,40 @@ input[type=file] {
     { keys: ['canton','guangzhou','china','chine','shanghai','beijing','pekin','hong kong','hongkong','shenzhen','chinese','chinois'], to: 'cantonese' },
   ];
 
-  function pickCuisine(locText) {
-    const s = (locText || '').toLowerCase();
+  function pickCuisine() {
+    // 1. Explicit manual choice always wins
+    if (state.cuisine && state.cuisine !== 'auto' && fixtures[state.cuisine]) return state.cuisine;
+    // 2. Script detected from the scanned photo by on-device OCR
+    if (state.detected && fixtures[state.detected]) return state.detected;
+    // 3. Keyword in the Location field
+    const s = (state.loc || '').toLowerCase();
     if (s) {
       for (const e of cuisineHints) {
         if (e.keys.some(k => s.includes(k))) return e.to;
       }
     }
-    const keys = Object.keys(fixtures);
-    return keys[Math.floor(Math.random() * keys.length)];
+    // 4. Deterministic fallback (no random)
+    return 'cantonese';
+  }
+
+  // Read the menu photo on-device (Tesseract OSD) and map its script to a cuisine.
+  function detectCuisineFromPhoto(dataUrl) {
+    if (!window.Tesseract || !dataUrl) return Promise.resolve(null);
+    try {
+      return window.Tesseract.detect(dataUrl)
+        .then(res => {
+          const d = (res && res.data) || {};
+          const script = d.script || '';
+          const conf = d.script_confidence || 0;
+          if (conf <= 0) return null;
+          const map = { Han: 'cantonese', HanS: 'cantonese', HanT: 'cantonese',
+                        Japanese: 'japanese', Arabic: 'lebanese' };
+          return map[script] || null;
+        })
+        .catch(() => null);
+    } catch (_) {
+      return Promise.resolve(null);
+    }
   }
 
   const palette = ['#3a1820', '#2c3a25', '#3a2a18', '#1f2d3a', '#3a2018', '#2a1f30', '#1f2f2a', '#3a2828'];
@@ -916,7 +963,10 @@ input[type=file] {
     kcal: 1800,
     photo: null,
     loc: '',
+    cuisine: 'auto',
+    detected: null,
   };
+  let ocrPromise = null;
 
   // ---------- Navigation ----------
   function show(name) {
@@ -1071,13 +1121,22 @@ input[type=file] {
     });
   });
   function syncChips() {
-    $$('.chip').forEach(c => c.classList.toggle('active', parseInt(c.dataset.kcal, 10) === state.kcal));
+    $$('#kcal-chips .chip').forEach(c => c.classList.toggle('active', parseInt(c.dataset.kcal, 10) === state.kcal));
   }
-  $$('.chip').forEach(c => {
+  $$('#kcal-chips .chip').forEach(c => {
     c.addEventListener('click', () => {
       state.kcal = parseInt(c.dataset.kcal, 10);
       $('#kcal-input').value = state.kcal;
       syncChips();
+    });
+  });
+
+  // Cuisine selector (manual override / fallback for the photo auto-detect)
+  $$('#cuisine-chips .chip').forEach(c => {
+    c.addEventListener('click', () => {
+      $$('#cuisine-chips .chip').forEach(x => x.classList.remove('active'));
+      c.classList.add('active');
+      state.cuisine = c.dataset.cuisine;
     });
   });
   $('#kcal-input').addEventListener('input', (e) => {
@@ -1149,6 +1208,11 @@ input[type=file] {
   analyzeBtn.addEventListener('click', () => {
     if (analyzeBtn.disabled) return;
     state.loc = $('#loc').value.trim();
+    state.detected = null;
+    // Only run OCR when the user left cuisine on Auto-detect.
+    ocrPromise = (state.cuisine === 'auto')
+      ? detectCuisineFromPhoto(state.photo).then(c => { state.detected = c; })
+      : Promise.resolve();
     show('loading');
     runLoading();
   });
@@ -1158,16 +1222,23 @@ input[type=file] {
     steps.forEach(s => s.classList.remove('active', 'done'));
     let i = 0;
     steps[0].classList.add('active');
+    const settle = (p, ms) => Promise.race([
+      Promise.resolve(p),
+      new Promise(r => setTimeout(r, ms)),
+    ]);
     const tick = () => {
       steps[i].classList.remove('active');
       steps[i].classList.add('done');
       i++;
       if (i >= steps.length) {
-        setTimeout(() => { renderResults(); show('results'); }, 400);
+        // Wait for the real photo analysis to settle before showing results
+        // (capped so a slow/offline OCR never blocks the demo).
+        settle(ocrPromise || Promise.resolve(), 15000)
+          .then(() => setTimeout(() => { renderResults(); show('results'); }, 400));
         return;
       }
       steps[i].classList.add('active');
-      setTimeout(tick, 1520); // ~5 * 1.5s ≈ 7.6s + 400ms tail = 8s total
+      setTimeout(tick, 1520);
     };
     setTimeout(tick, 1520);
   }
@@ -1198,7 +1269,7 @@ input[type=file] {
   }
 
   function renderResults() {
-    const key = pickCuisine(state.loc);
+    const key = pickCuisine();
     const f = fixtures[key];
 
     $('#result-crumb').textContent = f.crumb;
@@ -1206,15 +1277,19 @@ input[type=file] {
     $('#result-loc').textContent = state.loc ? state.loc : f.loc;
 
     const list = $('#results-list');
-    list.innerHTML = f.dishes.map(d => {
+    list.innerHTML = f.dishes.map((d, n) => {
       const tierLabel = d.tier === 'top' ? 'Top pick' : d.tier === 'great' ? 'Great' : 'Skip';
+      const bg = palette[n % palette.length];
       return `
         <div class="dish-card tier-${d.tier}">
-          <div class="tier">${tierLabel}</div>
-          <div class="name">${d.name}</div>
-          <div class="cn">${d.cn}</div>
-          <div class="why">${d.why}</div>
-          <div class="kcal">${d.kcal} kcal</div>
+          <div class="dish-photo" style="background-color:${bg};background-image:url('${d.img}')"></div>
+          <div class="dish-body">
+            <div class="tier">${tierLabel}</div>
+            <div class="name">${d.name}</div>
+            <div class="cn">${d.cn}</div>
+            <div class="why">${d.why}</div>
+            <div class="kcal">${d.kcal} kcal</div>
+          </div>
         </div>
       `;
     }).join('');
@@ -1231,11 +1306,16 @@ input[type=file] {
     const go = e.target.closest('[data-go]');
     if (!go) return;
     if (go.dataset.go === 'scan') {
-      // keep photo if user wants to re-analyze? clear it for a fresh scan.
+      // Fresh scan: clear photo, location, detection and cuisine override.
       state.photo = null;
+      state.detected = null;
+      state.cuisine = 'auto';
+      ocrPromise = null;
       fileInput.value = '';
       renderDropzone();
       if ($('#loc')) $('#loc').value = '';
+      $$('#cuisine-chips .chip').forEach(x =>
+        x.classList.toggle('active', x.dataset.cuisine === 'auto'));
     }
     if (go.dataset.go === 'welcome') {
       // soft reset of swipe state so a returning user starts fresh
