@@ -14,7 +14,6 @@
 <link rel="icon" href="https://d8j0ntlcm91z4.cloudfront.net/user_3CDQuYIygvqkUH2VHmNQlHT6LLz/hf_20260513_145133_dbac88a6-e698-48bb-a8db-d0b57cc83221.jpeg">
 <link rel="manifest" href='data:application/manifest+json,%7B%22name%22%3A%22Palate%22%2C%22short_name%22%3A%22Palate%22%2C%22start_url%22%3A%22.%2F%22%2C%22scope%22%3A%22.%2F%22%2C%22display%22%3A%22standalone%22%2C%22orientation%22%3A%22portrait%22%2C%22background_color%22%3A%22%23FAF8F3%22%2C%22theme_color%22%3A%22%234A1520%22%2C%22description%22%3A%22Your%20global%20food%20passport%22%2C%22icons%22%3A%5B%7B%22src%22%3A%22https%3A%2F%2Fd8j0ntlcm91z4.cloudfront.net%2Fuser_3CDQuYIygvqkUH2VHmNQlHT6LLz%2Fhf_20260513_145133_dbac88a6-e698-48bb-a8db-d0b57cc83221.jpeg%22%2C%22sizes%22%3A%22512x512%22%2C%22type%22%3A%22image%2Fjpeg%22%2C%22purpose%22%3A%22any%22%7D%5D%7D'>
 <title>Palate — Your global food passport</title>
-<script src="https://cdn.jsdelivr.net/npm/tesseract.js@5.1.1/dist/tesseract.min.js" defer></script>
 <style>
 :root {
   --burgundy: #4A1520;
@@ -1049,186 +1048,74 @@ input[type=file] {
     return parts.join(' ') + '.';
   }
 
-
-  // Score OCR'd menu text against per-cuisine vocab; best hit count wins.
-  const cuisineLexicon = {
-    italian:   ['pizza','pasta','carbonara','risotto','parmigian','mozzarella','prosciutto','gnocchi','tiramisu','antipasti','primi','secondi','bruschetta','ragu','pecorino','focaccia','lasagn','ravioli','margherita','vino','aperitivo','burrata','arancini'],
-    mexican:   ['taco','burrito','quesadilla','guacamole','salsa','enchilada','nacho','jalapeno','carnitas','pastor','mole','tortilla','ceviche','margarita','frijol','chile','elote','barbacoa','tostada'],
-    japanese:  ['sushi','ramen','sashimi','tempura','miso','udon','yakitori','teriyaki','izakaya','nigiri','maki','donburi','gyoza','wasabi','sake','matcha','bento','katsu','soba','edamame'],
-    lebanese:  ['hummus','houmous','falafel','shawarma','tabbouleh','tabouleh','kebab','tahini','baba','manakish','fattoush','kibbeh','mezze','meze','labneh','halloumi','zaatar','shish','moutabal'],
-    cantonese: ['dim sum','char siu','wonton','congee','chow mein','har gow','siu mai','siu mei','bok choy','hoisin','dumpling','noodle','fried rice','peking','szechuan','sichuan','canton','wok','chinese','xiao long','pak choi'],
-    indian:    ['curry','masala','tikka','tandoori','biryani','naan','paneer','dal','dhal','samosa','korma','vindaloo','rogan','saag','bhaji','pakora','chutney','raita','dosa','idli','vada','chana','aloo','gobi','jalfrezi','madras','bhuna','lassi','papadum','poppadom','keema','butter chicken','garam'],
-  };
-
-  function cuisineFromText(text) {
-    const t = ' ' + (text || '').toLowerCase().replace(/\s+/g, ' ') + ' ';
-    let best = null, bestScore = 0;
-    for (const key of Object.keys(cuisineLexicon)) {
-      let score = 0;
-      for (const w of cuisineLexicon[key]) if (t.indexOf(w) !== -1) score++;
-      if (score > bestScore) { bestScore = score; best = key; }
-    }
-    return bestScore >= 1 ? best : null;
-  }
-
-  const cuisineLabel = {
-    italian: 'Italian', mexican: 'Mexican', japanese: 'Japanese',
-    lebanese: 'Levantine', cantonese: 'Cantonese', indian: 'Indian',
-  };
-
-  // --- Heuristic food engine: turn a dish name into flavours + diet + kcal ---
-  const flavorWords = {
-    rich:    ['cream','carbonara','alfredo','butter','truffle','foie','confit','braised','ragu','ragù','bisque','gratin','fondue','risotto','korma','rendang'],
-    creamy:  ['cream','alfredo','carbonara','bechamel','béchamel','mascarpone','burrata','gratin','bisque','korma','curry','coconut'],
-    roast:   ['roast','roasted','grilled','bbq','barbecue','char','seared','smoked','tandoori','peking','rotisserie','baked'],
-    smoky:   ['smoked','bbq','barbecue','chipotle','charred','grilled'],
-    spicy:   ['spicy','chili','chilli','arrabbiata','diavola','jalapeno','jalapeño','nduja','sriracha','hot','piri','harissa','szechuan','sichuan','vindaloo'],
-    spice:   ['curry','masala','tikka','tagine','tajine','biryani','garam','cumin','spiced','tandoori','jerk'],
-    fresh:   ['salad','tomato','basil','lemon','cucumber','mint','herb','citrus','rocket','arugula','caprese','pico','garden'],
-    herbal:  ['basil','mint','parsley','cilantro','coriander','herb','pesto','chimichurri','tabbouleh','sage'],
-    tangy:   ['lemon','lime','vinegar','pickled','citrus','tamarind','sour','yuzu','ponzu','ceviche','escabeche'],
-    sweet:   ['honey','caramel','sweet','teriyaki','hoisin','glazed','maple','mango','plum'],
-    seafood: ['fish','shrimp','prawn','salmon','tuna','octopus','squid','calamari','scallop','crab','lobster','clam','vongole','mussel','oyster','anchovy','seafood','ceviche','sashimi','sushi'],
-    umami:   ['mushroom','soy','miso','parmesan','parmigian','truffle','tomato','anchovy','dashi','seaweed','bacon','aged'],
-    raw:     ['tartare','carpaccio','ceviche','sashimi','crudo'],
-    clean:   ['steamed','poached','broth','consomme'],
-    light:   ['salad','steamed','broth','soup','poke','clear','grilled vegetable'],
-    earthy:  ['mushroom','lentil','bean','beet','truffle','eggplant','aubergine','chickpea'],
-    aromatic:['curry','lemongrass','saffron','anise','cardamom','thai','pho','tagine','tajine'],
-    dessert: ['tiramisu','gelato','cake','dessert','chocolate','panna cotta','cannoli','ice cream','sorbet','pudding','baklava','churro','brownie','cheesecake','mousse'],
-  };
-  const dietWords = {
-    pork:    ['pork','prosciutto','guanciale','pancetta','ham','bacon','salami','chorizo','nduja','speck'],
-    beef:    ['beef','steak','veal','bresaola','wagyu','bistecca','brisket','bolognese'],
-    poultry: ['chicken','duck','turkey','pollo','poulet','quail'],
-    lamb:    ['lamb','agnello','mutton'],
-    seafood: ['fish','shrimp','prawn','salmon','tuna','octopus','squid','calamari','scallop','crab','lobster','clam','mussel','oyster','anchovy','seafood','sashimi','sushi'],
-    dairy:   ['cheese','cream','butter','mozzarella','parmesan','parmigian','pecorino','burrata','mascarpone','yogurt','yoghurt','béchamel','bechamel','paneer','feta','ricotta','halloumi','milk'],
-    egg:     ['egg','omelette','frittata','carbonara'],
-    gluten:  ['pasta','spaghetti','penne','tagliatelle','linguine','bread','pizza','gnocchi','noodle','bun','breaded','flour','dumpling','ravioli','lasagn','focaccia','pita','baguette','crouton','panko','schnitzel','tempura'],
-    alcohol: ['wine','beer','rum','vodka','whisky','liqueur','prosecco','tiramisu','marsala','champagne'],
-  };
-
-  function hit(words, lower) { return words.some(w => lower.indexOf(w) !== -1); }
-
-  function makeDish(name) {
-    const lower = name.toLowerCase();
-    const tags = [];
-    for (const f of Object.keys(flavorWords)) if (hit(flavorWords[f], lower)) tags.push(f);
-    for (const d of Object.keys(dietWords))   if (hit(dietWords[d], lower))   tags.push(d);
-    if (tags.indexOf('pork') !== -1 || tags.indexOf('beef') !== -1 ||
-        tags.indexOf('poultry') !== -1 || tags.indexOf('lamb') !== -1) tags.push('meat');
-    if (tags.indexOf('lamb') !== -1) tags.push('beef'); // treat as red meat for diet
-
-    let kcal = 430;
-    if (hit(['fried','deep-fried','cream','cheese','carbonara','alfredo','pizza','pasta','risotto','lasagn','gratin','burger','bbq','ribs','confit','bacon','fettuccine','mac and cheese'], lower)) kcal += 190;
-    if (hit(['steak','duck','lamb','schnitzel','curry','sausage','meatball','pork belly'], lower)) kcal += 90;
-    if (hit(['salad','steamed','grilled vegetable','soup','broth','poke','sashimi','ceviche','carpaccio','tartare','oysters','crudités'], lower)) kcal -= 170;
-    if (tags.indexOf('dessert') !== -1) kcal = 420;
-    kcal = Math.max(120, Math.min(900, Math.round(kcal / 10) * 10));
-
-    const flav = Array.from(new Set(
-      tags.filter(t => FLAVOR_TOKENS.indexOf(t) !== -1 && t !== 'dessert')));
-    let desc;
-    if (tags.indexOf('dessert') !== -1) desc = 'A sweet course to finish.';
-    else if (flav.length) desc = flav.slice(0, 3).join(', ').replace(/^./, c => c.toUpperCase()) + '.';
-    else desc = 'Read from your menu.';
-    return { name, cn: '', kcal, tags: Array.from(new Set(tags)), desc };
-  }
-
-  const SECTION = /^(menu|carte|antipasti|primi|secondi|contorni|dolci|desserts?|starters?|appetiz\w+|main(s| courses?| dishes)?|entr[ée]es?|sides?|salads?|soups?|drinks?|beverages?|wines?|bar|cocktails?|specials?|plats?|formule|pizze?|pasta|sushi|sashimi|nigiri|maki|kids?|extras?|breads?|rice|noodles?|curries|tandoori|vegetarian|accompaniments?|today'?s? specials?|house specials?|set menu|à la carte|chef'?s? selection)$/i;
-
-  function titleCase(s) {
-    return s.toLowerCase().replace(/\b([a-zà-ÿ])([a-zà-ÿ']*)/g,
-      (_, a, b) => a.toUpperCase() + b);
-  }
-
-  // Turn raw OCR text into the dishes that are actually on the photographed menu
-  function parseMenuNames(text) {
-    if (!text) return [];
-    const seen = new Set(), names = [];
-    text.split(/\r?\n/).forEach(raw => {
-      let line = raw.replace(/[•·▪◦*]+/g, ' ')
-                    .replace(/\.{2,}/g, ' ')
-                    .replace(/[_=~]{2,}/g, ' ').trim();
-      line = line.replace(/[€$£¥]\s?\d+[.,]?\d*|\b\d+[.,]\d{2}\b|\b\d{1,3}\s?(?:€|eur|usd)\b/gi, ' ');
-      line = line.replace(/\b(?:eur|usd|gbp|chf|euros?|dollars?|pounds?)\b/gi, ' ');
-      line = line.replace(/[-–—]\s*$/,'').replace(/\s{2,}/g, ' ').trim();
-      line = line.replace(/[\s.,;:-]*\b\d{1,4}\b\s*$/,'').trim();
-      if (line.length < 3) return;
-      const letters = (line.match(/[A-Za-zÀ-ÿ]/g) || []).length;
-      if (letters < 3 || letters / line.length < 0.5) return;
-      if (SECTION.test(line)) return;
-      if (line.length > 46) line = line.split(/[,.;:(]/)[0].trim();
-      if (line.length < 3 || line.length > 46) return;
-      const key = line.toLowerCase().replace(/[^a-z0-9]/g, '');
-      if (!key || seen.has(key)) return;
-      seen.add(key);
-      names.push(titleCase(line));
-    });
-    return names.slice(0, 16);
-  }
-
-  function parseMenu(text) {
-    return parseMenuNames(text).map(makeDish);
-  }
-
+  // ---------- Menu analysis (server: OCR + translation + extraction) ----------
   function targetLang() {
     return ((navigator.language || 'en').toLowerCase().slice(0, 2)) || 'en';
   }
   function langName(code) {
     try { return new Intl.DisplayNames([code], { type: 'language' }).of(code); }
-    catch (_) { return code.toUpperCase(); }
+    catch (_) { return (code || 'en').toUpperCase(); }
   }
 
-  // Best-effort translation of a list of strings (one network call, batched).
-  // On any failure we return the originals so the menu still shows.
-  function translateBatch(names, tl) {
-    if (!names.length) return Promise.resolve(names.slice());
-    const q = encodeURIComponent(names.join('\n'));
-    const url = 'https://translate.googleapis.com/translate_a/single'
-              + '?client=gtx&sl=auto&tl=' + encodeURIComponent(tl) + '&dt=t&q=' + q;
-    return fetch(url)
-      .then(r => (r && r.ok) ? r.json() : null)
-      .then(j => {
-        if (!j || !j[0]) return names.slice();
-        const out = j[0].map(seg => (seg && seg[0]) || '').join('')
-                        .split('\n').map(s => s.trim()).filter(Boolean);
-        return out.length === names.length ? out : names.slice();
-      })
-      .catch(() => names.slice());
+  // Shrink the photo before upload: faster, cheaper, and within API limits.
+  function downscaleImage(dataUrl, maxEdge) {
+    return new Promise((resolve) => {
+      const img = new Image();
+      img.onload = () => {
+        const scale = Math.min(1, maxEdge / Math.max(img.width, img.height));
+        const w = Math.max(1, Math.round(img.width * scale));
+        const h = Math.max(1, Math.round(img.height * scale));
+        const c = document.createElement('canvas');
+        c.width = w; c.height = h;
+        c.getContext('2d').drawImage(img, 0, 0, w, h);
+        try { resolve(c.toDataURL('image/jpeg', 0.82)); }
+        catch (_) { resolve(dataUrl); }
+      };
+      img.onerror = () => resolve(dataUrl);
+      img.src = dataUrl;
+    });
   }
 
-  // OCR the menu (multi-language), infer cuisine, then translate every dish
-  // into the user's language while ranking on an English reading.
+  // Calls our serverless function, which runs Claude (OCR + translate +
+  // structured extraction). Populates state.menuDishes or state.menuError.
   function analyzeMenu(dataUrl) {
     state.menuDishes = null;
-    if (!window.Tesseract || !dataUrl) return Promise.resolve();
-    try {
-      return window.Tesseract.recognize(dataUrl, 'eng+fra+spa+ita+deu+por')
-        .then(r => {
-          const text = (r && r.data && r.data.text) || '';
-          state.menuText = text;
-          state.detected = cuisineFromText(text);
-          const names = parseMenuNames(text);
-          if (names.length < 2) { state.menuDishes = []; return; }
-          const tl = targetLang();
-          const pEn   = tl === 'en' ? Promise.resolve(names.slice())
-                                    : translateBatch(names, 'en');
-          const pDisp = translateBatch(names, tl);
-          return Promise.all([pEn, pDisp]).then(([en, disp]) => {
-            state.menuDishes = names.map((orig, i) => {
-              const d = makeDish(en[i] || orig);
-              d.name = disp[i] || orig;
-              d.cn = d.name.toLowerCase() !== orig.toLowerCase() ? orig : '';
-              return d;
-            });
-          });
-        })
-        .catch(() => { state.menuDishes = null; });
-    } catch (_) {
-      return Promise.resolve();
-    }
+    state.menuError = '';
+    state.detected = '';
+    if (!dataUrl) { state.menuError = 'No photo to analyse.'; return Promise.resolve(); }
+    return downscaleImage(dataUrl, 1568)
+      .then(small => fetch('/api/menu', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ image: small, lang: targetLang() }),
+      }))
+      .then(async (r) => {
+        let body = null;
+        try { body = await r.json(); } catch (_) {}
+        if (!r.ok || !body) {
+          state.menuError = (body && body.error) || ('Request failed (' + r.status + ').');
+          return;
+        }
+        state.detected = (body.cuisine || '').toString();
+        const dishes = Array.isArray(body.dishes) ? body.dishes : [];
+        state.menuDishes = dishes.map((x) => {
+          const diet = Array.isArray(x.diet) ? x.diet.slice() : [];
+          if (['pork', 'beef', 'poultry', 'lamb'].some(t => diet.indexOf(t) !== -1)
+              && diet.indexOf('meat') === -1) diet.push('meat');
+          if (diet.indexOf('lamb') !== -1 && diet.indexOf('beef') === -1) diet.push('beef');
+          const flavors = Array.isArray(x.flavors) ? x.flavors : [];
+          const orig = (x.original || '').toString().trim();
+          const name = (x.translated || orig).toString().trim();
+          return {
+            name: name || orig || 'Dish',
+            cn: orig && orig.toLowerCase() !== name.toLowerCase() ? orig : '',
+            desc: (x.description || '').toString().trim() || 'From your menu.',
+            kcal: Math.max(40, Math.min(1600, Math.round(Number(x.kcal) || 400))),
+            tags: flavors.concat(diet),
+          };
+        });
+      })
+      .catch(() => { state.menuError = 'Could not reach the analysis service.'; });
   }
 
   const palette = ['#3a1820', '#2c3a25', '#3a2a18', '#1f2d3a', '#3a2018', '#2a1f30', '#1f2f2a', '#3a2828'];
@@ -1247,9 +1134,9 @@ input[type=file] {
     photo: null,
     loc: '',
     cuisine: 'auto',
-    detected: null,
-    menuText: '',
+    detected: '',
     menuDishes: null,
+    menuError: '',
   };
   let ocrPromise = null;
 
@@ -1499,10 +1386,10 @@ input[type=file] {
   analyzeBtn.addEventListener('click', () => {
     if (analyzeBtn.disabled) return;
     state.loc = $('#loc').value.trim();
-    state.detected = null;
-    state.menuText = '';
+    state.detected = '';
     state.menuDishes = null;
-    // Always OCR the photo so we can rank the dishes that are really on it.
+    state.menuError = '';
+    // Server-side: Claude reads, translates and extracts the real dishes.
     ocrPromise = analyzeMenu(state.photo);
     show('loading');
     runLoading();
@@ -1522,9 +1409,9 @@ input[type=file] {
       steps[i].classList.add('done');
       i++;
       if (i >= steps.length) {
-        // Wait for the real photo analysis to settle before showing results
-        // (capped so a slow/offline OCR never blocks the demo).
-        settle(ocrPromise || Promise.resolve(), 15000)
+        // Wait for the real analysis to settle (capped so a stuck request
+        // never blocks the UI — renderResults shows an honest message).
+        settle(ocrPromise || Promise.resolve(), 90000)
           .then(() => setTimeout(() => { renderResults(); show('results'); }, 400));
         return;
       }
@@ -1594,24 +1481,21 @@ input[type=file] {
   }
 
   function renderResults() {
-    // Prefer the translated dishes; fall back to the raw parse if the
-    // translation step never produced anything.
-    const menu = Array.isArray(state.menuDishes) && state.menuDishes.length
-                   ? state.menuDishes
-                   : parseMenu(state.menuText);
+    // Only ever rank the dishes Claude actually read off the photo.
+    const menu = Array.isArray(state.menuDishes) ? state.menuDishes : [];
     const totals = $('.totals');
 
-    // We only ever rank the dishes that are really on the scanned photo.
-    // If we can't read it, we say so — never substitute another menu.
     if (menu.length < 2) {
+      const reason = state.menuError
+        ? state.menuError
+        : "We couldn't read enough dishes from this photo.";
       $('#result-crumb').textContent = 'Scan';
       $('#result-name').textContent = "Couldn't read this menu";
       $('#result-loc').textContent = state.loc || '';
       $('#profile-pill').textContent = buildProfilePill();
       $('#results-list').innerHTML =
         `<div class="empty-note">
-           <p>We couldn't reliably read the dishes on your photo, so we won't
-           guess with a different restaurant's menu.</p>
+           <p>${reason} We won't guess with a different restaurant's menu.</p>
            <p class="empty-sub">For a clean scan:</p>
            <ul>
              <li>Fill the frame with the menu, straight on</li>
@@ -1624,9 +1508,8 @@ input[type=file] {
     }
     if (totals) totals.style.display = '';
 
-    const ck = (state.cuisine && state.cuisine !== 'auto')
-                 ? state.cuisine : state.detected;
-    const label = cuisineLabel[ck];
+    const cz = (state.detected || '').trim();
+    const label = cz ? cz.charAt(0).toUpperCase() + cz.slice(1).toLowerCase() : '';
     $('#result-crumb').textContent =
       (label ? label + ' menu' : 'Your menu') + ' · your photo';
     $('#result-name').textContent = state.loc || 'Your menu';
@@ -1669,9 +1552,9 @@ input[type=file] {
     if (go.dataset.go === 'scan') {
       // Fresh scan: clear photo, location, detection and cuisine override.
       state.photo = null;
-      state.detected = null;
-      state.menuText = '';
+      state.detected = '';
       state.menuDishes = null;
+      state.menuError = '';
       state.cuisine = 'auto';
       ocrPromise = null;
       fileInput.value = '';

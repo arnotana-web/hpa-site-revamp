@@ -2,6 +2,14 @@
   publish = "palate"
   command = ""
 
+[functions]
+  node_bundler = "esbuild"
+
+[[redirects]]
+  from = "/api/menu"
+  to = "/.netlify/functions/menu"
+  status = 200
+
 [[headers]]
   for = "/*"
   [headers.values]
