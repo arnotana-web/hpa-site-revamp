@@ -1144,9 +1144,9 @@ input[type=file] {
   }
 
   // Turn raw OCR text into the dishes that are actually on the photographed menu
-  function parseMenu(text) {
+  function parseMenuNames(text) {
     if (!text) return [];
-    const seen = new Set(), items = [];
+    const seen = new Set(), names = [];
     text.split(/\r?\n/).forEach(raw => {
       let line = raw.replace(/[•·▪◦*]+/g, ' ')
                     .replace(/\.{2,}/g, ' ')
@@ -1164,22 +1164,68 @@ input[type=file] {
       const key = line.toLowerCase().replace(/[^a-z0-9]/g, '');
       if (!key || seen.has(key)) return;
       seen.add(key);
-      items.push(makeDish(titleCase(line)));
+      names.push(titleCase(line));
     });
-    return items.slice(0, 16);
+    return names.slice(0, 16);
   }
 
-  // OCR the menu photo on-device: keep the raw text AND infer the cuisine
+  function parseMenu(text) {
+    return parseMenuNames(text).map(makeDish);
+  }
+
+  function targetLang() {
+    return ((navigator.language || 'en').toLowerCase().slice(0, 2)) || 'en';
+  }
+  function langName(code) {
+    try { return new Intl.DisplayNames([code], { type: 'language' }).of(code); }
+    catch (_) { return code.toUpperCase(); }
+  }
+
+  // Best-effort translation of a list of strings (one network call, batched).
+  // On any failure we return the originals so the menu still shows.
+  function translateBatch(names, tl) {
+    if (!names.length) return Promise.resolve(names.slice());
+    const q = encodeURIComponent(names.join('\n'));
+    const url = 'https://translate.googleapis.com/translate_a/single'
+              + '?client=gtx&sl=auto&tl=' + encodeURIComponent(tl) + '&dt=t&q=' + q;
+    return fetch(url)
+      .then(r => (r && r.ok) ? r.json() : null)
+      .then(j => {
+        if (!j || !j[0]) return names.slice();
+        const out = j[0].map(seg => (seg && seg[0]) || '').join('')
+                        .split('\n').map(s => s.trim()).filter(Boolean);
+        return out.length === names.length ? out : names.slice();
+      })
+      .catch(() => names.slice());
+  }
+
+  // OCR the menu (multi-language), infer cuisine, then translate every dish
+  // into the user's language while ranking on an English reading.
   function analyzeMenu(dataUrl) {
+    state.menuDishes = null;
     if (!window.Tesseract || !dataUrl) return Promise.resolve();
     try {
-      return window.Tesseract.recognize(dataUrl, 'eng')
+      return window.Tesseract.recognize(dataUrl, 'eng+fra+spa+ita+deu+por')
         .then(r => {
           const text = (r && r.data && r.data.text) || '';
           state.menuText = text;
           state.detected = cuisineFromText(text);
+          const names = parseMenuNames(text);
+          if (names.length < 2) { state.menuDishes = []; return; }
+          const tl = targetLang();
+          const pEn   = tl === 'en' ? Promise.resolve(names.slice())
+                                    : translateBatch(names, 'en');
+          const pDisp = translateBatch(names, tl);
+          return Promise.all([pEn, pDisp]).then(([en, disp]) => {
+            state.menuDishes = names.map((orig, i) => {
+              const d = makeDish(en[i] || orig);
+              d.name = disp[i] || orig;
+              d.cn = d.name.toLowerCase() !== orig.toLowerCase() ? orig : '';
+              return d;
+            });
+          });
         })
-        .catch(() => {});
+        .catch(() => { state.menuDishes = null; });
     } catch (_) {
       return Promise.resolve();
     }
@@ -1203,6 +1249,7 @@ input[type=file] {
     cuisine: 'auto',
     detected: null,
     menuText: '',
+    menuDishes: null,
   };
   let ocrPromise = null;
 
@@ -1454,6 +1501,7 @@ input[type=file] {
     state.loc = $('#loc').value.trim();
     state.detected = null;
     state.menuText = '';
+    state.menuDishes = null;
     // Always OCR the photo so we can rank the dishes that are really on it.
     ocrPromise = analyzeMenu(state.photo);
     show('loading');
@@ -1546,7 +1594,11 @@ input[type=file] {
   }
 
   function renderResults() {
-    const menu = parseMenu(state.menuText);
+    // Prefer the translated dishes; fall back to the raw parse if the
+    // translation step never produced anything.
+    const menu = Array.isArray(state.menuDishes) && state.menuDishes.length
+                   ? state.menuDishes
+                   : parseMenu(state.menuText);
     const totals = $('.totals');
 
     // We only ever rank the dishes that are really on the scanned photo.
@@ -1579,7 +1631,7 @@ input[type=file] {
       (label ? label + ' menu' : 'Your menu') + ' · your photo';
     $('#result-name').textContent = state.loc || 'Your menu';
     $('#result-loc').textContent =
-      menu.length + ' dishes read from your photo, ranked for you';
+      menu.length + ' dishes · translated to ' + langName(targetLang());
 
     const scored = menu.map(d => ({ d, s: scoreDish(d) }));
     const recommend = scored.filter(x => !x.s.conflict && x.s.score >= 52)
@@ -1619,6 +1671,7 @@ input[type=file] {
       state.photo = null;
       state.detected = null;
       state.menuText = '';
+      state.menuDishes = null;
       state.cuisine = 'auto';
       ocrPromise = null;
       fileInput.value = '';
