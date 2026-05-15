@@ -1115,10 +1115,11 @@ input[type=file] {
     { keys: ['canton','guangzhou','china','chine','shanghai','beijing','pekin','hong kong','hongkong','shenzhen','chinese','chinois'], to: 'cantonese' },
   ];
 
+  let fallbackIdx = -1;
   function pickCuisine() {
     // 1. Explicit manual choice always wins
     if (state.cuisine && state.cuisine !== 'auto' && fixtures[state.cuisine]) return state.cuisine;
-    // 2. Script detected from the scanned photo by on-device OCR
+    // 2. Cuisine inferred from the scanned menu text by on-device OCR
     if (state.detected && fixtures[state.detected]) return state.detected;
     // 3. Keyword in the Location field
     const s = (state.loc || '').toLowerCase();
@@ -1127,24 +1128,40 @@ input[type=file] {
         if (e.keys.some(k => s.includes(k))) return e.to;
       }
     }
-    // 4. Deterministic fallback (no random)
-    return 'cantonese';
+    // 4. No signal at all — rotate through cuisines so repeated scans
+    //    don't always land on the same restaurant.
+    const keys = Object.keys(fixtures);
+    fallbackIdx = (fallbackIdx + 1) % keys.length;
+    return keys[fallbackIdx];
   }
 
-  // Read the menu photo on-device (Tesseract OSD) and map its script to a cuisine.
+  // Score OCR'd menu text against per-cuisine vocab; best hit count wins.
+  const cuisineLexicon = {
+    italian:   ['pizza','pasta','carbonara','risotto','parmigian','mozzarella','prosciutto','gnocchi','tiramisu','antipasti','primi','secondi','bruschetta','ragu','pecorino','focaccia','lasagn','ravioli','margherita','vino','aperitivo','burrata','arancini'],
+    mexican:   ['taco','burrito','quesadilla','guacamole','salsa','enchilada','nacho','jalapeno','carnitas','pastor','mole','tortilla','ceviche','margarita','frijol','chile','elote','barbacoa','tostada'],
+    japanese:  ['sushi','ramen','sashimi','tempura','miso','udon','yakitori','teriyaki','izakaya','nigiri','maki','donburi','gyoza','wasabi','sake','matcha','bento','katsu','soba','edamame'],
+    lebanese:  ['hummus','houmous','falafel','shawarma','tabbouleh','tabouleh','kebab','tahini','baba','manakish','fattoush','kibbeh','mezze','meze','labneh','halloumi','zaatar','shish','moutabal'],
+    cantonese: ['dim sum','char siu','wonton','congee','chow mein','har gow','siu mai','siu mei','bok choy','hoisin','dumpling','noodle','fried rice','peking','szechuan','sichuan','canton','wok','chinese','xiao long','pak choi'],
+  };
+
+  function cuisineFromText(text) {
+    const t = ' ' + (text || '').toLowerCase().replace(/\s+/g, ' ') + ' ';
+    let best = null, bestScore = 0;
+    for (const key of Object.keys(cuisineLexicon)) {
+      let score = 0;
+      for (const w of cuisineLexicon[key]) if (t.indexOf(w) !== -1) score++;
+      if (score > bestScore) { bestScore = score; best = key; }
+    }
+    return bestScore >= 1 ? best : null;
+  }
+
+  // Read the menu photo on-device (Tesseract OCR) and infer its cuisine
+  // from the dish/language words it contains.
   function detectCuisineFromPhoto(dataUrl) {
     if (!window.Tesseract || !dataUrl) return Promise.resolve(null);
     try {
-      return window.Tesseract.detect(dataUrl)
-        .then(res => {
-          const d = (res && res.data) || {};
-          const script = d.script || '';
-          const conf = d.script_confidence || 0;
-          if (conf <= 0) return null;
-          const map = { Han: 'cantonese', HanS: 'cantonese', HanT: 'cantonese',
-                        Japanese: 'japanese', Arabic: 'lebanese' };
-          return map[script] || null;
-        })
+      return window.Tesseract.recognize(dataUrl, 'eng')
+        .then(r => cuisineFromText((r && r.data && r.data.text) || ''))
         .catch(() => null);
     } catch (_) {
       return Promise.resolve(null);
