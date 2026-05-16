@@ -1,0 +1,1581 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no, maximum-scale=1">
+<meta name="theme-color" content="#4A1520">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Palate">
+<meta name="format-detection" content="telephone=no">
+<meta name="description" content="Palate — your global food passport. Scan any menu, get the best dishes for your taste.">
+<link rel="apple-touch-icon" href="https://d8j0ntlcm91z4.cloudfront.net/user_3CDQuYIygvqkUH2VHmNQlHT6LLz/hf_20260513_145133_dbac88a6-e698-48bb-a8db-d0b57cc83221.jpeg">
+<link rel="icon" href="https://d8j0ntlcm91z4.cloudfront.net/user_3CDQuYIygvqkUH2VHmNQlHT6LLz/hf_20260513_145133_dbac88a6-e698-48bb-a8db-d0b57cc83221.jpeg">
+<link rel="manifest" href='data:application/manifest+json,%7B%22name%22%3A%22Palate%22%2C%22short_name%22%3A%22Palate%22%2C%22start_url%22%3A%22.%2F%22%2C%22scope%22%3A%22.%2F%22%2C%22display%22%3A%22standalone%22%2C%22orientation%22%3A%22portrait%22%2C%22background_color%22%3A%22%23FAF8F3%22%2C%22theme_color%22%3A%22%234A1520%22%2C%22description%22%3A%22Your%20global%20food%20passport%22%2C%22icons%22%3A%5B%7B%22src%22%3A%22https%3A%2F%2Fd8j0ntlcm91z4.cloudfront.net%2Fuser_3CDQuYIygvqkUH2VHmNQlHT6LLz%2Fhf_20260513_145133_dbac88a6-e698-48bb-a8db-d0b57cc83221.jpeg%22%2C%22sizes%22%3A%22512x512%22%2C%22type%22%3A%22image%2Fjpeg%22%2C%22purpose%22%3A%22any%22%7D%5D%7D'>
+<title>Palate — Your global food passport</title>
+<style>
+:root {
+  --burgundy: #4A1520;
+  --burgundy-deep: #2E0D14;
+  --burgundy-soft: rgba(74,21,32,.06);
+  --cream: #FAF8F3;
+  --cream-dim: rgba(250,248,243,.7);
+  --gold: #A67C3D;
+  --ink: #1A1814;
+  --muted: #7a6e68;
+  --line: rgba(26,24,20,.1);
+  --green: #4f7a3f;
+  --red: #9a3a3a;
+  --serif: Georgia, 'Times New Roman', 'Iowan Old Style', serif;
+  --sans: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+html, body {
+  height: 100%;
+  overscroll-behavior: none;
+}
+body {
+  font-family: var(--sans);
+  color: var(--ink);
+  background: var(--burgundy-deep);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  overflow: hidden;
+  position: fixed;
+  inset: 0;
+}
+button { font: inherit; color: inherit; }
+input { font: inherit; color: inherit; }
+
+main { position: absolute; inset: 0; }
+
+.screen {
+  position: absolute;
+  inset: 0;
+  display: none;
+  flex-direction: column;
+  overflow: hidden;
+  padding-top: env(safe-area-inset-top);
+  padding-bottom: env(safe-area-inset-bottom);
+}
+body.screen-welcome  #screen-welcome,
+body.screen-swipe    #screen-swipe,
+body.screen-prefs    #screen-prefs,
+body.screen-scan     #screen-scan,
+body.screen-loading  #screen-loading,
+body.screen-results  #screen-results { display: flex; }
+
+/* ---------- Welcome ---------- */
+#screen-welcome {
+  background:
+    radial-gradient(ellipse 90% 60% at 50% 0%, #6a1a2c 0%, transparent 70%),
+    radial-gradient(ellipse 80% 70% at 50% 100%, #1f070d 0%, transparent 70%),
+    var(--burgundy);
+  color: var(--cream);
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 32px 28px;
+}
+.welcome-inner { display: flex; flex-direction: column; align-items: center; width: 100%; max-width: 360px; }
+.logo {
+  width: 120px; height: 120px;
+  border-radius: 12px;
+  object-fit: cover;
+  margin-bottom: 36px;
+  box-shadow: 0 18px 50px rgba(0,0,0,.5), 0 0 0 1px rgba(255,255,255,.06) inset;
+  background: #2a0a14;
+}
+.welcome-inner h1 {
+  font-family: var(--serif);
+  font-style: italic;
+  font-weight: 400;
+  font-size: clamp(58px, 16vw, 86px);
+  letter-spacing: -0.02em;
+  line-height: .95;
+  color: var(--cream);
+}
+.welcome-inner .tag {
+  font-family: var(--sans);
+  font-size: 14px;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--cream-dim);
+  margin-top: 18px;
+  margin-bottom: 64px;
+}
+.btn-primary, .btn-ghost {
+  display: block;
+  width: 100%;
+  padding: 16px 22px;
+  border: none;
+  border-radius: 999px;
+  font-family: var(--sans);
+  font-size: 15px;
+  font-weight: 500;
+  letter-spacing: .02em;
+  cursor: pointer;
+  transition: transform .15s ease, opacity .15s;
+}
+.btn-primary { background: var(--cream); color: var(--burgundy); margin-bottom: 10px; }
+.btn-ghost   { background: transparent; color: var(--cream); border: 1px solid rgba(250,248,243,.28); }
+.btn-primary:active, .btn-ghost:active { transform: scale(.97); }
+
+/* ---------- Top bar (shared) ---------- */
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 18px;
+  background: var(--cream);
+  border-bottom: 1px solid var(--line);
+  flex-shrink: 0;
+}
+.topbar h2 {
+  font-family: var(--serif);
+  font-style: italic;
+  font-weight: 400;
+  font-size: 20px;
+  color: var(--ink);
+  letter-spacing: -.01em;
+}
+.icon-btn {
+  background: none; border: none;
+  width: 32px; height: 32px;
+  display: flex; align-items: center; justify-content: center;
+  color: var(--ink);
+  cursor: pointer;
+  font-size: 22px;
+  line-height: 1;
+}
+.spacer-32 { width: 32px; }
+
+/* ---------- Swipe ---------- */
+#screen-swipe { background: var(--cream); }
+.swipe-top { padding: 16px 22px 0; flex-shrink: 0; }
+.progress {
+  height: 2px;
+  background: rgba(26,24,20,.08);
+  border-radius: 999px;
+  overflow: hidden;
+}
+.progress > div {
+  height: 100%;
+  width: 0%;
+  background: var(--burgundy);
+  border-radius: 999px;
+  transition: width .35s ease;
+}
+.swipe-counter {
+  font-size: 11px;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-top: 14px;
+  text-align: center;
+}
+.deck {
+  flex: 1;
+  margin: 16px 22px 4px;
+  min-height: 0;
+}
+.deck.duel {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 10px;
+  position: relative;
+}
+.duel-card {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  border: none;
+  border-radius: 18px;
+  background-color: #2a1a18;
+  background-size: cover;
+  background-position: center;
+  box-shadow: 0 14px 36px rgba(0,0,0,.20), 0 1px 3px rgba(0,0,0,.06);
+  overflow: hidden;
+  cursor: pointer;
+  text-align: left;
+  padding: 0;
+  color: var(--cream);
+  -webkit-tap-highlight-color: transparent;
+  transition: transform .35s cubic-bezier(.2,.8,.2,1), opacity .35s ease, box-shadow .2s ease;
+}
+.duel-card::after {
+  content: '';
+  position: absolute; inset: 0;
+  background: linear-gradient(to top, rgba(0,0,0,.62) 0%, rgba(0,0,0,0) 60%);
+  pointer-events: none;
+}
+.duel-card:active { transform: scale(.985); }
+.duel-card .country {
+  position: absolute;
+  top: 16px; left: 18px;
+  z-index: 2;
+  font-size: 10px;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  opacity: .85;
+  font-weight: 500;
+}
+.duel-card .pick {
+  position: absolute;
+  top: 14px; right: 16px;
+  z-index: 3;
+  padding: 5px 12px;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: .16em;
+  border: 2px solid var(--cream);
+  border-radius: 6px;
+  opacity: 0;
+  transition: opacity .15s ease;
+}
+.duel-card .meta {
+  position: absolute;
+  left: 18px; right: 18px; bottom: 16px;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+.duel-card .name {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 27px;
+  letter-spacing: -.01em;
+  text-shadow: 0 1px 12px rgba(0,0,0,.6);
+}
+.duel-card .desc {
+  font-size: 12.5px;
+  line-height: 1.35;
+  opacity: .88;
+  text-shadow: 0 1px 8px rgba(0,0,0,.6);
+}
+@media (hover: hover) {
+  .duel-card:hover .pick { opacity: 1; }
+  .duel-card:hover { box-shadow: 0 18px 44px rgba(0,0,0,.28); }
+}
+.duel-card.win {
+  transform: scale(1.03);
+  box-shadow: 0 0 0 3px var(--cream), 0 18px 44px rgba(0,0,0,.3);
+}
+.duel-card.win .pick { opacity: 1; }
+.duel-card.lose { opacity: .25; transform: scale(.94); }
+.duel-vs {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 5;
+  width: 44px; height: 44px;
+  border-radius: 50%;
+  background: var(--cream);
+  color: var(--ink);
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 16px;
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 4px 14px rgba(0,0,0,.22);
+  pointer-events: none;
+}
+.swipe-actions {
+  display: flex;
+  justify-content: center;
+  padding: 12px 0 24px;
+  flex-shrink: 0;
+}
+.duel-skip {
+  border: none;
+  background: none;
+  color: var(--muted);
+  font-size: 12px;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  cursor: pointer;
+  padding: 8px 14px;
+}
+.duel-skip:active { opacity: .6; }
+
+/* ---------- Prefs ---------- */
+#screen-prefs { background: var(--cream); }
+.scroll { flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; }
+.prefs-body { padding: 28px 22px 24px; }
+.section-title {
+  font-family: var(--serif);
+  font-style: italic;
+  font-weight: 400;
+  font-size: 26px;
+  letter-spacing: -.01em;
+  margin-bottom: 4px;
+}
+.section-sub {
+  font-size: 13px;
+  color: var(--muted);
+  margin-bottom: 18px;
+}
+.section + .section { margin-top: 36px; }
+.toggles {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+.toggle {
+  padding: 14px 16px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: #fff;
+  font-size: 14px;
+  text-align: left;
+  cursor: pointer;
+  transition: all .15s ease;
+  color: var(--ink);
+  font-weight: 500;
+}
+.toggle:active { transform: scale(.98); }
+.toggle.active {
+  background: var(--burgundy);
+  color: var(--cream);
+  border-color: var(--burgundy);
+}
+.kcal-row {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  border-bottom: 1px solid var(--line);
+  padding-bottom: 6px;
+}
+.kcal-input {
+  flex: 1;
+  font-family: var(--serif);
+  font-size: 44px;
+  font-weight: 400;
+  border: none;
+  padding: 6px 0;
+  background: transparent;
+  color: var(--ink);
+  outline: none;
+  -moz-appearance: textfield;
+  appearance: textfield;
+}
+.kcal-input::-webkit-outer-spin-button,
+.kcal-input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+.kcal-label {
+  font-size: 12px;
+  color: var(--muted);
+  letter-spacing: .14em;
+  text-transform: uppercase;
+}
+.chips { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 14px; }
+.chip {
+  padding: 8px 14px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: #fff;
+  font-size: 13px;
+  cursor: pointer;
+  color: var(--ink);
+  transition: all .15s ease;
+}
+.chip:active { transform: scale(.95); }
+.chip.active {
+  background: var(--gold);
+  color: var(--cream);
+  border-color: var(--gold);
+}
+.btn-bottom {
+  margin: 8px 22px max(22px, env(safe-area-inset-bottom));
+  padding: 16px;
+  background: var(--burgundy);
+  color: var(--cream);
+  border: none;
+  border-radius: 999px;
+  font-size: 15px;
+  font-weight: 500;
+  letter-spacing: .02em;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: opacity .15s ease, transform .15s ease;
+}
+.btn-bottom:active { transform: scale(.98); }
+.btn-bottom:disabled { opacity: .35; cursor: not-allowed; }
+
+/* ---------- Scan ---------- */
+#screen-scan { background: var(--cream); }
+.scan-body { padding: 22px; flex: 1; overflow-y: auto; }
+.dropzone {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  border: 1.5px dashed rgba(74,21,32,.32);
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  color: var(--burgundy);
+  text-align: center;
+  background: rgba(74,21,32,.03);
+  cursor: pointer;
+  overflow: hidden;
+  margin-bottom: 28px;
+  transition: background .2s ease;
+}
+.dropzone:active { background: rgba(74,21,32,.06); }
+.dropzone .icon { margin-bottom: 12px; }
+.dropzone .label {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 19px;
+  font-weight: 400;
+}
+.dropzone .hint {
+  font-size: 11px;
+  color: var(--muted);
+  margin-top: 8px;
+  letter-spacing: .15em;
+  text-transform: uppercase;
+}
+.dropzone.has-photo { border-style: solid; border-color: transparent; cursor: default; }
+.dropzone img.preview {
+  position: absolute;
+  inset: 0;
+  width: 100%; height: 100%;
+  object-fit: cover;
+}
+.remove-photo {
+  position: absolute;
+  top: 12px; right: 12px;
+  background: rgba(0,0,0,.65);
+  color: #fff;
+  border: none;
+  border-radius: 50%;
+  width: 34px; height: 34px;
+  font-size: 20px;
+  line-height: 1;
+  cursor: pointer;
+  z-index: 2;
+  display: flex; align-items: center; justify-content: center;
+}
+.field-label {
+  font-size: 11px;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 6px;
+}
+.text-input {
+  width: 100%;
+  padding: 12px 0;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid var(--line);
+  font-size: 16px;
+  color: var(--ink);
+  outline: none;
+  transition: border-color .2s;
+}
+.text-input:focus { border-color: var(--burgundy); }
+input[type=file] {
+  position: absolute;
+  width: 1px; height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0,0,0,0);
+  white-space: nowrap;
+  border: 0;
+  opacity: 0;
+}
+
+/* ---------- Loading ---------- */
+#screen-loading {
+  background:
+    radial-gradient(ellipse 90% 60% at 50% 0%, #6a1a2c 0%, transparent 70%),
+    radial-gradient(ellipse 80% 70% at 50% 100%, #1f070d 0%, transparent 70%),
+    var(--burgundy);
+  color: var(--cream);
+  align-items: center;
+  justify-content: center;
+  padding: 32px;
+}
+.loading-inner { display: flex; flex-direction: column; align-items: center; width: 100%; max-width: 340px; }
+.dots { display: flex; gap: 12px; margin-bottom: 48px; }
+.dots span {
+  width: 9px; height: 9px;
+  border-radius: 50%;
+  background: var(--cream);
+  opacity: .35;
+  animation: pulse 1.4s infinite ease-in-out;
+}
+.dots span:nth-child(2) { animation-delay: .2s; }
+.dots span:nth-child(3) { animation-delay: .4s; }
+@keyframes pulse {
+  0%, 80%, 100% { transform: scale(.5); opacity: .35; }
+  40% { transform: scale(1); opacity: 1; }
+}
+.steps { width: 100%; }
+.step {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 0;
+  font-size: 16px;
+  color: rgba(250,248,243,.35);
+  font-family: var(--serif);
+  font-style: italic;
+  letter-spacing: -.01em;
+  transition: color .4s ease;
+  border-bottom: 1px solid rgba(250,248,243,.08);
+}
+.step:last-child { border-bottom: none; }
+.step .marker {
+  width: 18px; height: 18px;
+  border-radius: 50%;
+  border: 1px solid rgba(250,248,243,.3);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px;
+  line-height: 1;
+  flex-shrink: 0;
+  transition: all .3s ease;
+}
+.step.active { color: var(--cream); }
+.step.active .marker {
+  border-color: var(--cream);
+  box-shadow: 0 0 0 3px rgba(250,248,243,.12);
+}
+.step.done { color: rgba(250,248,243,.65); }
+.step.done .marker {
+  background: var(--gold);
+  border-color: var(--gold);
+  color: var(--burgundy-deep);
+}
+.step.done .marker::after { content: '✓'; font-style: normal; font-weight: 700; font-size: 12px; }
+
+/* ---------- Results ---------- */
+#screen-results { background: var(--cream); }
+.results-head { padding: 22px 22px 6px; flex-shrink: 0; }
+.results-head .crumb {
+  font-size: 10px;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 8px;
+}
+.results-head h1 {
+  font-family: var(--serif);
+  font-style: italic;
+  font-weight: 400;
+  font-size: 30px;
+  line-height: 1.05;
+  letter-spacing: -.015em;
+  color: var(--ink);
+}
+.results-head .loc {
+  font-size: 13px;
+  color: var(--muted);
+  margin-top: 6px;
+}
+.profile-pill {
+  display: inline-block;
+  margin-top: 12px;
+  padding: 6px 12px;
+  background: var(--burgundy-soft);
+  color: var(--burgundy);
+  border-radius: 999px;
+  font-size: 11px;
+  letter-spacing: .05em;
+  font-weight: 500;
+}
+.results-list { padding: 16px 18px 8px; }
+.empty-note {
+  padding: 8px 20px 24px;
+  color: var(--ink);
+  font-size: 14px;
+  line-height: 1.55;
+}
+.empty-note p { margin: 0 0 10px; }
+.empty-note .empty-sub {
+  font-size: 11px;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-top: 18px;
+}
+.empty-note ul { margin: 6px 0 0; padding-left: 18px; color: var(--muted); }
+.empty-note li { margin: 4px 0; }
+.rec-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 22px;
+  color: var(--ink);
+  margin: 18px 4px 12px;
+}
+.rec-head:first-child { margin-top: 4px; }
+.rec-head span {
+  font-family: var(--sans);
+  font-style: normal;
+  font-size: 11px;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.rec-head.muted { color: var(--muted); }
+
+.dish-card {
+  background: #fff;
+  border-radius: 12px;
+  border-left: 4px solid;
+  margin-bottom: 10px;
+  box-shadow: 0 1px 3px rgba(0,0,0,.04);
+  overflow: hidden;
+}
+.dish-card .dish-body { padding: 16px; }
+.dish-card .dish-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+.dish-card .tier {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+}
+.dish-card .match {
+  display: flex;
+  align-items: baseline;
+  gap: 3px;
+  color: var(--ink);
+}
+.dish-card .match b {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 22px;
+  font-weight: 400;
+}
+.dish-card .match span {
+  font-size: 10px;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.dish-card .name {
+  font-family: var(--serif);
+  font-style: italic;
+  font-weight: 400;
+  font-size: 22px;
+  letter-spacing: -.01em;
+  color: var(--ink);
+  margin-bottom: 2px;
+}
+.dish-card .cn {
+  font-size: 12px;
+  color: var(--muted);
+  margin-bottom: 10px;
+}
+.dish-card .desc {
+  font-size: 13.5px;
+  color: var(--ink);
+  line-height: 1.5;
+  margin-bottom: 8px;
+}
+.dish-card .reason {
+  font-size: 12.5px;
+  color: var(--muted);
+  line-height: 1.45;
+  font-style: italic;
+  margin-bottom: 12px;
+}
+.dish-card .kcal-line { display: flex; align-items: center; gap: 10px; }
+.dish-card .kcal-bar {
+  flex: 1;
+  height: 4px;
+  background: rgba(26,24,20,.08);
+  border-radius: 999px;
+  overflow: hidden;
+}
+.dish-card .kcal-bar i {
+  display: block;
+  height: 100%;
+  background: var(--gold);
+  border-radius: 999px;
+}
+.dish-card .kcal-txt {
+  font-size: 11px;
+  color: var(--muted);
+  letter-spacing: .04em;
+  white-space: nowrap;
+}
+.tier-top   { border-left-color: var(--green); }
+.tier-top .tier { color: var(--green); }
+.tier-top .kcal-bar i { background: var(--green); }
+.tier-great { border-left-color: var(--gold); }
+.tier-great .tier { color: var(--gold); }
+.tier-skip  { border-left-color: var(--red); opacity: .66; }
+.tier-skip .tier { color: var(--red); }
+.tier-skip .kcal-bar i { background: var(--red); }
+
+.totals {
+  margin: 6px 18px 16px;
+  padding: 14px 18px;
+  background: var(--burgundy);
+  color: var(--cream);
+  border-radius: 12px;
+}
+.totals .totals-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.totals .budget-bar {
+  margin-top: 12px;
+  height: 5px;
+  background: rgba(250,248,243,.16);
+  border-radius: 999px;
+  overflow: hidden;
+}
+.totals .budget-bar i {
+  display: block;
+  height: 100%;
+  width: 0%;
+  background: var(--cream);
+  border-radius: 999px;
+  transition: width .5s ease;
+}
+.totals .budget-bar i.over { background: #e08a8a; }
+.totals .lab {
+  font-size: 10px;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  opacity: .65;
+  margin-bottom: 2px;
+}
+.totals .val {
+  font-family: var(--serif);
+  font-style: italic;
+  font-weight: 400;
+  font-size: 22px;
+}
+.results-actions {
+  display: flex;
+  gap: 10px;
+  padding: 4px 18px max(22px, env(safe-area-inset-bottom));
+  flex-shrink: 0;
+  background: var(--cream);
+  border-top: 1px solid var(--line);
+  padding-top: 14px;
+}
+.results-actions button {
+  flex: 1;
+  padding: 14px;
+  border-radius: 999px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  border: 1px solid var(--line);
+  transition: transform .15s ease;
+}
+.results-actions button:active { transform: scale(.97); }
+.results-actions .primary   { background: var(--burgundy); color: var(--cream); border-color: var(--burgundy); }
+.results-actions .secondary { background: #fff; color: var(--ink); }
+</style>
+</head>
+<body class="screen-welcome">
+<main>
+
+  <!-- ============ 1. WELCOME ============ -->
+  <section class="screen" id="screen-welcome">
+    <div class="welcome-inner">
+      <img class="logo" id="logo-img" alt="Palate"
+           src="https://d8j0ntlcm91z4.cloudfront.net/user_3CDQuYIygvqkUH2VHmNQlHT6LLz/hf_20260513_145133_dbac88a6-e698-48bb-a8db-d0b57cc83221.jpeg">
+      <h1>Palate</h1>
+      <div class="tag">Your global food passport</div>
+      <button class="btn-primary" data-go="swipe">Build my taste profile</button>
+      <button class="btn-ghost" data-go="scan">Skip — scan a menu</button>
+    </div>
+  </section>
+
+  <!-- ============ 2. SWIPE ============ -->
+  <section class="screen" id="screen-swipe">
+    <div class="swipe-top">
+      <div class="progress"><div id="progress-bar"></div></div>
+      <div class="swipe-counter">Round <span id="swipe-count">0</span> of <span id="swipe-total">12</span> · which would you order?</div>
+    </div>
+    <div class="deck duel" id="deck"></div>
+    <div class="swipe-actions">
+      <button class="duel-skip" id="btn-skip" type="button">No preference — skip</button>
+    </div>
+  </section>
+
+  <!-- ============ 3. PREFERENCES ============ -->
+  <section class="screen" id="screen-prefs">
+    <div class="topbar">
+      <button class="icon-btn" data-go="welcome" aria-label="Back">‹</button>
+      <h2>Preferences</h2>
+      <div class="spacer-32"></div>
+    </div>
+    <div class="scroll">
+      <div class="prefs-body">
+        <div class="section">
+          <div class="section-title">Dietary</div>
+          <div class="section-sub">Tap any that apply</div>
+          <div class="toggles">
+            <button class="toggle" data-diet="halal">Halal</button>
+            <button class="toggle" data-diet="vegetarian">Vegetarian</button>
+            <button class="toggle" data-diet="vegan">Vegan</button>
+            <button class="toggle" data-diet="gf">Gluten-free</button>
+          </div>
+        </div>
+        <div class="section">
+          <div class="section-title">Daily calories</div>
+          <div class="section-sub">A rough target — we'll work with it</div>
+          <div class="kcal-row">
+            <input id="kcal-input" type="number" inputmode="numeric" class="kcal-input" value="1800" min="800" max="5000" step="50">
+            <span class="kcal-label">kcal / day</span>
+          </div>
+          <div class="chips" id="kcal-chips">
+            <button class="chip" data-kcal="1400">1400</button>
+            <button class="chip active" data-kcal="1800">1800</button>
+            <button class="chip" data-kcal="2200">2200</button>
+            <button class="chip" data-kcal="2800">2800</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <button class="btn-bottom" data-go="scan">Continue</button>
+  </section>
+
+  <!-- ============ 4. SCAN ============ -->
+  <section class="screen" id="screen-scan">
+    <div class="topbar">
+      <button class="icon-btn" id="scan-back" aria-label="Back">‹</button>
+      <h2>Scan menu</h2>
+      <div class="spacer-32"></div>
+    </div>
+    <div class="scan-body">
+      <label class="dropzone" id="dropzone" for="file">
+        <div class="icon">
+          <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M3 8.5A2 2 0 0 1 5 6.5h2.2l1.6-2.2A1 1 0 0 1 9.6 4h4.8a1 1 0 0 1 .8.3l1.6 2.2H19a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+            <circle cx="12" cy="13" r="4"/>
+          </svg>
+        </div>
+        <div class="label">Tap to capture menu</div>
+        <div class="hint">Photo library, camera or files</div>
+      </label>
+      <input type="file" id="file" accept="image/*">
+
+      <div class="field-label">Cuisine</div>
+      <div class="section-sub" style="margin-bottom:12px;font-size:12px">We can't read the photo on-device — tell us the kitchen</div>
+      <div class="chips" id="cuisine-chips" style="margin-top:0;margin-bottom:26px">
+        <button class="chip active" data-cuisine="auto">Auto-detect</button>
+        <button class="chip" data-cuisine="cantonese">Cantonese</button>
+        <button class="chip" data-cuisine="lebanese">Levantine</button>
+        <button class="chip" data-cuisine="japanese">Japanese</button>
+        <button class="chip" data-cuisine="italian">Italian</button>
+        <button class="chip" data-cuisine="mexican">Mexican</button>
+      </div>
+
+      <div class="field-label">Location (optional)</div>
+      <input type="text" class="text-input" id="loc" placeholder="e.g. Tao Tao Ju, Guangzhou" autocomplete="off" autocapitalize="words">
+    </div>
+    <button class="btn-bottom" id="analyze" disabled>Analyze this menu</button>
+  </section>
+
+  <!-- ============ 5. LOADING ============ -->
+  <section class="screen" id="screen-loading">
+    <div class="loading-inner">
+      <div class="dots"><span></span><span></span><span></span></div>
+      <div class="steps" id="steps">
+        <div class="step" data-step="0"><div class="marker"></div>Reading menu</div>
+        <div class="step" data-step="1"><div class="marker"></div>Identifying dishes</div>
+        <div class="step" data-step="2"><div class="marker"></div>Matching taste profile</div>
+        <div class="step" data-step="3"><div class="marker"></div>Estimating calories</div>
+        <div class="step" data-step="4"><div class="marker"></div>Ranking recommendations</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 6. RESULTS ============ -->
+  <section class="screen" id="screen-results">
+    <div class="scroll">
+      <div class="results-head">
+        <div class="crumb" id="result-crumb">Cantonese · Guangzhou</div>
+        <h1 id="result-name">Tao Tao Ju 陶陶居</h1>
+        <div class="loc" id="result-loc">Guangzhou old town</div>
+        <div class="profile-pill" id="profile-pill">Profile: savory · umami-forward · 1800 kcal</div>
+      </div>
+      <div class="results-list" id="results-list"></div>
+      <div class="totals">
+        <div class="totals-row">
+          <div>
+            <div class="lab">Recommended total</div>
+            <div class="val" id="kcal-total">— kcal</div>
+          </div>
+          <div style="text-align:right">
+            <div class="lab">Your target</div>
+            <div class="val" id="kcal-target">1800</div>
+          </div>
+        </div>
+        <div class="budget-bar"><i id="kcal-fill"></i></div>
+      </div>
+    </div>
+    <div class="results-actions">
+      <button class="secondary" data-go="welcome">Home</button>
+      <button class="primary" data-go="scan">Scan another</button>
+    </div>
+  </section>
+
+</main>
+
+<script>
+(() => {
+  'use strict';
+  const $  = (s, p = document) => p.querySelector(s);
+  const $$ = (s, p = document) => Array.from(p.querySelectorAll(s));
+
+  // ---------- Data ----------
+  // Curated pool of well-known main dishes — no desserts, so duels never
+  // compare a pastry with a main. A fresh region-mixed set every session.
+  const pool = [
+    { name: 'Sushi',            country: 'Japan',    region: 'asia',     wiki: 'Sushi',            flavors: ['umami','seafood','clean','light'],     desc: 'Vinegared rice with fresh fish.' },
+    { name: 'Ramen',            country: 'Japan',    region: 'asia',     wiki: 'Ramen',            flavors: ['umami','rich','savory'],               desc: 'Noodles in a deep savoury broth.' },
+    { name: 'Pad Thai',         country: 'Thailand', region: 'asia',     wiki: 'Pad_thai',         flavors: ['sweet','tangy','savory'],              desc: 'Stir-fried noodles, tamarind, peanut.' },
+    { name: 'Green Curry',      country: 'Thailand', region: 'asia',     wiki: 'Green_curry',      flavors: ['spicy','aromatic','creamy'],           desc: 'Coconut curry with chilli and basil.' },
+    { name: 'Butter Chicken',   country: 'India',    region: 'asia',     wiki: 'Butter_chicken',   flavors: ['rich','creamy','spice'],               desc: 'Chicken in a silky spiced tomato sauce.' },
+    { name: 'Biryani',          country: 'India',    region: 'asia',     wiki: 'Biryani',          flavors: ['spice','rich','aromatic'],             desc: 'Fragrant spiced rice baked with meat.' },
+    { name: 'Peking Duck',      country: 'Beijing',  region: 'asia',     wiki: 'Peking_duck',      flavors: ['roast','rich','umami'],                desc: 'Crisp lacquered roast duck.' },
+    { name: 'Dim Sum',          country: 'Canton',   region: 'asia',     wiki: 'Dim_sum',          flavors: ['umami','savory','roast'],              desc: 'Steamed and fried small plates.' },
+    { name: 'Pho',              country: 'Vietnam',  region: 'asia',     wiki: 'Pho',              flavors: ['umami','clean','aromatic','light'],    desc: 'Clear beef broth, rice noodles, herbs.' },
+    { name: 'Bibimbap',         country: 'Korea',    region: 'asia',     wiki: 'Bibimbap',         flavors: ['savory','fresh','spicy'],              desc: 'Rice bowl with veg, beef and chilli.' },
+    { name: 'Margherita Pizza', country: 'Italy',    region: 'europe',   wiki: 'Pizza_Margherita', flavors: ['umami','rich','savory','fresh'],       desc: 'Tomato, mozzarella and basil.' },
+    { name: 'Carbonara',        country: 'Italy',    region: 'europe',   wiki: 'Carbonara',        flavors: ['rich','umami','savory'],               desc: 'Pasta with egg, pecorino and guanciale.' },
+    { name: 'Steak Frites',     country: 'France',   region: 'europe',   wiki: 'Steak_frites',     flavors: ['rich','savory','roast'],               desc: 'Seared steak with crisp fries.' },
+    { name: 'Lobster Bisque',   country: 'France',   region: 'europe',   wiki: 'Bisque_(food)',    flavors: ['creamy','rich','seafood'],             desc: 'Silky shellfish soup finished with cream.' },
+    { name: 'Paella',           country: 'Spain',    region: 'europe',   wiki: 'Paella',           flavors: ['savory','seafood','smoky','aromatic'], desc: 'Saffron rice with seafood.' },
+    { name: 'Moussaka',         country: 'Greece',   region: 'europe',   wiki: 'Moussaka',         flavors: ['rich','savory','creamy'],              desc: 'Aubergine, lamb and béchamel, baked.' },
+    { name: 'Schnitzel',        country: 'Austria',  region: 'europe',   wiki: 'Schnitzel',        flavors: ['savory','rich','roast'],               desc: 'Golden breaded cutlet, crisp and light.' },
+    { name: 'Shawarma',         country: 'Levant',   region: 'mena',     wiki: 'Shawarma',         flavors: ['savory','smoky','spice'],              desc: 'Spit-roasted spiced meat in flatbread.' },
+    { name: 'Hummus',           country: 'Levant',   region: 'mena',     wiki: 'Hummus',           flavors: ['herbal','fresh','veg','clean'],        desc: 'Whipped chickpea with tahini and lemon.' },
+    { name: 'Falafel',          country: 'Levant',   region: 'mena',     wiki: 'Falafel',          flavors: ['savory','herbal','fresh'],             desc: 'Crisp herby chickpea fritters.' },
+    { name: 'Shakshuka',        country: 'Maghreb',  region: 'mena',     wiki: 'Shakshouka',       flavors: ['spice','fresh','savory'],              desc: 'Eggs poached in spiced tomato.' },
+    { name: 'Tagine',           country: 'Morocco',  region: 'mena',     wiki: 'Tajine',           flavors: ['aromatic','spice','rich'],             desc: 'Slow-cooked sweet-savoury spiced stew.' },
+    { name: 'Tacos',            country: 'Mexico',   region: 'americas', wiki: 'Taco',             flavors: ['spicy','savory','smoky'],              desc: 'Corn tortillas, grilled fillings, salsa.' },
+    { name: 'Enchiladas',       country: 'Mexico',   region: 'americas', wiki: 'Enchilada',        flavors: ['spicy','savory','rich'],               desc: 'Rolled tortillas baked in chilli sauce.' },
+    { name: 'Cheeseburger',     country: 'USA',      region: 'americas', wiki: 'Cheeseburger',     flavors: ['rich','savory','umami'],               desc: 'Grilled beef patty with melted cheese.' },
+    { name: 'BBQ Ribs',         country: 'USA',      region: 'americas', wiki: 'Pork_ribs',        flavors: ['smoky','rich','savory'],               desc: 'Slow-smoked ribs with a sticky glaze.' },
+    { name: 'Caesar Salad',     country: 'USA',      region: 'americas', wiki: 'Caesar_salad',     flavors: ['fresh','savory','creamy'],             desc: 'Crisp romaine, parmesan, creamy dressing.' },
+    { name: 'Buddha Bowl',      country: 'Modern',   region: 'americas', wiki: 'Buddha_bowl',      flavors: ['fresh','veg','clean','light'],         desc: 'Grains, greens and seeds, balanced.' },
+  ];
+  const flavorByName = {};
+  pool.forEach(d => { flavorByName[d.name] = d.flavors; });
+
+  const FLAVOR_TOKENS = ['umami','savory','rich','roast','seafood','raw','clean','fresh','herbal','spice','spicy','sweet','creamy','tangy','smoky','fermented','light','refined','aromatic','complex','earthy','adventurous','veg','dessert'];
+
+  function dietConflict(tags) {
+    const has = t => tags.indexOf(t) !== -1;
+    if (state.diets.has('vegan') && (has('meat')||has('pork')||has('beef')||has('poultry')||has('seafood')||has('dairy')||has('egg')))
+      return 'Not vegan';
+    if (state.diets.has('vegetarian') && (has('meat')||has('pork')||has('beef')||has('poultry')||has('seafood')))
+      return 'Not vegetarian';
+    if (state.diets.has('halal') && (has('pork')||has('alcohol')))
+      return has('pork') ? 'Contains pork' : 'Contains alcohol';
+    if (state.diets.has('gf') && has('gluten'))
+      return 'Contains gluten';
+    return null;
+  }
+
+  // Largest-magnitude taste weight, so scores normalise regardless of round count
+  function tasteScale() {
+    let m = 1;
+    Object.keys(state.taste).forEach(k => { m = Math.max(m, Math.abs(state.taste[k])); });
+    return m;
+  }
+
+  function scoreDish(d) {
+    const flavors = d.tags.filter(t => FLAVOR_TOKENS.indexOf(t) !== -1);
+    // Project the dish onto your learned taste vector (likes minus dislikes)
+    let raw = 0;
+    flavors.forEach(f => { raw += (state.taste[f] || 0); });
+    const norm = raw / (flavors.length || 1) / tasteScale();   // ~[-1, 1]
+    let score = 60 + norm * 30;                                 // taste match
+    const liked = flavors.filter(f => (state.taste[f] || 0) > 0)
+                         .sort((a, b) => state.taste[b] - state.taste[a]);
+    // calorie fit vs a sensible per-dish share of your daily target
+    const share = (state.kcal || 1800) * 0.28;
+    if (d.kcal <= share)            score += 8;
+    else if (d.kcal <= share * 1.3) score += 2;
+    else                            score -= 14;               // heavy
+    const conflict = dietConflict(d.tags);
+    if (conflict) score = Math.min(score, 34);
+    score = Math.max(18, Math.min(99, Math.round(score)));
+    return { score, overlap: liked, conflict };
+  }
+
+  // Winner dishes you picked that carry one of these flavours
+  function pickedWith(flavors) {
+    return state.liked.filter(n =>
+      (flavorByName[n] || []).some(f => flavors.indexOf(f) !== -1));
+  }
+
+  function reasonText(d, s) {
+    if (s.conflict) {
+      const map = { 'Not vegan':'outside your vegan choice', 'Not vegetarian':'outside your vegetarian choice',
+                    'Contains pork':'pork is outside your halal preference', 'Contains alcohol':'alcohol is outside your halal preference',
+                    'Contains gluten':'gluten is off your list' };
+      return s.conflict + ' — ' + (map[s.conflict] || 'outside your preferences') + '.';
+    }
+    const share = (state.kcal || 1800) * 0.28;
+    const parts = [];
+    if (s.overlap.length) {
+      const names = pickedWith(s.overlap.slice(0, 2)).slice(0, 2);
+      parts.push('Matches your taste for ' + s.overlap.slice(0, 2).join(' & ')
+        + (names.length ? ' (you chose ' + names.join(', ') + ')' : ''));
+    } else {
+      parts.push('A solid pick, just outside your usual flavours');
+    }
+    if (d.kcal <= share) parts.push('and light on your calorie budget');
+    else if (d.kcal > share * 1.3) parts.push('but heavy against your ' + (state.kcal||1800) + ' kcal target');
+    return parts.join(' ') + '.';
+  }
+
+  // ---------- Menu analysis (server: OCR + translation + extraction) ----------
+  function targetLang() {
+    return ((navigator.language || 'en').toLowerCase().slice(0, 2)) || 'en';
+  }
+  function langName(code) {
+    try { return new Intl.DisplayNames([code], { type: 'language' }).of(code); }
+    catch (_) { return (code || 'en').toUpperCase(); }
+  }
+
+  // Shrink the photo before upload: faster, cheaper, and within API limits.
+  function downscaleImage(dataUrl, maxEdge) {
+    return new Promise((resolve) => {
+      const img = new Image();
+      img.onload = () => {
+        const scale = Math.min(1, maxEdge / Math.max(img.width, img.height));
+        const w = Math.max(1, Math.round(img.width * scale));
+        const h = Math.max(1, Math.round(img.height * scale));
+        const c = document.createElement('canvas');
+        c.width = w; c.height = h;
+        c.getContext('2d').drawImage(img, 0, 0, w, h);
+        try { resolve(c.toDataURL('image/jpeg', 0.82)); }
+        catch (_) { resolve(dataUrl); }
+      };
+      img.onerror = () => resolve(dataUrl);
+      img.src = dataUrl;
+    });
+  }
+
+  // Calls our serverless function, which runs Claude (OCR + translate +
+  // structured extraction). Populates state.menuDishes or state.menuError.
+  function analyzeMenu(dataUrl) {
+    state.menuDishes = null;
+    state.menuError = '';
+    state.detected = '';
+    if (!dataUrl) { state.menuError = 'No photo to analyse.'; return Promise.resolve(); }
+    return downscaleImage(dataUrl, 1280)
+      .then(small => fetch('/api/menu', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ image: small, lang: targetLang() }),
+      }))
+      .then(async (r) => {
+        let body = null;
+        try { body = await r.json(); } catch (_) {}
+        if (!r.ok || !body) {
+          state.menuError = (body && body.error) || ('Request failed (' + r.status + ').');
+          return;
+        }
+        state.detected = (body.cuisine || '').toString();
+        const dishes = Array.isArray(body.dishes) ? body.dishes : [];
+        state.menuDishes = dishes.map((x) => {
+          const diet = Array.isArray(x.diet) ? x.diet.slice() : [];
+          if (['pork', 'beef', 'poultry', 'lamb'].some(t => diet.indexOf(t) !== -1)
+              && diet.indexOf('meat') === -1) diet.push('meat');
+          if (diet.indexOf('lamb') !== -1 && diet.indexOf('beef') === -1) diet.push('beef');
+          const flavors = Array.isArray(x.flavors) ? x.flavors : [];
+          const orig = (x.original || '').toString().trim();
+          const name = (x.translated || orig).toString().trim();
+          return {
+            name: name || orig || 'Dish',
+            cn: orig && orig.toLowerCase() !== name.toLowerCase() ? orig : '',
+            desc: (x.description || '').toString().trim() || 'From your menu.',
+            kcal: Math.max(40, Math.min(1600, Math.round(Number(x.kcal) || 400))),
+            tags: flavors.concat(diet),
+          };
+        });
+      })
+      .catch(() => { state.menuError = 'Could not reach the analysis service.'; });
+  }
+
+  const palette = ['#3a1820', '#2c3a25', '#3a2a18', '#1f2d3a', '#3a2018', '#2a1f30', '#1f2f2a', '#3a2828'];
+
+  // ---------- State ----------
+  const state = {
+    idx: 0,
+    liked: [],
+    disliked: [],
+    taste: {},        // flavour token -> learned weight (likes minus dislikes)
+    duels: [],        // [ [dishA, dishB], ... ] for this session
+    round: 0,
+    rounds: 12,
+    diets: new Set(),
+    kcal: 1800,
+    photo: null,
+    loc: '',
+    cuisine: 'auto',
+    detected: '',
+    menuDishes: null,
+    menuError: '',
+  };
+  let ocrPromise = null;
+
+  // ---------- Navigation ----------
+  function show(name) {
+    document.body.className = 'screen-' + name;
+    window.scrollTo(0, 0);
+  }
+  document.addEventListener('click', (e) => {
+    const go = e.target.closest('[data-go]');
+    if (go) show(go.dataset.go);
+  });
+
+  // Resolve a dish's real photo from its Wikipedia article lead image
+  // (cached, so it always matches the dish and only fetches once).
+  const wikiCache = {};
+  function wikiImage(title) {
+    if (!title) return Promise.resolve(null);
+    if (wikiCache[title] !== undefined) return Promise.resolve(wikiCache[title]);
+    const url = 'https://en.wikipedia.org/api/rest_v1/page/summary/'
+              + encodeURIComponent(title) + '?redirect=true';
+    return fetch(url, { headers: { Accept: 'application/json' } })
+      .then(r => (r && r.ok) ? r.json() : null)
+      .then(d => {
+        const src = (d && ((d.thumbnail && d.thumbnail.source)
+                        || (d.originalimage && d.originalimage.source))) || null;
+        wikiCache[title] = src;
+        return src;
+      })
+      .catch(() => { wikiCache[title] = null; return null; });
+  }
+
+  // Warm the cache so duel cards don't flicker (first slice is enough)
+  pool.slice(0, 16).forEach(d => { wikiImage(d.wiki).then(src => { if (src) { const i = new Image(); i.src = src; } }); });
+
+  // ---------- Taste duels (A vs B) ----------
+  const deck = $('#deck');
+  let duelLock = false;
+
+  function shuffle(a) {
+    for (let i = a.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
+  }
+
+  // Fresh, region-mixed pairs every session
+  function buildDuels() {
+    const items = shuffle(pool.slice());
+    const pairs = [];
+    while (pairs.length < 12 && items.length >= 2) {
+      const a = items.shift();
+      let pi = items.findIndex(x => x.region !== a.region);
+      if (pi === -1) pi = 0;
+      const b = items.splice(pi, 1)[0];
+      pairs.push([a, b]);
+    }
+    state.duels   = pairs;
+    state.rounds  = pairs.length;
+    state.round   = 0;
+    state.taste   = {};
+    state.liked   = [];
+    state.disliked = [];
+  }
+
+  function panelHTML(d, side) {
+    return `<button class="duel-card" data-side="${side}" type="button">
+        <span class="country">${d.country}</span>
+        <span class="pick">PICK</span>
+        <span class="meta">
+          <span class="name">${d.name}</span>
+          <span class="desc">${d.desc}</span>
+        </span>
+      </button>`;
+  }
+
+  function renderDuel() {
+    const pair = state.duels[state.round];
+    if (!pair) { show('prefs'); return; }
+    duelLock = false;
+    deck.className = 'deck duel';
+    deck.innerHTML =
+      panelHTML(pair[0], 0) +
+      `<span class="duel-vs">or</span>` +
+      panelHTML(pair[1], 1);
+    deck.querySelectorAll('.duel-card').forEach((el, i) => {
+      el.style.backgroundColor = palette[(state.round * 2 + i) % palette.length];
+      wikiImage(pair[i].wiki).then(src => { if (src) el.style.backgroundImage = `url("${src}")`; });
+      el.addEventListener('click', () => choose(i));
+    });
+    updateProgress();
+  }
+
+  // Comparative signal: the winner's flavours go up, the loser's go down
+  function choose(side) {
+    if (duelLock) return;
+    const pair = state.duels[state.round];
+    if (!pair) return;
+    duelLock = true;
+    const win = pair[side], lose = pair[1 - side];
+    (win.flavors  || []).forEach(f => state.taste[f] = (state.taste[f] || 0) + 1);
+    (lose.flavors || []).forEach(f => state.taste[f] = (state.taste[f] || 0) - 0.7);
+    state.liked.push(win.name);
+    state.disliked.push(lose.name);
+    const cards = deck.querySelectorAll('.duel-card');
+    cards[side].classList.add('win');
+    cards[1 - side].classList.add('lose');
+    advance();
+  }
+
+  function skipRound() {
+    if (duelLock) return;
+    duelLock = true;
+    const pair = state.duels[state.round];
+    if (pair) pair.forEach(d => (d.flavors || []).forEach(
+      f => state.taste[f] = (state.taste[f] || 0) + 0.15));
+    advance();
+  }
+
+  function advance() {
+    setTimeout(() => {
+      state.round++;
+      if (state.round >= state.rounds) show('prefs');
+      else renderDuel();
+    }, 380);
+  }
+
+  function updateProgress() {
+    $('#swipe-count').textContent = String(state.round);
+    const tot = $('#swipe-total');
+    if (tot) tot.textContent = String(state.rounds);
+    $('#progress-bar').style.width = ((state.round / state.rounds) * 100) + '%';
+  }
+
+  const skipBtn = $('#btn-skip');
+  if (skipBtn) skipBtn.addEventListener('click', skipRound);
+
+  window.addEventListener('keydown', (e) => {
+    if (!document.body.classList.contains('screen-swipe')) return;
+    if (e.key === 'ArrowUp'   || e.key === 'ArrowLeft')  { e.preventDefault(); choose(0); }
+    if (e.key === 'ArrowDown' || e.key === 'ArrowRight') { e.preventDefault(); choose(1); }
+    if (e.key === ' ')        { e.preventDefault(); skipRound(); }
+  });
+
+  // Rebuild a fresh set every time the user enters the taste screen
+  document.addEventListener('click', (e) => {
+    if (e.target.closest('[data-go="swipe"]')) { buildDuels(); renderDuel(); }
+  });
+
+  buildDuels();
+  renderDuel();
+
+  // ---------- Preferences ----------
+  $$('.toggle').forEach(btn => {
+    btn.addEventListener('click', () => {
+      btn.classList.toggle('active');
+      const k = btn.dataset.diet;
+      if (state.diets.has(k)) state.diets.delete(k); else state.diets.add(k);
+    });
+  });
+  function syncChips() {
+    $$('#kcal-chips .chip').forEach(c => c.classList.toggle('active', parseInt(c.dataset.kcal, 10) === state.kcal));
+  }
+  $$('#kcal-chips .chip').forEach(c => {
+    c.addEventListener('click', () => {
+      state.kcal = parseInt(c.dataset.kcal, 10);
+      $('#kcal-input').value = state.kcal;
+      syncChips();
+    });
+  });
+
+  // Cuisine selector (manual override / fallback for the photo auto-detect)
+  $$('#cuisine-chips .chip').forEach(c => {
+    c.addEventListener('click', () => {
+      $$('#cuisine-chips .chip').forEach(x => x.classList.remove('active'));
+      c.classList.add('active');
+      state.cuisine = c.dataset.cuisine;
+    });
+  });
+  $('#kcal-input').addEventListener('input', (e) => {
+    const v = parseInt(e.target.value, 10);
+    state.kcal = isFinite(v) ? v : 1800;
+    syncChips();
+  });
+
+  // ---------- Scan ----------
+  const fileInput = $('#file');
+  const dz = $('#dropzone');
+  const analyzeBtn = $('#analyze');
+
+  const emptyDropzoneHTML = `
+    <div class="icon">
+      <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M3 8.5A2 2 0 0 1 5 6.5h2.2l1.6-2.2A1 1 0 0 1 9.6 4h4.8a1 1 0 0 1 .8.3l1.6 2.2H19a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+        <circle cx="12" cy="13" r="4"/>
+      </svg>
+    </div>
+    <div class="label">Tap to capture menu</div>
+    <div class="hint">Photo library, camera or files</div>
+  `;
+
+  function renderDropzone() {
+    if (state.photo) {
+      // Disable the label-for behavior so tapping the X doesn't reopen the picker.
+      dz.removeAttribute('for');
+      dz.classList.add('has-photo');
+      dz.innerHTML = `
+        <img class="preview" src="${state.photo}" alt="menu preview">
+        <button class="remove-photo" type="button" aria-label="Remove photo">×</button>
+      `;
+      analyzeBtn.disabled = false;
+    } else {
+      dz.setAttribute('for', 'file');
+      dz.classList.remove('has-photo');
+      dz.innerHTML = emptyDropzoneHTML;
+      analyzeBtn.disabled = true;
+    }
+  }
+
+  dz.addEventListener('click', (e) => {
+    const removeBtn = e.target.closest('.remove-photo');
+    if (removeBtn) {
+      e.preventDefault();
+      e.stopPropagation();
+      state.photo = null;
+      fileInput.value = '';
+      renderDropzone();
+    }
+    // When empty, the <label for="file"> handles the picker natively — no JS click needed.
+  });
+
+  fileInput.addEventListener('change', () => {
+    const f = fileInput.files && fileInput.files[0];
+    if (!f) return;
+    const reader = new FileReader();
+    reader.onload = () => { state.photo = reader.result; renderDropzone(); };
+    reader.readAsDataURL(f);
+  });
+
+  // Scan back: if user went through swipe/prefs first, go to prefs; otherwise welcome
+  $('#scan-back').addEventListener('click', () => {
+    show(state.liked.length || state.diets.size ? 'prefs' : 'welcome');
+  });
+
+  // ---------- Analyze → Loading ----------
+  analyzeBtn.addEventListener('click', () => {
+    if (analyzeBtn.disabled) return;
+    state.loc = $('#loc').value.trim();
+    state.detected = '';
+    state.menuDishes = null;
+    state.menuError = '';
+    // Server-side: Claude reads, translates and extracts the real dishes.
+    ocrPromise = analyzeMenu(state.photo);
+    show('loading');
+    runLoading();
+  });
+
+  function runLoading() {
+    const steps = $$('.step');
+    steps.forEach(s => s.classList.remove('active', 'done'));
+    let i = 0;
+    steps[0].classList.add('active');
+    const settle = (p, ms) => Promise.race([
+      Promise.resolve(p),
+      new Promise(r => setTimeout(r, ms)),
+    ]);
+    const tick = () => {
+      steps[i].classList.remove('active');
+      steps[i].classList.add('done');
+      i++;
+      if (i >= steps.length) {
+        // Wait for the real analysis to settle (capped so a stuck request
+        // never blocks the UI — renderResults shows an honest message).
+        settle(ocrPromise || Promise.resolve(), 90000)
+          .then(() => setTimeout(() => { renderResults(); show('results'); }, 400));
+        return;
+      }
+      steps[i].classList.add('active');
+      setTimeout(tick, 1520);
+    };
+    setTimeout(tick, 1520);
+  }
+
+  // ---------- Results ----------
+  function buildProfilePill() {
+    const dietTags = [];
+    if (state.diets.has('halal'))      dietTags.push('halal');
+    if (state.diets.has('vegetarian')) dietTags.push('vegetarian');
+    if (state.diets.has('vegan'))      dietTags.push('vegan');
+    if (state.diets.has('gf'))         dietTags.push('gluten-free');
+
+    // Top positive flavours from the duels become the taste descriptors
+    const label = {
+      umami: 'umami-forward', savory: 'savoury', rich: 'rich & bold', roast: 'roasted',
+      seafood: 'seafood-led', raw: 'raw & clean', clean: 'clean', fresh: 'fresh',
+      herbal: 'herbal', spice: 'spiced', spicy: 'loves heat', sweet: 'sweet tooth',
+      creamy: 'creamy', tangy: 'tangy', smoky: 'smoky', fermented: 'fermented',
+      light: 'light', refined: 'refined', aromatic: 'aromatic', complex: 'complex',
+      earthy: 'earthy', adventurous: 'adventurous', veg: 'plant-forward', dessert: 'sweet tooth',
+    };
+    const top = Object.keys(state.taste)
+      .filter(k => state.taste[k] > 0)
+      .sort((a, b) => state.taste[b] - state.taste[a])
+      .map(k => label[k] || k);
+    const tastes = Array.from(new Set(top)).slice(0, 2);
+    if (tastes.length === 0) tastes.push('savoury', 'umami-forward');
+    const parts = [];
+    if (dietTags.length) parts.push(dietTags.join(' & '));
+    parts.push(...tastes);
+    parts.push(state.kcal + ' kcal');
+    return 'Profile: ' + parts.join(' · ');
+  }
+
+  function dishCardHTML(d, s) {
+    const cls = s.conflict ? 'tier-skip'
+              : s.score >= 82 ? 'tier-top'
+              : s.score >= 64 ? 'tier-great' : 'tier-skip';
+    const label = s.conflict ? s.conflict
+                : s.score >= 82 ? 'Top pick for you'
+                : s.score >= 64 ? 'Great match' : 'Worth a look';
+    const target = state.kcal || 1800;
+    const pct = Math.round((d.kcal / target) * 100);
+    const barW = Math.max(4, Math.min(100, pct));
+    return `
+      <div class="dish-card ${cls}">
+        <div class="dish-body">
+          <div class="dish-head">
+            <div class="tier">${label}</div>
+            <div class="match"><b>${s.score}</b><span>% for you</span></div>
+          </div>
+          <div class="name">${d.name}</div>
+          ${d.cn ? `<div class="cn">${d.cn}</div>` : ''}
+          <div class="desc">${d.desc}</div>
+          <div class="reason">${reasonText(d, s)}</div>
+          <div class="kcal-line">
+            <div class="kcal-bar"><i style="width:${barW}%"></i></div>
+            <div class="kcal-txt">${d.kcal} kcal · ${pct}% of your ${target}</div>
+          </div>
+        </div>
+      </div>`;
+  }
+
+  function renderResults() {
+    // Only ever rank the dishes Claude actually read off the photo.
+    const menu = Array.isArray(state.menuDishes) ? state.menuDishes : [];
+    const totals = $('.totals');
+
+    if (menu.length < 2) {
+      const reason = state.menuError
+        ? state.menuError
+        : "We couldn't read enough dishes from this photo.";
+      $('#result-crumb').textContent = 'Scan';
+      $('#result-name').textContent = "Couldn't read this menu";
+      $('#result-loc').textContent = state.loc || '';
+      $('#profile-pill').textContent = buildProfilePill();
+      $('#results-list').innerHTML =
+        `<div class="empty-note">
+           <p>${reason} We won't guess with a different restaurant's menu.</p>
+           <p class="empty-sub">For a clean scan:</p>
+           <ul>
+             <li>Fill the frame with the menu, straight on</li>
+             <li>Even lighting — avoid glare and shadows</li>
+             <li>One page at a time, text in focus</li>
+           </ul>
+         </div>`;
+      if (totals) totals.style.display = 'none';
+      return;
+    }
+    if (totals) totals.style.display = '';
+
+    const cz = (state.detected || '').trim();
+    const label = cz ? cz.charAt(0).toUpperCase() + cz.slice(1).toLowerCase() : '';
+    $('#result-crumb').textContent =
+      (label ? label + ' menu' : 'Your menu') + ' · your photo';
+    $('#result-name').textContent = state.loc || 'Your menu';
+    $('#result-loc').textContent =
+      menu.length + ' dishes · translated to ' + langName(targetLang());
+
+    const scored = menu.map(d => ({ d, s: scoreDish(d) }));
+    const recommend = scored.filter(x => !x.s.conflict && x.s.score >= 52)
+                            .sort((a, b) => b.s.score - a.s.score);
+    const avoid = scored.filter(x => x.s.conflict || x.s.score < 52)
+                        .sort((a, b) => b.s.score - a.s.score);
+
+    let html = '';
+    if (recommend.length) {
+      html += `<div class="rec-head">Recommended for you<span>${recommend.length} dishes</span></div>`;
+      html += recommend.map(x => dishCardHTML(x.d, x.s)).join('');
+    }
+    if (avoid.length) {
+      html += `<div class="rec-head muted">Better skipped<span>${avoid.length} dishes</span></div>`;
+      html += avoid.map(x => dishCardHTML(x.d, x.s)).join('');
+    }
+    $('#results-list').innerHTML = html;
+
+    const recTotal = recommend.reduce((sum, x) => sum + x.d.kcal, 0);
+    const target = state.kcal || 1800;
+    $('#kcal-total').textContent = recTotal + ' kcal';
+    $('#kcal-target').textContent = String(target);
+    const fill = $('#kcal-fill');
+    if (fill) {
+      fill.style.width = Math.min(100, Math.round((recTotal / target) * 100)) + '%';
+      fill.classList.toggle('over', recTotal > target);
+    }
+    $('#profile-pill').textContent = buildProfilePill();
+  }
+
+  // Reset selected file when leaving via Home/Scan-another
+  document.addEventListener('click', (e) => {
+    const go = e.target.closest('[data-go]');
+    if (!go) return;
+    if (go.dataset.go === 'scan') {
+      // Fresh scan: clear photo, location, detection and cuisine override.
+      state.photo = null;
+      state.detected = '';
+      state.menuDishes = null;
+      state.menuError = '';
+      state.cuisine = 'auto';
+      ocrPromise = null;
+      fileInput.value = '';
+      renderDropzone();
+      if ($('#loc')) $('#loc').value = '';
+      $$('#cuisine-chips .chip').forEach(x =>
+        x.classList.toggle('active', x.dataset.cuisine === 'auto'));
+    }
+    if (go.dataset.go === 'welcome') {
+      // fresh duel set so a returning user starts over
+      buildDuels();
+      renderDuel();
+    }
+  });
+
+  // Disable text selection on long press (iOS callout) for non-input elements
+  document.addEventListener('touchstart', (e) => {
+    if (e.target.closest('input, textarea')) return;
+  }, { passive: true });
+
+})();
+</script>
+</body>
+</html>
