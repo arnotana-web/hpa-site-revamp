@@ -1,4 +1,7 @@
-import Anthropic from '@anthropic-ai/sdk';
+// Menu analysis via Google Gemini (free tier — key from aistudio.google.com).
+// Set GEMINI_API_KEY in the Netlify environment variables.
+
+const MODEL = 'gemini-2.5-flash'; // free tier; alt: gemini-2.0-flash
 
 // Flavour + dietary vocabulary the model must choose from. Kept in sync with
 // FLAVOR_TOKENS / dietConflict in palate/index.html so client-side ranking works.
@@ -40,16 +43,14 @@ Rules:
   dishes, return {"cuisine":"","dishes":[]}.
 Respond ONLY with JSON conforming to the schema.`;
 
-const schema = {
+const responseSchema = {
   type: 'object',
-  additionalProperties: false,
   properties: {
     cuisine: { type: 'string' },
     dishes: {
       type: 'array',
       items: {
         type: 'object',
-        additionalProperties: false,
         properties: {
           original: { type: 'string' },
           translated: { type: 'string' },
@@ -59,10 +60,12 @@ const schema = {
           kcal: { type: 'integer' },
         },
         required: ['original', 'translated', 'description', 'flavors', 'diet', 'kcal'],
+        propertyOrdering: ['original', 'translated', 'description', 'flavors', 'diet', 'kcal'],
       },
     },
   },
   required: ['cuisine', 'dishes'],
+  propertyOrdering: ['cuisine', 'dishes'],
 };
 
 const json = (obj, status = 200) =>
@@ -73,9 +76,8 @@ const json = (obj, status = 200) =>
 
 export default async (req) => {
   if (req.method !== 'POST') return json({ error: 'Method not allowed' }, 405);
-  if (!process.env.ANTHROPIC_API_KEY) {
-    return json({ error: 'Server is not configured (missing API key).' }, 500);
-  }
+  const key = process.env.GEMINI_API_KEY;
+  if (!key) return json({ error: 'Server is not configured (missing API key).' }, 500);
 
   let body;
   try {
@@ -90,49 +92,64 @@ export default async (req) => {
 
   const m = image.match(/^data:(image\/(?:jpeg|png|webp|gif));base64,(.+)$/);
   if (!m) return json({ error: 'Invalid image data URL' }, 400);
-  const mediaType = m[1];
+  const mimeType = m[1];
   const data = m[2];
 
-  const client = new Anthropic();
+  const endpoint =
+    `https://generativelanguage.googleapis.com/v1beta/models/${MODEL}:generateContent`;
 
-  try {
-    const message = await client.messages.create({
-      model: 'claude-haiku-4-5', // cheapest capable vision model (user: minimise cost)
-      max_tokens: 8000,
-      output_config: {
-        // NB: Haiku 4.5 does not support `effort` (it errors); structured
-        // JSON output is all we need here.
-        format: { type: 'json_schema', schema },
+  const payload = {
+    systemInstruction: { parts: [{ text: SYSTEM }] },
+    contents: [
+      {
+        role: 'user',
+        parts: [
+          { inline_data: { mime_type: mimeType, data } },
+          { text: `Target language (BCP-47 code): ${lang}. Analyse this menu photo.` },
+        ],
       },
-      system: [
-        { type: 'text', text: SYSTEM, cache_control: { type: 'ephemeral' } },
-      ],
-      messages: [
-        {
-          role: 'user',
-          content: [
-            { type: 'image', source: { type: 'base64', media_type: mediaType, data } },
-            { type: 'text', text: `Target language (BCP-47 code): ${lang}. Analyse this menu photo.` },
-          ],
-        },
-      ],
+    ],
+    generationConfig: {
+      responseMimeType: 'application/json',
+      responseSchema,
+      maxOutputTokens: 8192,
+      temperature: 0.2,
+      thinkingConfig: { thinkingBudget: 0 }, // skip thinking: cheaper/faster
+    },
+  };
+
+  let res;
+  try {
+    res = await fetch(endpoint, {
+      method: 'POST',
+      headers: { 'content-type': 'application/json', 'x-goog-api-key': key },
+      body: JSON.stringify(payload),
     });
-
-    const textBlock = message.content.find((b) => b.type === 'text');
-    if (!textBlock) return json({ error: 'Empty model response' }, 502);
-
-    let parsed;
-    try {
-      parsed = JSON.parse(textBlock.text);
-    } catch (_) {
-      return json({ error: 'Could not parse model output' }, 502);
-    }
-    return json(parsed, 200);
-  } catch (err) {
-    if (err instanceof Anthropic.APIError) {
-      const status = err.status && err.status >= 400 ? err.status : 502;
-      return json({ error: err.message || 'Upstream model error' }, status);
-    }
-    return json({ error: 'Analysis failed' }, 500);
+  } catch (_) {
+    return json({ error: 'Could not reach the analysis service.' }, 502);
   }
+
+  let out = null;
+  try {
+    out = await res.json();
+  } catch (_) {}
+
+  if (!res.ok) {
+    const msg = (out && out.error && out.error.message) || `Upstream error (${res.status}).`;
+    return json({ error: msg }, res.status >= 400 ? res.status : 502);
+  }
+
+  const cand = out && out.candidates && out.candidates[0];
+  const text =
+    cand && cand.content && cand.content.parts &&
+    cand.content.parts.map((p) => p.text || '').join('');
+  if (!text) return json({ error: 'Empty model response' }, 502);
+
+  let parsed;
+  try {
+    parsed = JSON.parse(text);
+  } catch (_) {
+    return json({ error: 'Could not parse model output' }, 502);
+  }
+  return json(parsed, 200);
 };
