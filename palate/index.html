@@ -1083,7 +1083,7 @@ input[type=file] {
     state.menuError = '';
     state.detected = '';
     if (!dataUrl) { state.menuError = 'No photo to analyse.'; return Promise.resolve(); }
-    return downscaleImage(dataUrl, 1568)
+    return downscaleImage(dataUrl, 1280)
       .then(small => fetch('/api/menu', {
         method: 'POST',
         headers: { 'content-type': 'application/json' },

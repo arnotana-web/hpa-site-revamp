@@ -97,10 +97,11 @@ export default async (req) => {
 
   try {
     const message = await client.messages.create({
-      model: 'claude-opus-4-7', // swappable: claude-sonnet-4-6 is cheaper/faster
+      model: 'claude-haiku-4-5', // cheapest capable vision model (user: minimise cost)
       max_tokens: 8000,
       output_config: {
-        effort: 'low', // scoped extraction task; raise for harder menus
+        // NB: Haiku 4.5 does not support `effort` (it errors); structured
+        // JSON output is all we need here.
         format: { type: 'json_schema', schema },
       },
       system: [
